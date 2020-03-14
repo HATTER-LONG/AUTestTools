@@ -49,7 +49,7 @@ ELSE()
 ENDIF()
 
 IF(WIN32)
-    message("Win32")
+list(APPEND linkLib clang)
 elseif(UNIX)
     list(APPEND linkLib pthread)
 else()
