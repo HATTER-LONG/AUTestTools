@@ -39,7 +39,7 @@ add_executable(
     ${HEAD_FILES}
 )
 
-set(linkLib Qt5::Widgets Qt5::Core Qt5::Gui)
+set(linkLib Qt5::Widgets Qt5::Core Qt5::Gui clang)
 
 IF (CMAKE_BUILD_TYPE STREQUAL Debug)
     add_definitions(-DDEBUG)
@@ -49,7 +49,7 @@ ELSE()
 ENDIF()
 
 IF(WIN32)
-list(APPEND linkLib clang)
+    
 elseif(UNIX)
     list(APPEND linkLib pthread)
 else()
