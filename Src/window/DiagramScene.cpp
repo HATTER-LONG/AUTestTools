@@ -60,6 +60,7 @@ void DiagramScene::setItemColor(const QColor &color)
         item->setBrush(myItemColor);
     }
 }
+
 void DiagramScene::setFont(const QFont &font)
 {
     spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
@@ -107,6 +108,8 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case InsertItem:
         item = new DiagramItem(myItemType);
         item->setBrush(myItemColor);
+        item->setFont(myFont);
+        item->setTextColor(myTextColor);
         addItem(item);
         item->setPos(mouseEvent->scenePos());
         emit itemInserted(item);

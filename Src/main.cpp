@@ -1,11 +1,11 @@
 #include <iostream>
 #include <string>
 
-#include <QApplication>
-
 #include "window/mainwindow.h"
 #include "spdlog/spdlog.h"
 #include "clang-c/Index.h"
+
+#include <QApplication>
 
 std::ostream &operator<<(std::ostream &stream, const CXString &str)
 {
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    //test();
+    test();
     std::string Info = "HelloWorld!";
     spdlog::info("AUTest Project {}", Info);
     w.show();

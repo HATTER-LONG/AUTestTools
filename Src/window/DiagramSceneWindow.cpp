@@ -99,9 +99,20 @@ void DiagramSceneWindow::deleteItem()
     foreach (QGraphicsItem *item, scene->selectedItems())
     {
         if (item->type() == DiagramItem::Type)
+        {
             qgraphicsitem_cast<DiagramItem *>(item)->removeArrows();
-        scene->removeItem(item);
-        delete item;
+        }
+
+        if (item->parentItem() == Q_NULLPTR)
+        {
+            scene->removeItem(item);
+            delete item;
+        }
+        else
+        {
+            scene->removeItem(item->parentItem());
+            delete item->parentItem();
+        }
     }
 }
 
@@ -198,6 +209,10 @@ void DiagramSceneWindow::textColorChanged()
 void DiagramSceneWindow::lineColorChanged()
 {
     spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
+
+    lineAction = qobject_cast<QAction *>(sender());
+    lineColorToolButton->setIcon(createColorToolButtonIcon(":/images/linecolor.png", qvariant_cast<QColor>(lineAction->data())));
+    lineButtonTriggered();
 }
 void DiagramSceneWindow::textButtonTriggered()
 {
@@ -360,8 +375,10 @@ void DiagramSceneWindow::createToolbars()
         fontSizeCombo->addItem(QString().setNum(i));
     QIntValidator *validator = new QIntValidator(2, 64, this);
     fontSizeCombo->setValidator(validator);
+    fontSizeCombo->setCurrentText("20");
     connect(fontSizeCombo, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(fontSizeChanged(QString)));
+    fontSizeChanged(fontSizeCombo->currentText());
 
     fontColorToolButton = new QToolButton;
     fontColorToolButton->setPopupMode(QToolButton::MenuButtonPopup);
@@ -502,7 +519,8 @@ QWidget *DiagramSceneWindow::createCellWidget(const QString &text, DiagramItem::
 }
 QWidget *DiagramSceneWindow::createBackgroundCellWidget(const QString &text, const QString &image)
 {
-    spdlog::info("{}:{}:{} Call text is [{}]  image is [{}]!!!", __FILE__, __FUNCTION__, __LINE__, text.toStdString().c_str(), image.toStdString().c_str());
+    spdlog::info("{}:{}:{} Call text is [{}]  image is [{}]!!!",
+                 __FILE__, __FUNCTION__, __LINE__, text.toStdString().c_str(), image.toStdString().c_str());
 
     QToolButton *button = new QToolButton;
     button->setText(text);
