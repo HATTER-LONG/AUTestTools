@@ -32,7 +32,7 @@ qt5_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
 #指定头文件查找路径
 include_directories(Include) 
 #查找当前文件夹中的所有源代码文件，也可以通过Set命令将所有文件设置为一个变量
-FILE(GLOB SRC_FILES "./Src/*.cpp" "./Src/window/*.cpp") 
+FILE(GLOB SRC_FILES "./Src/*.cpp" "./Src/window/*.cpp" "./Src/window/DiagramWindow/*.cpp") 
 #同理，查找当前文件夹中所有的头文件
 FILE(GLOB HEAD_FILES "Include/*") 
 #同理，查找当前文件夹中所有的ui文件
