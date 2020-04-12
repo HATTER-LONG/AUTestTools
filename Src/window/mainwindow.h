@@ -1,8 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "DiagramItem.h"
-#include "DiagramSceneWindow.h"
+#include "DiagramWindow/DiagramSceneWindow.h"
 #include <QMainWindow>
 
 class DiagramScene;

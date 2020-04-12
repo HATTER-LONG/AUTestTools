@@ -1,7 +1,5 @@
 
 #include "mainwindow.h"
-#include "DiagramItem.h"
-#include "DiagramScene.h"
 #include "spdlog/spdlog.h"
 
 #include <QtWidgets>
