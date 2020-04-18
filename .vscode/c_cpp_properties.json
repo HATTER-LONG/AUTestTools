@@ -5,8 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/Include/**",
-                "F:/QT5/5.12.2/msvc2017_64/include/**",
-                "F:/QT5/5.12.2/msvc2017_64/include/QtWidgets/**"
+                "${Include_QT}/**",
+                "${Include_QT}/QtWidgets/**"
             ],
             "defines": [
                 "_DEBUG",

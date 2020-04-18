@@ -16,8 +16,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-
 find_package(Threads) #查找 多线程库
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 #静态库的方式连接 spdlog
@@ -61,6 +59,8 @@ elseif(UNIX)
 else()
     message(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
 ENDIF()
+
+add_subdirectory(test)
 
 target_link_libraries(
     ${PROJECT_NAME} 

@@ -8,7 +8,7 @@
             "name": "(Windows) 启动",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Automated_UnitTest.exe",
+            "program": "${command:cmake.launchTargetPath}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -16,7 +16,7 @@
             "externalConsole": true
         },
         {
-            "name": "(gdb) 启动",
+            "name": "(Linux) 启动",
             "type": "cppdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
