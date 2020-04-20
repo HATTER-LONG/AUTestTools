@@ -7,6 +7,14 @@ project(Automated_UnitTest LANGUAGES CXX)
 # CMAKE_PREFIX_PATH=/home/xxx/Qt5.13.2/5.13.2/gcc_64
 # 请检查环境变量CMAKE_PREFIX_PATH 是否新增 Qt 相关路径
 
+if(NOT DEFINED ENV{CLANG_LIB})
+    message(FATAL_ERROR "not defined environment variable:CLANG_LIB")
+elseif(NOT DEFINED ENV{CLANG_HEADFILES})
+    message(FATAL_ERROR "not defined environment variable:CLANG_HEADFILES")
+endif()
+set(CLANG_LIB_PATH $ENV{CLANG_LIB})
+set(CLANG_INCLUDE_PATH $ENV{CLANG_HEADFILES})
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -18,17 +26,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Threads) #查找 多线程库
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
+
+find_package(LLVM REQUIRED CONFIG)
+find_package(Clang REQUIRED CONFIG)
+
 #静态库的方式连接 spdlog
 add_definitions(-DSPDLOG_COMPILED_LIB) 
 #指定连结库的路径
-link_directories(Lib) 
+link_directories(${CLANG_LIB_PATH} ./Lib) 
+#指定头文件查找路径
+include_directories(Include ${CLANG_INCLUDE_PATH})
 
 file(GLOB_RECURSE QRC_SOURCE_FILES "./*.qrc")
 set(QRC_SOURCE_FILES image.qrc)
 qt5_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
 
-#指定头文件查找路径
-include_directories(Include) 
+
 #查找当前文件夹中的所有源代码文件，也可以通过Set命令将所有文件设置为一个变量
 FILE(GLOB SRC_FILES "./Src/*.cpp" "./Src/window/*.cpp" "./Src/window/DiagramWindow/*.cpp") 
 #同理，查找当前文件夹中所有的头文件
@@ -43,7 +56,7 @@ add_executable(
     ${HEAD_FILES}
 )
 
-set(linkLib Qt5::Widgets Qt5::Core Qt5::Gui clang)
+set(linkLib Qt5::Widgets Qt5::Core Qt5::Gui  libclang)
 
 IF (CMAKE_BUILD_TYPE STREQUAL Debug)
     add_definitions(-DDEBUG)

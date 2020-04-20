@@ -17,5 +17,20 @@ struct Badabang : Wowza
     bool operator==(const Badabang &o) const;
 };
 
+void testif_else()
+{
+    if (1)
+    {
+        int a = 10;
+    }
+    else if (2)
+    {
+        int b = 20;
+    }
+    else
+    {
+        int c = 20;
+    }
+}
 template <typename T>
 void bar(T &&t);

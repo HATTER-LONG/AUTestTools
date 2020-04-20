@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/Include/**",
                 "${Include_QT}/**",
-                "${Include_QT}/QtWidgets/**"
+                "${Include_QT}/QtWidgets/**",
+                "${CLANG_HEADFILES}/**"
             ],
             "defines": [
                 "_DEBUG",

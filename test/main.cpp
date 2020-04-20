@@ -7,17 +7,21 @@
 #include <string.h>
 #include <iostream>
 
-#include "clang-c/Index.h"
-
+#include <clang-c/Index.h>
+#include "LoopConvert.h"
 char *findingString = "Init";
 int numOfArgc = 0;
-
+void test(int a, char b, char *c)
+{
+    return;
+}
 bool printKindSpelling(CXCursor cursor)
 {
     enum CXCursorKind curKind = clang_getCursorKind(cursor);
     const char *curkindSpelling = clang_getCString(
         clang_getCursorKindSpelling(curKind));
     printf("The AST node kind spelling is:%s\n", curkindSpelling);
+    test(10, 'a', NULL);
     return true;
 }
 
@@ -48,9 +52,10 @@ enum CXChildVisitResult printVisitor(CXCursor cursor, CXCursor parent,
                                      CXClientData client_data)
 {
     const char *astSpelling = clang_getCString(clang_getCursorSpelling(cursor));
+    const char *astKindSpelling = clang_getCString(clang_getCursorKindSpelling(clang_getCursorKind(cursor)));
     if (numOfArgc == 3)
     {
-        if (strcmp(astSpelling, findingString) == 0)
+        if (strcmp(astSpelling, findingString) == 0 || strcmp(astKindSpelling, findingString) == 0)
         {
             printSpelling(cursor);
             printKindSpelling(cursor);
@@ -66,14 +71,13 @@ enum CXChildVisitResult printVisitor(CXCursor cursor, CXCursor parent,
     return CXChildVisit_Recurse;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     if ((argc > 3) || (argc < 2))
     {
         printf("You input wrong number arguments!\n");
         return -1;
     }
-
     if ((strcmp(argv[1], "-help")) == 0)
     {
         printf("scread <filename>              The scread will output all the AST nodes' information\n");
@@ -91,11 +95,11 @@ int main(int argc, char *argv[])
             return -1;
         }
     }
-
+    Function(argc, argv);
     numOfArgc = argc;
     if (numOfArgc == 3)
     {
-        findingString = argv[2];
+        // findingString = argv[2];
     }
 
     CXIndex Index = clang_createIndex(0, 0);
