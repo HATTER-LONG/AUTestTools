@@ -4,7 +4,6 @@
 
 #include <QtWidgets>
 
-const int InsertTextButton = 10;
 MainWindow::MainWindow()
 {
     diagramSceneWindow = new DiagramSceneWindow(this);

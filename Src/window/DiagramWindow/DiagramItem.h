@@ -2,8 +2,8 @@
 #define __DIAGRAM_ITEM_H__
 
 #include "DiagramTextItem.h"
-#include <QWidget>
 #include <QGraphicsPolygonItem>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 class QPixmap;
@@ -37,32 +37,32 @@ public:
         Io
     };
 
-    DiagramItem(DiagramType diagramType, QGraphicsItem *parent = nullptr);
-    ~DiagramItem();
+    DiagramItem(DiagramType diagramType, QGraphicsItem* parent = nullptr);
+    ~DiagramItem() override;
 
-    void removeArrow(Arrow *arrow);
+    void removeArrow(Arrow* arrow);
     void removeArrows();
     DiagramType diagramType() const { return myDiagramType; }
     QPolygonF polygon() const { return myPolygon; }
-    void addArrow(Arrow *arrow);
+    void addArrow(Arrow* arrow);
     QPixmap image() const;
     int type() const override { return Type; }
-    void setFont(const QFont &font);
-    void setTextColor(const QColor &color);
+    void setFont(const QFont& font);
+    void setTextColor(const QColor& color);
     void createTextItem();
 
 protected:
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-    void focusOutEvent(QFocusEvent *event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
+    void focusOutEvent(QFocusEvent* event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
 
 private:
     DiagramType myDiagramType;
     QPolygonF myPolygon;
-    QMenu *myContextMenu;
-    QList<Arrow *> arrows;
-    DiagramTextItem *mytextItem;
+    QMenu* myContextMenu;
+    QList<Arrow*> arrows;
+    DiagramTextItem* mytextItem;
 
     QColor myTextColor;
     QFont myFont;

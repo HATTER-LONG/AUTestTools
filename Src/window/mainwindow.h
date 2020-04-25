@@ -29,9 +29,9 @@ public:
 
 private:
     void createMenus();
-    DiagramSceneWindow *diagramSceneWindow;
-    QMenu *fileMenu;
-    QMenu *itemMenu;
-    QMenu *aboutMenu;
+    DiagramSceneWindow* diagramSceneWindow;
+    QMenu* fileMenu;
+    QMenu* itemMenu;
+    QMenu* aboutMenu;
 };
 #endif // MAINWINDOW_H

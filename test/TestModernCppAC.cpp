@@ -23,7 +23,8 @@ TEST_CASE("Modern C++ used algorithm", "[algorithm]")
     {
         std::vector<std::string> names = {"nn", "aa", "dds"};
         std::sort(std::begin(names), std::end(names));
-        std::for_each(std::begin(names), std::end(names), [](const std::string &text) { spdlog::info("text = \"{}\"", text); });
+        std::for_each(std::begin(names), std::end(names),
+                      [](const std::string& text) { spdlog::info("text = \"{}\"", text); });
     }
 
     SECTION("Algorithm equal use by default compare func")
@@ -31,7 +32,8 @@ TEST_CASE("Modern C++ used algorithm", "[algorithm]")
         const std::vector<std::string> names1{"Peter", "Harry", "Marc"};
         const std::vector<std::string> names2{"Peter", "Harry", "Marc"};
 
-        const bool isEqual = std::equal(std::begin(names1), std::end(names1), std::begin(names2), std::end(names2)); //defatule use == to compare
+        const bool isEqual = std::equal(std::begin(names1), std::end(names1), std::begin(names2),
+                                        std::end(names2)); // defatule use == to compare
         REQUIRE(isEqual == true);
     }
 
@@ -41,7 +43,7 @@ TEST_CASE("Modern C++ used algorithm", "[algorithm]")
         const std::vector<std::string> names2{"Peter", "Harry", "Marc"};
 
         const bool isEqual = std::equal(std::begin(names1), std::end(names1), std::begin(names2), std::end(names2),
-                                        [](const std::string &string1, const std::string &string2) {
+                                        [](const std::string& string1, const std::string& string2) {
                                             spdlog::info("string1 is \"{}\" and string2 is \"{}\"", string1, string2);
                                             return (string1.compare(string2) == 0);
                                         });

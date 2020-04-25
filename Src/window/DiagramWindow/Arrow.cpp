@@ -1,12 +1,11 @@
 
 #include "Arrow.h"
 
-#include <qmath.h>
-#include <QPen>
 #include <QPainter>
+#include <QPen>
+#include <qmath.h>
 
-Arrow::Arrow(DiagramItem *startItem, DiagramItem *endItem, QGraphicsItem *parent)
-    : QGraphicsLineItem(parent)
+Arrow::Arrow(DiagramItem* startItem, DiagramItem* endItem, QGraphicsItem* parent) : QGraphicsLineItem(parent)
 {
     myStartItem = startItem;
     myEndItem = endItem;
@@ -19,8 +18,7 @@ QRectF Arrow::boundingRect() const
 {
     qreal extra = (pen().width() + 20) / 2.0;
 
-    return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
-                                      line().p2().y() - line().p1().y()))
+    return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(), line().p2().y() - line().p1().y()))
         .normalized()
         .adjusted(-extra, -extra, extra, extra);
 }
@@ -38,8 +36,7 @@ void Arrow::updatePosition()
     setLine(line);
 }
 
-void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
-                  QWidget *)
+void Arrow::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     if (myStartItem->collidesWithItem(myEndItem))
         return;
@@ -60,8 +57,7 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     {
         p2 = endPolygon.at(i) + myEndItem->pos();
         polyLine = QLineF(p1, p2);
-        QLineF::IntersectType intersectType =
-            polyLine.intersect(centerLine, &intersectPoint);
+        QLineF::IntersectType intersectType = polyLine.intersect(centerLine, &intersectPoint);
         if (intersectType == QLineF::BoundedIntersection)
             break;
         p1 = p2;
@@ -71,10 +67,9 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     double angle = std::atan2(-line().dy(), line().dx());
 
-    QPointF arrowP1 = line().p1() + QPointF(sin(angle + M_PI / 3) * arrowSize,
-                                            cos(angle + M_PI / 3) * arrowSize);
-    QPointF arrowP2 = line().p1() + QPointF(sin(angle + M_PI - M_PI / 3) * arrowSize,
-                                            cos(angle + M_PI - M_PI / 3) * arrowSize);
+    QPointF arrowP1 = line().p1() + QPointF(sin(angle + M_PI / 3) * arrowSize, cos(angle + M_PI / 3) * arrowSize);
+    QPointF arrowP2 =
+        line().p1() + QPointF(sin(angle + M_PI - M_PI / 3) * arrowSize, cos(angle + M_PI - M_PI / 3) * arrowSize);
 
     arrowHead.clear();
     arrowHead << line().p1() << arrowP1 << arrowP2;

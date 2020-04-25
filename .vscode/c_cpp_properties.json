@@ -15,8 +15,8 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.17763.0",
-            "compilerPath": "F:/Visual Studio/VC/Tools/MSVC/14.16.27023/bin/Hostx64/x64/cl.exe",
-            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "F:\\LLVM10\\Lib\\bin\\clang.exe",
+            "intelliSenseMode": "clang-x64",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "configurationProvider": "vector-of-bool.cmake-tools"

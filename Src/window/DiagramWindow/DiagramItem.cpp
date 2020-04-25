@@ -1,7 +1,7 @@
-#include "DiagramItem.h"
-#include "spdlog/spdlog.h"
 #include "Arrow.h"
+#include "DiagramItem.h"
 #include "DiagramTextItem.h"
+#include "spdlog/spdlog.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
@@ -10,11 +10,11 @@
 #include <QTextBlockFormat>
 #include <QTextCursor>
 
-DiagramItem::DiagramItem(DiagramType diagramType, QGraphicsItem *parent) : QGraphicsPolygonItem(parent)
+DiagramItem::DiagramItem(DiagramType diagramType, QGraphicsItem* parent) : QGraphicsPolygonItem(parent)
 {
     spdlog::info("DiagramItem Build  diagramType = [{}]\n", diagramType);
     myDiagramType = diagramType;
-    //myContextMenu = contextMenu;
+    // myContextMenu = contextMenu;
 
     QPainterPath path;
     switch (myDiagramType)
@@ -29,18 +29,14 @@ DiagramItem::DiagramItem(DiagramType diagramType, QGraphicsItem *parent) : QGrap
         myPolygon = path.toFillPolygon();
         break;
     case Conditional:
-        myPolygon << QPointF(-100, 0) << QPointF(0, 100)
-                  << QPointF(100, 0) << QPointF(0, -100)
-                  << QPointF(-100, 0);
+        myPolygon << QPointF(-100, 0) << QPointF(0, 100) << QPointF(100, 0) << QPointF(0, -100) << QPointF(-100, 0);
         break;
     case Step:
-        myPolygon << QPointF(-100, -100) << QPointF(100, -100)
-                  << QPointF(100, 100) << QPointF(-100, 100)
+        myPolygon << QPointF(-100, -100) << QPointF(100, -100) << QPointF(100, 100) << QPointF(-100, 100)
                   << QPointF(-100, -100);
         break;
     default:
-        myPolygon << QPointF(-120, -80) << QPointF(-70, 80)
-                  << QPointF(120, 80) << QPointF(70, -80)
+        myPolygon << QPointF(-120, -80) << QPointF(-70, 80) << QPointF(120, 80) << QPointF(70, -80)
                   << QPointF(-120, -80);
         break;
     }
@@ -52,12 +48,9 @@ DiagramItem::DiagramItem(DiagramType diagramType, QGraphicsItem *parent) : QGrap
     createTextItem();
 }
 
-DiagramItem::~DiagramItem()
-{
-    delete mytextItem;
-}
+DiagramItem::~DiagramItem() { delete mytextItem; }
 
-void DiagramItem::removeArrow(Arrow *arrow)
+void DiagramItem::removeArrow(Arrow* arrow)
 {
     int index = arrows.indexOf(arrow);
 
@@ -67,7 +60,7 @@ void DiagramItem::removeArrow(Arrow *arrow)
 
 void DiagramItem::removeArrows()
 {
-    foreach (Arrow *arrow, arrows)
+    foreach (Arrow* arrow, arrows)
     {
         arrow->startItem()->removeArrow(arrow);
         arrow->endItem()->removeArrow(arrow);
@@ -76,18 +69,15 @@ void DiagramItem::removeArrows()
     }
 }
 
-void DiagramItem::addArrow(Arrow *arrow)
-{
-    arrows.append(arrow);
-}
+void DiagramItem::addArrow(Arrow* arrow) { arrows.append(arrow); }
 
-void DiagramItem::setFont(const QFont &font)
+void DiagramItem::setFont(const QFont& font)
 {
     myFont = font;
     mytextItem->setFont(myFont);
 }
 
-void DiagramItem::setTextColor(const QColor &color)
+void DiagramItem::setTextColor(const QColor& color)
 {
     myTextColor = color;
     mytextItem->setDefaultTextColor(myTextColor);
@@ -122,19 +112,19 @@ QPixmap DiagramItem::image() const
     return pixmap;
 }
 
-void DiagramItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void DiagramItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     spdlog::info("{}:{} call!!", __FILE__, __FUNCTION__);
     scene()->clearSelection();
     setSelected(true);
-    //myContextMenu->exec(event->screenPos());
+    // myContextMenu->exec(event->screenPos());
 }
 
-QVariant DiagramItem::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant DiagramItem::itemChange(GraphicsItemChange change, const QVariant& value)
 {
     if (change == QGraphicsItem::ItemPositionChange)
     {
-        foreach (Arrow *arrow, arrows)
+        foreach (Arrow* arrow, arrows)
         {
             arrow->updatePosition();
         }
@@ -143,7 +133,7 @@ QVariant DiagramItem::itemChange(GraphicsItemChange change, const QVariant &valu
     return value;
 }
 
-void DiagramItem::focusOutEvent(QFocusEvent *event)
+void DiagramItem::focusOutEvent(QFocusEvent* event)
 {
     if (Q_NULLPTR == mytextItem)
     {
@@ -156,7 +146,7 @@ void DiagramItem::focusOutEvent(QFocusEvent *event)
     QGraphicsPolygonItem::focusOutEvent(event);
 }
 
-void DiagramItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+void DiagramItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
     if (Q_NULLPTR == mytextItem)
     {

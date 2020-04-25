@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
 
-#include "window/mainwindow.h"
 #include "spdlog/spdlog.h"
+#include "window/mainwindow.h"
 #include "clang-c/Index.h"
 
 #include <QApplication>
 
-std::ostream &operator<<(std::ostream &stream, const CXString &str)
+std::ostream& operator<<(std::ostream& stream, const CXString& str)
 {
     stream << clang_getCString(str);
     clang_disposeString(str);
@@ -16,11 +16,8 @@ std::ostream &operator<<(std::ostream &stream, const CXString &str)
 void test()
 {
     CXIndex index = clang_createIndex(0, 0);
-    CXTranslationUnit unit = clang_parseTranslationUnit(
-        index,
-        "./test.cpp", nullptr, 0,
-        nullptr, 0,
-        CXTranslationUnit_None);
+    CXTranslationUnit unit =
+        clang_parseTranslationUnit(index, "./test.cpp", nullptr, 0, nullptr, 0, CXTranslationUnit_None);
     if (unit == nullptr)
     {
         std::cerr << "Unable to parse translation unit. Quitting." << std::endl;
@@ -41,11 +38,11 @@ void test()
     clang_disposeIndex(index);
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    //test();
+    // test();
     std::string Info = "HelloWorld!";
     spdlog::info("AUTest Project {}", Info);
     w.show();

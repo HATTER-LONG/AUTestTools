@@ -1,3 +1,11 @@
 {
-    "C_Cpp.intelliSenseEngineFallback": "Enabled"
+    "cmake.copyCompileCommands": "${workspaceFolder}/build/",
+    "files.eol": "\n",
+    "[cpp]": {
+        "editor.quickSuggestions": true
+    },
+    "[c]": {
+        "editor.quickSuggestions": true
+    },
+    "editor.formatOnSave": true
 }
