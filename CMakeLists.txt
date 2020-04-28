@@ -33,9 +33,9 @@ find_package(Clang REQUIRED CONFIG)
 #静态库的方式连接 spdlog
 add_definitions(-DSPDLOG_COMPILED_LIB) 
 #指定连结库的路径
-link_directories(${CLANG_LIB_PATH} ./Lib) 
+link_directories(./Lib ${CLANG_LIB_PATH} ${LLVM_LIBRARY_DIRS}) 
 #指定头文件查找路径
-include_directories(Include ${CLANG_INCLUDE_PATH})
+include_directories(Include ${CLANG_INCLUDE_PATH} ${LLVM_INCLUDE_DIRS})
 
 file(GLOB_RECURSE QRC_SOURCE_FILES "./*.qrc")
 set(QRC_SOURCE_FILES image.qrc)

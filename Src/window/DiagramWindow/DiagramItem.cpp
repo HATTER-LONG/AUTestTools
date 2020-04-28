@@ -112,7 +112,7 @@ QPixmap DiagramItem::image() const
     return pixmap;
 }
 
-void DiagramItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
+void DiagramItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*/)
 {
     spdlog::info("{}:{} call!!", __FILE__, __FUNCTION__);
     scene()->clearSelection();
