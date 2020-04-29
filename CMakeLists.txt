@@ -7,22 +7,16 @@ project(Automated_UnitTest LANGUAGES CXX)
 # CMAKE_PREFIX_PATH=/home/xxx/Qt5.13.2/5.13.2/gcc_64
 # 请检查环境变量CMAKE_PREFIX_PATH 是否新增 Qt 相关路径
 
-if(NOT DEFINED ENV{CLANG_LIB})
-    message(FATAL_ERROR "not defined environment variable:CLANG_LIB")
-elseif(NOT DEFINED ENV{CLANG_HEADFILES})
-    message(FATAL_ERROR "not defined environment variable:CLANG_HEADFILES")
-endif()
-set(CLANG_LIB_PATH $ENV{CLANG_LIB})
-set(CLANG_INCLUDE_PATH $ENV{CLANG_HEADFILES})
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions -fno-short-enums -Werror=non-virtual-dtor")
 
 find_package(Threads) #查找 多线程库
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
@@ -33,9 +27,9 @@ find_package(Clang REQUIRED CONFIG)
 #静态库的方式连接 spdlog
 add_definitions(-DSPDLOG_COMPILED_LIB) 
 #指定连结库的路径
-link_directories(./Lib ${CLANG_LIB_PATH} ${LLVM_LIBRARY_DIRS}) 
+link_directories(./Lib ${CLANG_LIBRARY_DIRS} ${LLVM_LIBRARY_DIRS}) 
 #指定头文件查找路径
-include_directories(Include ${CLANG_INCLUDE_PATH} ${LLVM_INCLUDE_DIRS})
+include_directories(Include ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS})
 
 file(GLOB_RECURSE QRC_SOURCE_FILES "./*.qrc")
 set(QRC_SOURCE_FILES image.qrc)
