@@ -68,7 +68,7 @@ int main(int argc, const char* argv[])
 {
     if ((argc > 3) || (argc < 2))
     {
-        printf("You inpu  t wrong number arguments!\n");
+        printf("You input wrong number arguments!\n");
         return -1;
     }
     FILE* result = fopen(argv[1], "r");
