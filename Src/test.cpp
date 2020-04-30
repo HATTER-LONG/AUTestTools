@@ -14,16 +14,17 @@ struct Badabang : Wowza
 {
     void foo(int) override;
 
-    bool operator==(const Badabang &o) const;
+    bool operator==(const Badabang& o) const;
 };
 
 void testif_else()
 {
-    if (1)
+    int h = 1;
+    if (int b = 1)
     {
         int a = 10;
     }
-    else if (2)
+    else if (h == 1)
     {
         int b = 20;
     }
@@ -31,6 +32,10 @@ void testif_else()
     {
         int c = 20;
     }
+
+    for (int i = 0; int b = 2 + i < 10; i++)
+    {
+        h++;
+    }
 }
-template <typename T>
-void bar(T &&t);
+template <typename T> void bar(T&& t);

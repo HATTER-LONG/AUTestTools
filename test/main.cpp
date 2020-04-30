@@ -42,7 +42,7 @@ bool printLocation(CXCursor cursor)
     return true;
 }
 
-enum CXChildVisitResult printVisitor(CXCursor cursor, CXCursor parent, CXClientData client_data)
+enum CXChildVisitResult printVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientData /*client_data*/)
 {
     const char* astSpelling = clang_getCString(clang_getCursorSpelling(cursor));
     const char* astKindSpelling = clang_getCString(clang_getCursorKindSpelling(clang_getCursorKind(cursor)));
