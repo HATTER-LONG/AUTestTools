@@ -16,8 +16,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions -fno-short-enums -Werror=non-virtual-dtor")
-
 find_package(Threads) #查找 多线程库
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 
@@ -63,6 +61,7 @@ IF(WIN32)
     
 elseif(UNIX)
     list(APPEND linkLib pthread)
+    SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 else()
     message(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
 ENDIF()

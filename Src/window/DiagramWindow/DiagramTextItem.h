@@ -22,8 +22,8 @@ public:
         Type = UserType + 3
     };
 
-    DiagramTextItem(QGraphicsItem* parent = 0);
-    ~DiagramTextItem();
+    DiagramTextItem(QGraphicsItem* parent = nullptr);
+    ~DiagramTextItem() override;
     int type() const override { return Type; }
 
 signals:

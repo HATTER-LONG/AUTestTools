@@ -18,8 +18,9 @@
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/Support/raw_ostream.h"
 #include "llvm/ADT/STLExtras.h"
+#include "llvm/Support/raw_ostream.h"
+
 
 #include "Function/LoopConvert.h"
 
@@ -41,7 +42,7 @@ public:
         // Only care about If statements.
         if (isa<IfStmt>(s))
         {
-            IfStmt* IfStatement = cast<IfStmt>(s);
+            auto* IfStatement = cast<IfStmt>(s);
             Stmt* Then = IfStatement->getThen();
 
             TheRewriter.InsertText(Then->getBeginLoc(), "// the 'if' part\n", true, true);
@@ -100,11 +101,11 @@ public:
     // declaration.
     bool HandleTopLevelDecl(DeclGroupRef DR) override
     {
-        for (DeclGroupRef::iterator b = DR.begin(), e = DR.end(); b != e; ++b)
+        for (auto& b : DR)
         {
             // Traverse the declaration using our AST visitor.
-            Visitor.TraverseDecl(*b);
-            (*b)->dump();
+            Visitor.TraverseDecl(b);
+            b->dump();
         }
         return true;
     }

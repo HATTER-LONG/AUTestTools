@@ -21,12 +21,12 @@ DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent
     view = new QGraphicsView(scene);
     createToolbars();
 
-    QHBoxLayout* layout = new QHBoxLayout;
+    auto* layout = new QHBoxLayout;
     layout->addWidget(toolBox);
 
     layout->addWidget(view);
     setWindowFlags(Qt::FramelessWindowHint);
-    QWidget* diagramWidget = new QWidget;
+    auto* diagramWidget = new QWidget;
     diagramWidget->setLayout(layout);
     this->setCentralWidget(diagramWidget);
 }
@@ -84,7 +84,7 @@ void DiagramSceneWindow::deleteItem()
         if (item->type() == Arrow::Type)
         {
             scene->removeItem(item);
-            Arrow* arrow = qgraphicsitem_cast<Arrow*>(item);
+            auto* arrow = qgraphicsitem_cast<Arrow*>(item);
             arrow->startItem()->removeArrow(arrow);
             arrow->endItem()->removeArrow(arrow);
             delete item;
@@ -164,7 +164,7 @@ void DiagramSceneWindow::itemInserted(DiagramItem* item)
     buttonGroup->button(int(item->diagramType()))->setChecked(false);
 }
 
-void DiagramSceneWindow::textInserted(QGraphicsTextItem* item)
+void DiagramSceneWindow::textInserted(QGraphicsTextItem* /*item*/)
 {
     spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
     buttonGroup->button(InsertTextButton)->setChecked(false);
@@ -235,7 +235,7 @@ void DiagramSceneWindow::handleFontChange()
 void DiagramSceneWindow::itemSelected(QGraphicsItem* item)
 {
     spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
-    DiagramTextItem* textItem = qgraphicsitem_cast<DiagramTextItem*>(item);
+    auto* textItem = qgraphicsitem_cast<DiagramTextItem*>(item);
 
     QFont font = textItem->font();
     fontCombo->setCurrentFont(font);
@@ -257,35 +257,35 @@ void DiagramSceneWindow::createToolBox()
     buttonGroup = new QButtonGroup(this);
     buttonGroup->setExclusive(false);
     connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonGroupClicked(int)));
-    QGridLayout* layout = new QGridLayout;
+    auto* layout = new QGridLayout;
     layout->addWidget(createCellWidget(tr("Conditional"), DiagramItem::Conditional), 0, 0);
     layout->addWidget(createCellWidget(tr("Process"), DiagramItem::Step), 0, 1);
     layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
     //! [21]
 
-    QToolButton* textButton = new QToolButton;
+    auto* textButton = new QToolButton;
     textButton->setCheckable(true);
     buttonGroup->addButton(textButton, InsertTextButton);
     textButton->setIcon(QIcon(QPixmap(":/images/textpointer.png")));
     textButton->setIconSize(QSize(50, 50));
-    QGridLayout* textLayout = new QGridLayout;
+    auto* textLayout = new QGridLayout;
     textLayout->addWidget(textButton, 0, 0, Qt::AlignHCenter);
     textLayout->addWidget(new QLabel(tr("Text")), 1, 0, Qt::AlignCenter);
-    QWidget* textWidget = new QWidget;
+    auto* textWidget = new QWidget;
     textWidget->setLayout(textLayout);
     layout->addWidget(textWidget, 1, 1);
 
     layout->setRowStretch(3, 10);
     layout->setColumnStretch(2, 10);
 
-    QWidget* itemWidget = new QWidget;
+    auto* itemWidget = new QWidget;
     itemWidget->setLayout(layout);
 
     backgroundButtonGroup = new QButtonGroup(this);
     connect(backgroundButtonGroup, SIGNAL(buttonClicked(QAbstractButton*)), this,
             SLOT(backgroundButtonGroupClicked(QAbstractButton*)));
 
-    QGridLayout* backgroundLayout = new QGridLayout;
+    auto* backgroundLayout = new QGridLayout;
     backgroundLayout->addWidget(createBackgroundCellWidget(tr("Blue Grid"), ":/images/background1.png"), 0, 0);
     backgroundLayout->addWidget(createBackgroundCellWidget(tr("White Grid"), ":/images/background2.png"), 0, 1);
     backgroundLayout->addWidget(createBackgroundCellWidget(tr("Gray Grid"), ":/images/background3.png"), 1, 0);
@@ -294,7 +294,7 @@ void DiagramSceneWindow::createToolBox()
     backgroundLayout->setRowStretch(2, 10);
     backgroundLayout->setColumnStretch(2, 10);
 
-    QWidget* backgroundWidget = new QWidget;
+    auto* backgroundWidget = new QWidget;
     backgroundWidget->setLayout(backgroundLayout);
 
     toolBox = new QToolBox;
@@ -362,7 +362,7 @@ void DiagramSceneWindow::createToolbars()
     fontSizeCombo->setEditable(true);
     for (int i = 8; i < 30; i = i + 2)
         fontSizeCombo->addItem(QString().setNum(i));
-    QIntValidator* validator = new QIntValidator(2, 64, this);
+    auto* validator = new QIntValidator(2, 64, this);
     fontSizeCombo->setValidator(validator);
     fontSizeCombo->setCurrentText("20");
     connect(fontSizeCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(fontSizeChanged(QString)));
@@ -402,11 +402,11 @@ void DiagramSceneWindow::createToolbars()
     colorToolBar->addWidget(fillColorToolButton);
     colorToolBar->addWidget(lineColorToolButton);
 
-    QToolButton* pointerButton = new QToolButton;
+    auto* pointerButton = new QToolButton;
     pointerButton->setCheckable(true);
     pointerButton->setChecked(true);
     pointerButton->setIcon(QIcon(":/images/pointer.png"));
-    QToolButton* linePointerButton = new QToolButton;
+    auto* linePointerButton = new QToolButton;
     linePointerButton->setCheckable(true);
     linePointerButton->setIcon(QIcon(":/images/linepointer.png"));
 
@@ -451,11 +451,11 @@ QMenu* DiagramSceneWindow::createColorMenu(const char* slot, QColor defaultColor
     colors << Qt::black << Qt::white << Qt::red << Qt::blue << Qt::yellow;
     QStringList names;
     names << tr("black") << tr("white") << tr("red") << tr("blue") << tr("yellow");
-    QMenu* colorMenu = new QMenu(this);
+    auto* colorMenu = new QMenu(this);
 
     for (int i = 0; i < colors.count(); i++)
     {
-        QAction* action = new QAction(names.at(i), this);
+        auto* action = new QAction(names.at(i), this);
         action->setData(colors.at(i));
         action->setIcon(createColorIcon(colors.at(i)));
         connect(action, SIGNAL(triggered()), this, slot);
@@ -483,17 +483,17 @@ QWidget* DiagramSceneWindow::createCellWidget(const QString& text, DiagramItem::
     DiagramItem item(type);
     QIcon icon(item.image());
 
-    QToolButton* button = new QToolButton;
+    auto* button = new QToolButton;
     button->setIcon(icon);
     button->setIconSize(QSize(50, 50));
     button->setCheckable(true);
     buttonGroup->addButton(button, int(type));
 
-    QGridLayout* layout = new QGridLayout;
+    auto* layout = new QGridLayout;
     layout->addWidget(button, 0, 0, Qt::AlignHCenter);
     layout->addWidget(new QLabel(text), 1, 0, Qt::AlignCenter);
 
-    QWidget* widget = new QWidget;
+    auto* widget = new QWidget;
     widget->setLayout(layout);
 
     return widget;
@@ -503,18 +503,18 @@ QWidget* DiagramSceneWindow::createBackgroundCellWidget(const QString& text, con
     spdlog::info("{}:{}:{} Call text is [{}]  image is [{}]!!!", __FILE__, __FUNCTION__, __LINE__,
                  text.toStdString().c_str(), image.toStdString().c_str());
 
-    QToolButton* button = new QToolButton;
+    auto* button = new QToolButton;
     button->setText(text);
     button->setIcon(QIcon(image));
     button->setIconSize(QSize(50, 50));
     button->setCheckable(true);
     backgroundButtonGroup->addButton(button);
 
-    QGridLayout* layout = new QGridLayout;
+    auto* layout = new QGridLayout;
     layout->addWidget(button, 0, 0, Qt::AlignHCenter);
     layout->addWidget(new QLabel(text), 1, 0, Qt::AlignCenter);
 
-    QWidget* widget = new QWidget;
+    auto* widget = new QWidget;
     widget->setLayout(layout);
 
     return widget;

@@ -34,7 +34,7 @@ void DiagramScene::setLineColor(const QColor& color)
     myLineColor = color;
     if (isItemChange(Arrow::Type))
     {
-        Arrow* item = qgraphicsitem_cast<Arrow*>(selectedItems().first());
+        auto* item = qgraphicsitem_cast<Arrow*>(selectedItems().first());
         item->setColor(myLineColor);
         update();
     }
@@ -46,7 +46,7 @@ void DiagramScene::setTextColor(const QColor& color)
     myTextColor = color;
     if (isItemChange(DiagramTextItem::Type))
     {
-        DiagramTextItem* item = qgraphicsitem_cast<DiagramTextItem*>(selectedItems().first());
+        auto* item = qgraphicsitem_cast<DiagramTextItem*>(selectedItems().first());
         item->setDefaultTextColor(myTextColor);
     }
 }
@@ -57,7 +57,7 @@ void DiagramScene::setItemColor(const QColor& color)
     myItemColor = color;
     if (isItemChange(DiagramItem::Type))
     {
-        DiagramItem* item = qgraphicsitem_cast<DiagramItem*>(selectedItems().first());
+        auto* item = qgraphicsitem_cast<DiagramItem*>(selectedItems().first());
         item->setBrush(myItemColor);
     }
 }
@@ -132,7 +132,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 
 void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
-    if (myMode == InsertLine && line != 0)
+    if (myMode == InsertLine && line != nullptr)
     {
         QLineF newLine(line->line().p1(), mouseEvent->scenePos());
         line->setLine(newLine);
@@ -145,7 +145,7 @@ void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
 
 void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
-    if (line != 0 && myMode == InsertLine)
+    if (line != nullptr && myMode == InsertLine)
     {
         QList<QGraphicsItem*> startItems = items(line->line().p1());
         if (startItems.count() && startItems.first() == line)
@@ -160,9 +160,9 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
         if (startItems.count() > 0 && endItems.count() > 0 && startItems.first()->type() == DiagramItem::Type &&
             endItems.first()->type() == DiagramItem::Type && startItems.first() != endItems.first())
         {
-            DiagramItem* startItem = qgraphicsitem_cast<DiagramItem*>(startItems.first());
-            DiagramItem* endItem = qgraphicsitem_cast<DiagramItem*>(endItems.first());
-            Arrow* arrow = new Arrow(startItem, endItem);
+            auto* startItem = qgraphicsitem_cast<DiagramItem*>(startItems.first());
+            auto* endItem = qgraphicsitem_cast<DiagramItem*>(endItems.first());
+            auto* arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
             startItem->addArrow(arrow);
             endItem->addArrow(arrow);
@@ -172,6 +172,6 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
         }
     }
 
-    line = 0;
+    line = nullptr;
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
