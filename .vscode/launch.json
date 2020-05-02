@@ -9,7 +9,10 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
-            "args": [],
+            "args": [
+                "./test/test.cxx",
+                "-p=./build/compile_commands.json"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

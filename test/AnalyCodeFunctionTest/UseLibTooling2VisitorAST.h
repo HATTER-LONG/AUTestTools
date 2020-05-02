@@ -1,0 +1,1 @@
+int Function(int argc, const char** argv);

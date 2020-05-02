@@ -8,6 +8,7 @@ project(Automated_UnitTest LANGUAGES CXX)
 # 请检查环境变量CMAKE_PREFIX_PATH 是否新增 Qt 相关路径
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -35,7 +36,11 @@ qt5_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
 
 
 #查找当前文件夹中的所有源代码文件，也可以通过Set命令将所有文件设置为一个变量
-FILE(GLOB SRC_FILES "./Src/*.cpp" "./Src/window/*.cpp" "./Src/window/DiagramWindow/*.cpp") 
+FILE(GLOB SRC_FILES 
+    "./Src/*.cpp" 
+    "./Src/window/*.cpp" 
+    "./Src/window/DiagramWindow/*.cpp"
+    "./Src/Function/*.cpp") 
 #同理，查找当前文件夹中所有的头文件
 FILE(GLOB HEAD_FILES "Include/*") 
 #同理，查找当前文件夹中所有的ui文件
@@ -57,6 +62,36 @@ ELSE()
     list(APPEND linkLib spdlog)
 ENDIF()
 
+set(CLANG_LINK_LIBRARIES
+  libclang
+  clangTooling
+  clangARCMigrate
+  clangAST
+  clangASTMatchers
+  clangAnalysis
+  clangBasic
+  clangCodeGen
+  clangDriver
+  clangEdit
+  clangFrontend
+  clangFrontendTool
+  clangLex
+  clangParse
+  clangRewrite
+  clangRewriteFrontend
+  clangSema
+  clangSerialization
+  clangCodeGen
+)
+
+function(clang_target_link target type)
+  if (CLANG_LINK_CLANG_DYLIB)
+    target_link_libraries(${target} ${type} clang_shared)
+  else()
+    target_link_libraries(${target} ${type} ${ARGN})
+  endif()
+endfunction()
+
 IF(WIN32)
     
 elseif(UNIX)
@@ -68,7 +103,8 @@ ENDIF()
 
 add_subdirectory(test)
 
-target_link_libraries(
-    ${PROJECT_NAME} 
-    ${linkLib}
-)
+#target_link_libraries(
+ #   ${PROJECT_NAME} 
+ #   ${linkLib}
+#)
+clang_target_link(${PROJECT_NAME} PRIVATE ${linkLib} ${CLANG_LINK_LIBRARIES})
