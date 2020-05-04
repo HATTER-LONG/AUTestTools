@@ -20,7 +20,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Threads) #查找 多线程库
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 
-find_package(LLVM REQUIRED CONFIG)
 find_package(Clang REQUIRED CONFIG)
 
 #静态库的方式连接 spdlog

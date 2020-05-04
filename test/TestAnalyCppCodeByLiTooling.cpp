@@ -15,6 +15,6 @@ TEST_CASE("Analysis of the code by libTooling", "[Auto Analysis Code By AST Tree
         {
             argv[i] = param[i].c_str();
         }
-        Function(param.size(), argv);
+        FunctionToAnalyseCodeTree(param.size(), argv);
     }
 }

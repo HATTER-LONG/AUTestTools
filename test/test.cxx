@@ -1,5 +1,8 @@
 #include "spdlog/spdlog.h"
+#include "test.h"
 #include <iostream>
+
+extern int testfunction(int a);
 enum class Cpp11Enum
 {
     RED = 10,
@@ -19,7 +22,7 @@ struct Badabang : Wowza
     bool operator==(const Badabang& o) const;
 };
 
-void testif_else()
+void testif_else(int ww)
 {
     int h = 1;
     if (int b = 1)
@@ -63,7 +66,28 @@ class testclass : public testclassparent
     testclass()
     {
         spdlog::info("{} call\n", __FUNCTION__);
+        testfunction(3);
         parentFunction(3, 'c');
+        TestClass2 a;
+        a.TestFunction(4);
     }
 };
+
+
+TestClass3::TestClass3()
+{
+    int adsds = 0;
+    spdlog::info("{} {}call\n", __FUNCTION__, adsds);
+}
+TestClass3::~TestClass3()
+{
+    int adsds = 0;
+    spdlog::info("{} {}call\n", __FUNCTION__, adsds);
+}
+std::string TestClass3::TestFunction3(int test)
+{
+    int sss;
+    spdlog::info("{} {}{}call\n", __FUNCTION__, test, sss);
+    return "a";
+}
 template <typename T> void bar(T&& t);
