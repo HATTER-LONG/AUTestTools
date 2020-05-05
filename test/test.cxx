@@ -44,6 +44,16 @@ void testif_else(int ww)
     }
 }
 
+std::string notcallall(TestClass3 b)
+{
+    TestClass3 tmp = b;
+    for (int i = 0; int b = 2 + i < 10; i++)
+    {
+        int h = 0;
+        h++;
+    }
+}
+
 class testclassparent
 {
 public:
@@ -55,8 +65,8 @@ public:
 
     ~testclassparent()
     {
-        spdlog::info("{} call\n", __FUNCTION__);
-        parentFunction(2, 'b');
+        int adsds = 0;
+        int adsdsd = 0;
     }
 
     void parentFunction(int test1, char test2) { spdlog::info("{} call {} -- {}\n", __FUNCTION__, test1, test2); }
