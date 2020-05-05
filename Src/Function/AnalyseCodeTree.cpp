@@ -129,7 +129,7 @@ public:
     void EndSourceFileAction() override
     {
         auto m = getCompilerInstance().getDiagnostics().getNumWarnings();
-        spdlog::info("{}", m);
+        spdlog::info("{} Warning\n", m);
     }
     std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance& CI, StringRef file) override
     {
