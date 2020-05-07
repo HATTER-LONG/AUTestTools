@@ -9,8 +9,10 @@
 #include <clang/Basic/CommentOptions.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendActions.h>
+#include <clang/Frontend/TextDiagnosticPrinter.h>
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
+#include <llvm/Support/raw_ostream.h>
 #include <string>
 
 using namespace clang;
@@ -106,6 +108,67 @@ public:
     // void onEndOfTranslationUnit() {}
 };
 
+class BlankDiagConsumer : public clang::DiagnosticConsumer
+{
+public:
+    BlankDiagConsumer() = default;
+    ~BlankDiagConsumer() override = default;
+    void HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const Diagnostic& Info) override
+    {
+        SmallString<100> OutStr;
+        Info.FormatDiagnostic(OutStr);
+
+        llvm::raw_svector_ostream DiagMessageStream(OutStr);
+        auto aa = FullSourceLoc(Info.getLocation(), Info.getSourceManager()).getFileLoc();
+        int Line = aa.getLineNumber();
+        spdlog::info("{} DiagLevel = {} Message = {} at Line = {}", __FUNCTION__, DiagLevel,
+                     DiagMessageStream.str().str().c_str(), Line);
+    }
+};
+
+class TestTextDiagConsumer : public clang::TextDiagnosticPrinter
+{
+public:
+    TestTextDiagConsumer(raw_ostream& os, DiagnosticOptions* diags, bool OwnsOutputStream = false)
+            : TextDiagnosticPrinter(os, diags, OwnsOutputStream)
+    {
+    }
+    void HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const Diagnostic& Info) override
+    {
+        TextDiagnosticPrinter::HandleDiagnostic(DiagLevel, Info);
+        spdlog::info("{} DiagLevel = {} Ok", __FUNCTION__, DiagLevel);
+    }
+};
+class MyFrontendAction : public ASTFrontendAction
+{
+public:
+    MyFrontendAction() = default;
+    void EndSourceFileAction() override
+    {
+        auto& DE = getCompilerInstance().getDiagnostics();
+        spdlog::info("{} Warning\n", DE.getNumWarnings());
+    }
+    std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance& CI, StringRef file) override
+    {
+        llvm::errs() << "** Creating AST consumer for: " << file << "\n";
+        auto FuncDeclMatcher =
+            functionDecl(isExpansionInMainFile(),
+                         anyOf(hasAncestor(cxxRecordDecl().bind("methodclass")), unless(hasAncestor(cxxRecordDecl()))),
+                         anyOf(forEachDescendant(callExpr().bind("callExprFunction")),
+                               unless(forEachDescendant(callExpr().bind("callExprFunction")))))
+                .bind("FunctiondFeclWithCall");
+        Finder.addMatcher(FuncDeclMatcher, &FuncCall);
+        CI.getDiagnostics().setClient(&ctr);
+        return Finder.newASTConsumer();
+    }
+
+private:
+    Func_Call FuncCall;
+    MatchFinder Finder;
+    BlankDiagConsumer ctr;
+};
+
+
 int FunctionToAnalyseCodeTree(int argc, const char** argv)
 {
     auto FuncDeclMatcher =
@@ -121,35 +184,6 @@ int FunctionToAnalyseCodeTree(int argc, const char** argv)
     Finder.addMatcher(FuncDeclMatcher, &FuncCall);
     return Tool.run(newFrontendActionFactory(&Finder).get());
 }
-
-class MyFrontendAction : public ASTFrontendAction
-{
-public:
-    MyFrontendAction() = default;
-    void EndSourceFileAction() override
-    {
-        auto m = getCompilerInstance().getDiagnostics().getNumWarnings();
-        spdlog::info("{} Warning\n", m);
-    }
-    std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance& CI, StringRef file) override
-    {
-        llvm::errs() << "** Creating AST consumer for: " << file << "\n";
-        auto m = CI.getDiagnostics().getNumWarnings();
-        spdlog::info("{}", m);
-        auto FuncDeclMatcher =
-            functionDecl(isExpansionInMainFile(),
-                         anyOf(hasAncestor(cxxRecordDecl().bind("methodclass")), unless(hasAncestor(cxxRecordDecl()))),
-                         anyOf(forEachDescendant(callExpr().bind("callExprFunction")),
-                               unless(forEachDescendant(callExpr().bind("callExprFunction")))))
-                .bind("FunctiondFeclWithCall");
-        Finder.addMatcher(FuncDeclMatcher, &FuncCall);
-        return Finder.newASTConsumer();
-    }
-
-private:
-    Func_Call FuncCall;
-    MatchFinder Finder;
-};
 
 int FunctionToAnalyseCodeError(int argc, const char** argv)
 {
