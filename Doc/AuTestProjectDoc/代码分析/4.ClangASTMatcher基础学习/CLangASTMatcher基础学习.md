@@ -35,9 +35,175 @@ recordDecl(hasName("Foo"), isDerivedFrom("Bar"))
 recordDecl(anyOf(hasName("Foo"), isDerivedFrom("Bar")))
 ```
 
-- 让我们修改下演示的代码，可以发现 anyOf 这个关键字，他表示 `hasName("Foo")` 与 `isDerivedFrom("Bar")` 这两个条件有一个成立即可匹配（类似 |）。
+- 让我们修改下演示的代码，可以发现 anyOf 这个关键字，它表示 `hasName("Foo")` 与 `isDerivedFrom("Bar")` 这两个条件有一个成立即可匹配（类似 |）。
   - 类似的还有 `allOf(A, B)` 标识 A 与 B 要同时成立才可以（类似 & ），`unless(A)` 匹配 A 不成立的节点（类似 ! ）。
   - anyOf is like "or", allOf can implement "and", and unless is like "not".
+
+## 使用 clang-query
+
+当我们编写了可以匹配节点想要测试怎么办，难道改一点就要重新编译链接运行，好在 clang 提供了好用的 clang-query 工具可以方便我们验证编写的 matcher 语法是否正确。
+
+首先准备一些测试代码：
+
+```c++
+//////////////////////////////////
+//test.h
+//////////////////////////////////
+#ifndef __TEST__H__
+#define __TEST__H__
+#include <string>
+class TestClass2
+{
+public:
+    TestClass2();
+    ~TestClass2();
+
+    std::string TestFunction(int test);
+};
+
+class TestClass3
+{
+public:
+    TestClass3();
+    ~TestClass3();
+
+    std::string TestFunction3(int test);
+};
+#endif
+//////////////////////////////////
+//test.cxx
+//////////////////////////////////
+#include "spdlog/spdlog.h"
+#include "test.h"
+#include <iostream>
+
+extern int testfunction(int a);
+enum class Cpp11Enum
+{
+    RED = 10,
+    BLUE = 20
+};
+
+struct Wowza
+{
+    virtual ~Wowza() = default;
+    virtual void foo(int i = 0) = 0;
+};
+
+struct Badabang : Wowza
+{
+    void foo(int) override;
+
+    bool operator==(const Badabang& o) const;
+};
+
+void testif_else(int ww)
+{
+    int h = 1;
+    if (int b = 1)
+    {
+        int a = 10;
+    }
+    else if (h == 1)
+    {
+        int b = 20;
+    }
+    else
+    {
+        int c = 20;
+    }
+
+    for (int i = 0; int b = 2 + i < 10; i++)
+    {
+        h++;
+    }
+}
+
+std::string notcallall(TestClass3 b)
+{
+    TestClass3 tmp = b;
+    for (int i = 0; int b = 2 + i < 10; i++)
+    {
+        int h = 0;
+        h++;
+    }
+}
+
+class testclassparent
+{
+public:
+    testclassparent()
+    {
+        spdlog::info("{} call\n", __FUNCTION__);
+        parentFunction(1, 'a');
+    }
+
+    ~testclassparent()
+    {
+        int adsds = 0;
+        int adsdsd = 0;
+    }
+
+    void parentFunction(int test1, char test2) { spdlog::info("{} call {} -- {}\n", __FUNCTION__, test1, test2); }
+};
+class testclass : public testclassparent
+{
+    testclass()
+    {
+        spdlog::info("{} call\n", __FUNCTION__);
+        testfunction(3);
+        parentFunction(3, 'c');
+        TestClass2 a;
+        a.TestFunction(4);
+    }
+};
+
+
+TestClass3::TestClass3()
+{
+    int adsds = 0;
+    spdlog::info("{} {}call\n", __FUNCTION__, adsds);
+}
+TestClass3::~TestClass3()
+{
+    int adsds = 0;
+    spdlog::info("{} {}call\n", __FUNCTION__, adsds);
+}
+std::string TestClass3::TestFunction3(int test)
+{
+    int sss;
+    spdlog::info("{} {}{}call\n", __FUNCTION__, test, sss);
+    return "a";
+}
+template <typename T> void bar(T&& t);
+
+```
+
+使用 clang-query 如下：
+
+![clang-query](./pic/2.png)
+
+- 这个命令的前半段没有什么好讲解的，目标文件就是 ./test/test.cxx。
+  - 我们需要重点关注下 -p "./build/compile_commands.json"。
+    - -p 的解释如下图，指定 compile_commands.json 这个文件的路径所在。
+
+        ![help -p](pic/3.png)
+
+    - compile_commands.json 文件包含了编译过程中的宏定义、头文件路径、编译器等信息，而 clang 在解析生成 AST 树时需要预编译，所以需要这些信息防止头文件找不到等等问题。compile_commands.json 我们可以通过 cmake 来生成，[参考这边文章](https://segmentfault.com/a/1190000007015981)。
+  
+        ![cmake set](./pic/5.png)
+
+    - 我们在之前的文章中一直使用 CmakeTools 工具，它的配置比较简单如下图设置即可。
+
+        ![cmaketools set](./pic/4.png)
+
+- 接下来执行 clang-query 命令，可以看到一些源码相关的警告后我们进入到 clang-query 的命令行内：
+
+    ![clang-query run](./pic/6.png)
+
+  - 执行 `m functionDecl(isExpansionInMainFile())` 运行我们的匹配语句，可以看到它打印出了我们 test.cxx 文件中所有的函数声明，与我们预期时相符的。默认打印的简略信息，如果想要看详细的 AST 结构信息，可以设置 output 方式：
+
+    ![run matcher](./pic/7.png)
 
 使用match 有两个方法：
 
