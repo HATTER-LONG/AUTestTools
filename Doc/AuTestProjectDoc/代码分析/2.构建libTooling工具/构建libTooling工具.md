@@ -11,7 +11,8 @@
 
 - 本文主要介绍如何通过 llvm 工程构建属于自己的 Clang Tooling 工具。主要分为两个部分：
   1. 通过 llvm 工程构建一个可以提供自己需要的功能工具。
-  2. 如何将该工具以模块的形式集成到自己的项目中。
+  2. 如何将该工具以模块的形式集成到自己的工程中。
+  3. 直接通过源码在自己的工程中进行编译。
 
 ### 构建一个代码解析工具
 
@@ -63,7 +64,7 @@ Emmmm... 可能你觉得生成个可执行得工具并不满足，想要让 clan
 
     ![新建工具目录](./pic/3.png)
 
-2. 为 LoopConvert.cpp 和 LoopConvert.h 添加源代码，[参考的源代码](https://github.com/eliben/llvm-clang-samples/blob/master/src_clang/tooling_sample.cpp)，这里由于我们得目标是生成一个库，因此将 main 函数变成一个 C 接口功能函数，以及将功能类得定义抽出到 .h 头文件中，方便我们自己的项目调用相应得功能。llvm-clang-samples 项目中的源代码有一些接口兼容性的错误已经修复，下边是源码：
+2. 为 LoopConvert.cpp 和 LoopConvert.h 添加源代码，[参考的源代码](https://github.com/eliben/llvm-clang-samples/blob/master/src_clang/tooling_sample.cpp)，这里由于我们的目标是生成一个库，因此将 main 函数变成一个 C 接口功能函数，以及将功能类得定义抽出到 .h 头文件中，方便我们自己的项目调用相应得功能。llvm-clang-samples 项目中的源代码有一些接口兼容性的错误已经修复，下边是源码：
 
     ```c++
     //------------------------------------------------------------------------------

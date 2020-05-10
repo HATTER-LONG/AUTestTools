@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
                 bool SkipFunctionBodies = false);
     ```
 
-    - 其中注意 `ASTConsumer *C` ，根据注释描述可知解析完成的源码文件会通过 ASTConsumer 来回传给我们，所以在调用这个接口时我们要实现一个 ASTConsumer 用来获取、遍历 AST 树。查看 ASTConsumer 的定义可以发现许多回调接口，包括不同类型、层级 AST 结构，这下真相大白了，可以发现 ParseAST() 接口可以说是 Clang AST 树解析和构建的核心了，但是它的特性其实主要在于解析以及通过钩子 ASTConsumer 来把分析后的 AST 节点回传给我们，而我们在使用 ASTFrontendAction 时是会重写 CreateASTConsumer 方法，相当于 ASTFrontendAction 会帮我们调用  ParseAST() 接口并将我们的 ASTConsumer 实例注册进去，这样我们在使用过程中完全不用关心它😀，下边举一个编写自己 ASTConsumer 与 ASTFrontendAction 的例子，通过继承 ASTConsumer、ASTFrontendAction 然后重写相关函数接口即可：
+    - 其中注意 `ASTConsumer *C` ，根据注释描述可知解析完成的源码文件会通过 ASTConsumer 来回传给我们，所以在调用这个接口时我们要实现一个 ASTConsumer 用来获取、遍历 AST 树。查看 ASTConsumer 的定义可以发现许多回调接口，包括不同类型、层级 AST 结构，这下真相大白了，ParseAST() 接口可以说是 Clang AST 树解析和构建的核心了，但是它的特性其实主要在于解析以及通过钩子 ASTConsumer 来把分析后的 AST 节点回传给我们，而我们在使用 ASTFrontendAction 时是会重写 CreateASTConsumer 方法，相当于 ASTFrontendAction 会帮我们调用  ParseAST() 接口并将我们的 ASTConsumer 实例注册进去，这样我们在使用过程中完全不用关心它😀，下边举一个编写自己 ASTConsumer 与 ASTFrontendAction 的例子，通过继承 ASTConsumer、ASTFrontendAction 然后重写相关函数接口即可：
 
     ```c++
     //-------------------------------------------------------------------------
