@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     }
     QApplication a(argc, argv);
     MainWindow w;
-    FunctionToAnalyseCodeTree(argc, const_cast<const char**>(argv));
+    FunctionToAnalyzeCodeTree(argc, const_cast<const char**>(argv));
     std::string Info = "HelloWorld!";
     spdlog::info("AUTest Project {}", Info);
     w.show();

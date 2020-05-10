@@ -104,8 +104,6 @@ public:
         spdlog::info("analysis result classname[{}] function[{} type:{}]  callexpr[{} type:{}]\n", classname.c_str(),
                      functionname.c_str(), functionparms.c_str(), callexprname.c_str(), callexprparms.c_str());
     }
-
-    // void onEndOfTranslationUnit() {}
 };
 
 class BlankDiagConsumer : public clang::DiagnosticConsumer
@@ -126,19 +124,6 @@ public:
     }
 };
 
-class TestTextDiagConsumer : public clang::TextDiagnosticPrinter
-{
-public:
-    TestTextDiagConsumer(raw_ostream& os, DiagnosticOptions* diags, bool OwnsOutputStream = false)
-            : TextDiagnosticPrinter(os, diags, OwnsOutputStream)
-    {
-    }
-    void HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const Diagnostic& Info) override
-    {
-        TextDiagnosticPrinter::HandleDiagnostic(DiagLevel, Info);
-        spdlog::info("{} DiagLevel = {} Ok", __FUNCTION__, DiagLevel);
-    }
-};
 class MyFrontendAction : public ASTFrontendAction
 {
 public:
@@ -169,7 +154,7 @@ private:
 };
 
 
-int FunctionToAnalyseCodeTree(int argc, const char** argv)
+int FunctionToAnalyzeCodeTree(int argc, const char** argv)
 {
     auto FuncDeclMatcher =
         functionDecl(isExpansionInMainFile(),
@@ -185,7 +170,7 @@ int FunctionToAnalyseCodeTree(int argc, const char** argv)
     return Tool.run(newFrontendActionFactory(&Finder).get());
 }
 
-int FunctionToAnalyseCodeError(int argc, const char** argv)
+int FunctionToAnalyzeCodeError(int argc, const char** argv)
 {
     CommonOptionsParser op(argc, argv, ToolingSampleCategory);
     ClangTool Tool(op.getCompilations(), op.getSourcePathList());

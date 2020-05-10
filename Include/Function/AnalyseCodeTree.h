@@ -1,2 +1,2 @@
-int FunctionToAnalyseCodeTree(int argc, const char** argv);
-int FunctionToAnalyseCodeError(int argc, const char** argv);
+int FunctionToAnalyzeCodeTree(int argc, const char** argv);
+int FunctionToAnalyzeCodeError(int argc, const char** argv);

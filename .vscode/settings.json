@@ -7,5 +7,6 @@
         "editor.quickSuggestions": true
     },
     "editor.formatOnSave": true,
-    "C_Cpp.default.compileCommands": "${workspaceFolder}\\build\\compile_commands.json"
+    "C_Cpp.default.compileCommands": "${workspaceFolder}\\build\\compile_commands.json",
+    "cmake.configureOnOpen": true
 }
