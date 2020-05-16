@@ -98,6 +98,7 @@ void DiagramItem::createTextItem()
     mytextItem->setPos(static_cast<qreal>(0 - (this->boundingRect().width() / 2)),
                        static_cast<qreal>(0 - (boundingRect().height() / 4)));
     mytextItem->setFlag(QGraphicsItem::ItemIsMovable, false);
+    mytextItem->setFlag(QGraphicsItem::ItemIsSelectable, false);
 }
 
 QPixmap DiagramItem::image() const

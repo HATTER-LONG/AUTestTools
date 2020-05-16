@@ -91,23 +91,26 @@ void DiagramScene::editorLostFocus(DiagramTextItem* item)
         item->deleteLater();
     }
 }
+DiagramItem* DiagramScene::createItem(DiagramItem::DiagramType type, QPointF point)
+{
+    auto* item = new DiagramItem(type);
+    item->setBrush(myItemColor);
+    item->setFont(myFont);
+    item->setTextColor(myTextColor);
+    item->setPos(point);
+    addItem(item);
+    return item;
+}
 
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
     if (mouseEvent->button() != Qt::LeftButton)
         return;
 
-    DiagramItem* item;
     switch (myMode)
     {
     case InsertItem:
-        item = new DiagramItem(myItemType);
-        item->setBrush(myItemColor);
-        item->setFont(myFont);
-        item->setTextColor(myTextColor);
-        addItem(item);
-        item->setPos(mouseEvent->scenePos());
-        emit itemInserted(item);
+        emit itemInserted(createItem(myItemType, mouseEvent->scenePos()));
         break;
     case InsertLine:
         line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(), mouseEvent->scenePos()));
@@ -143,6 +146,22 @@ void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
     }
 }
 
+void DiagramScene::setArrow(DiagramItem* startItem, DiagramItem* endItem)
+{
+    auto* arrow = new Arrow(startItem, endItem);
+    arrow->setColor(myLineColor);
+    startItem->addArrow(arrow);
+    endItem->addArrow(arrow);
+    arrow->setZValue(-1000.0);
+    addItem(arrow);
+    arrow->updatePosition();
+}
+
+bool DiagramScene::isDiagramItem(QGraphicsItem* item)
+{
+    return item->type() == DiagramItem::Type ||
+           (item->parentItem() != nullptr && item->parentItem()->type() == DiagramItem::Type);
+}
 void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
     if (line != nullptr && myMode == InsertLine)
@@ -157,18 +176,27 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
         removeItem(line);
         delete line;
 
-        if (startItems.count() > 0 && endItems.count() > 0 && startItems.first()->type() == DiagramItem::Type &&
-            endItems.first()->type() == DiagramItem::Type && startItems.first() != endItems.first())
+        if (startItems.count() > 0 && endItems.count() > 0 && startItems.first() != endItems.first())
         {
-            auto* startItem = qgraphicsitem_cast<DiagramItem*>(startItems.first());
-            auto* endItem = qgraphicsitem_cast<DiagramItem*>(endItems.first());
-            auto* arrow = new Arrow(startItem, endItem);
-            arrow->setColor(myLineColor);
-            startItem->addArrow(arrow);
-            endItem->addArrow(arrow);
-            arrow->setZValue(-1000.0);
-            addItem(arrow);
-            arrow->updatePosition();
+            auto* startItem = startItems.first();
+            auto* endItem = endItems.first();
+
+            if (isDiagramItem(startItem) && isDiagramItem(endItem))
+            {
+                if (startItem->type() != DiagramItem::Type)
+                {
+                    startItem = startItem->parentItem();
+                }
+                if (endItem->type() != DiagramItem::Type)
+                {
+                    endItem = endItem->parentItem();
+                }
+                setArrow(qgraphicsitem_cast<DiagramItem*>(startItem), qgraphicsitem_cast<DiagramItem*>(endItem));
+            }
+            else
+            {
+                spdlog::info("[%s] can not to arrow this Item\n", __FUNCTION__);
+            }
         }
     }
 

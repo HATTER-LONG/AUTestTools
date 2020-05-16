@@ -29,7 +29,7 @@ public:
         MoveItem
     };
 
-    explicit DiagramScene(QMenu* itemMenu, QObject* parent = 0);
+    explicit DiagramScene(QMenu* itemMenu, QObject* parent = nullptr);
     QFont font() const { return myFont; }
     QColor textColor() const { return myTextColor; }
     QColor itemColor() const { return myItemColor; }
@@ -38,7 +38,8 @@ public:
     void setTextColor(const QColor& color);
     void setItemColor(const QColor& color);
     void setFont(const QFont& font);
-
+    DiagramItem* createItem(DiagramItem::DiagramType type, QPointF point);
+    void setArrow(DiagramItem* startItem, DiagramItem* endItem);
 public slots:
     void setMode(Mode mode);
     void setItemType(DiagramItem::DiagramType type);
@@ -56,7 +57,7 @@ protected:
 
 private:
     bool isItemChange(int type);
-
+    bool isDiagramItem(QGraphicsItem* item);
     DiagramItem::DiagramType myItemType;
     QMenu* myItemMenu;
     Mode myMode;
