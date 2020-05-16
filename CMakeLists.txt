@@ -39,7 +39,8 @@ FILE(GLOB SRC_FILES
     "./Src/*.cpp" 
     "./Src/window/*.cpp" 
     "./Src/window/DiagramWindow/*.cpp"
-    "./Src/Function/*.cpp") 
+    "./Src/function/*.cpp"
+    "./Sec/function/AnalysisCode/*.cpp") 
 #同理，查找当前文件夹中所有的头文件
 FILE(GLOB HEAD_FILES "Include/*") 
 #同理，查找当前文件夹中所有的ui文件

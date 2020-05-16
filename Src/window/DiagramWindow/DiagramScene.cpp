@@ -195,7 +195,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
             }
             else
             {
-                spdlog::info("[%s] can not to arrow this Item\n", __FUNCTION__);
+                spdlog::info("[{}] can not to arrow this Item\n", __FUNCTION__);
             }
         }
     }

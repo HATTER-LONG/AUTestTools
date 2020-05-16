@@ -4,7 +4,8 @@ FILE(GLOB AUTESTSRC
     "./*.cpp" 
     "./*.cxx" 
     "./Tools/*.hpp"
-    "../Src/Function/*.cpp") 
+    "../Src/function/*.cpp"
+    "../Src/function/AnalysisCode/*.cpp") 
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
