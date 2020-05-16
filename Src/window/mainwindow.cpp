@@ -21,7 +21,6 @@ void MainWindow::createMenus()
     itemMenu = menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(diagramSceneWindow->toFrontAction);
     itemMenu->addSeparator();
-    itemMenu->addAction(diagramSceneWindow->toFrontAction);
     itemMenu->addAction(diagramSceneWindow->sendBackAction);
 
     aboutMenu = menuBar()->addMenu(tr("&Help"));
