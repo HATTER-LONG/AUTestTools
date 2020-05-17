@@ -46,7 +46,7 @@ class FunctionDeclAnalysis
 public:
     FunctionDeclAnalysis(std::string filepath, std::string compiledatabase);
 
-    bool StartToAnalysis();
+    int StartToAnalysis();
     std::vector<SourceCodeErrorMessage> GetErrorMessage();
     std::map<std::string, SourceCodeFunctionMessage> GetFunctionMessage();
 

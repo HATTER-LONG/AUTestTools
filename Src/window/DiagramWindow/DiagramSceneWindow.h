@@ -62,6 +62,7 @@ private:
 
     QIcon createColorToolButtonIcon(const QString& image, QColor color);
     QIcon createColorIcon(QColor color);
+    void fileopen();
 
 public:
     QAction* exitAction;

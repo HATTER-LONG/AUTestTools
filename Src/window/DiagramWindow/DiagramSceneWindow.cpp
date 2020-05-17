@@ -3,8 +3,10 @@
 #include "DiagramItem.h"
 #include "DiagramScene.h"
 #include "DiagramSceneWindow.h"
+#include "function/FunctionDeclAnalysis.h"
 #include "spdlog/spdlog.h"
 #include <QtWidgets>
+
 
 const int InsertTextButton = 10;
 DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent)
@@ -13,7 +15,7 @@ DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent
     createToolBox();
 
     scene = new DiagramScene(itemMenu, this);
-    scene->setSceneRect(QRectF(0, 0, 5000, 5000));
+    scene->setSceneRect(QRectF(0, 0, 10000, 10000));
     connect(scene, SIGNAL(itemInserted(DiagramItem*)), this, SLOT(itemInserted(DiagramItem*)));
     connect(scene, SIGNAL(textInserted(QGraphicsTextItem*)), this, SLOT(textInserted(QGraphicsTextItem*)));
     connect(scene, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(itemSelected(QGraphicsItem*)));
@@ -53,6 +55,8 @@ void DiagramSceneWindow::backgroundButtonGroupClicked(QAbstractButton* button)
 
     scene->update();
     view->update();
+
+    fileopen();
 }
 
 void DiagramSceneWindow::buttonGroupClicked(int id)
@@ -526,4 +530,93 @@ void DiagramSceneWindow::itemColorChanged()
     fillColorToolButton->setIcon(
         createColorToolButtonIcon("://images/fillcolor-40px.png", qvariant_cast<QColor>(fillAction->data())));
     fillButtonTriggered();
+}
+
+void DiagramSceneWindow::fileopen()
+{
+    auto* fundeclanalysisptr = new FunctionDeclAnalysis("./test/test.cxx", "./build/compile_commands.json");
+
+
+    int result = fundeclanalysisptr->StartToAnalysis();
+    spdlog::info("StartToAnalysis Result is {}\n", result);
+
+    SourceCodeErrorMessageList tmpErrorMessagevector = fundeclanalysisptr->GetErrorMessage();
+    for (auto a : tmpErrorMessagevector)
+    {
+        spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(),
+                     a.GetErrorPos());
+    }
+
+    SourceCodeFunctionMessageMap tmpFunctionMessageMap = fundeclanalysisptr->GetFunctionMessage();
+
+    DiagramItem* tmpItem = nullptr;
+    for (auto a : tmpFunctionMessageMap)
+    {
+        QPointF point;
+        if (tmpItem == nullptr)
+        {
+            point.setX(150);
+            point.setY(150);
+        }
+        else
+        {
+            point = tmpItem->pos();
+            point.setX(point.x() + tmpItem->boundingRect().width() + 50);
+        }
+
+        tmpItem = scene->createItem(DiagramItem::DiagramType::Step, point);
+        std::vector<std::string> functionparam = a.second.GetFunctionParam();
+        std::string showText = functionparam[0];
+        showText += " ";
+        showText += a.second.GetFunctionName();
+        showText += "(";
+        for (auto b = functionparam.begin() + 1; b != functionparam.end(); b++)
+        {
+            showText += *b;
+            if (b != functionparam.end() - 1)
+                showText += ", ";
+        }
+        showText += ")";
+
+        tmpItem->setItemText(QString(showText.c_str()));
+
+        std::vector<std::string> functioncallexpr = a.second.GetFunctionWhichCallExpr();
+        DiagramItem* tmpItemcall = nullptr;
+        DiagramItem* tmpItemcallLast = nullptr;
+        for (auto b = functioncallexpr.begin(); b != functioncallexpr.end(); b++)
+        {
+            QPointF pointf2;
+            if (tmpItemcall == nullptr)
+            {
+                pointf2 = tmpItem->pos();
+                pointf2.setY(pointf2.y() + tmpItem->boundingRect().height() + 100);
+                tmpItemcallLast = tmpItem;
+            }
+            else
+            {
+                pointf2 = tmpItemcall->pos();
+                pointf2.setY(pointf2.y() + tmpItemcall->boundingRect().height() + 100);
+                tmpItemcallLast = tmpItemcall;
+            }
+
+            tmpItemcall = scene->createItem(DiagramItem::DiagramType::Step, pointf2);
+            auto iter = tmpFunctionMessageMap.find(*b);
+
+            std::vector<std::string> functionparam = iter->second.GetFunctionParam();
+            std::string showText = functionparam[0];
+            showText += " ";
+            showText += iter->second.GetFunctionName();
+            showText += "(";
+            for (auto b = functionparam.begin() + 1; b != functionparam.end(); b++)
+            {
+                showText += *b;
+                if (b != functionparam.end() - 1)
+                    showText += ", ";
+            }
+            showText += ")";
+            tmpItemcall->setItemText(QString(showText.c_str()));
+
+            scene->setArrow(tmpItemcallLast, tmpItemcall);
+        }
+    }
 }

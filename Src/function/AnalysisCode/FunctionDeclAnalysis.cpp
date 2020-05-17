@@ -1,8 +1,6 @@
-#include "../test/Tools/InputParamSaver.hpp"
-#include "./FuncDeclASTFrontendAction.h"
+#include "FuncDeclASTFrontendAction.hpp"
 #include "function/FunctionDeclAnalysis.h"
-#include "spdlog/spdlog.h"
-#include <clang/Frontend/FrontendAction.h>
+
 FunctionDeclAnalysis::FunctionDeclAnalysis(std::string filepath, std::string compiledatabase)
         : sourceCodeFilePath(filepath), compiledDatabasePath(compiledatabase)
 {
@@ -21,32 +19,30 @@ public:
 private:
     clang::FrontendAction* myFrontendAction;
 };
-bool FunctionDeclAnalysis::StartToAnalysis()
+
+int FunctionDeclAnalysis::StartToAnalysis()
 {
     int argc = 2;
     const char* argv[3];
+    argv[0] = "";
     argv[1] = sourceCodeFilePath.c_str();
     if (!compiledDatabasePath.empty())
     {
         argc++;
-        compiledDatabasePath = "\"" + compiledDatabasePath + "\"";
         compiledDatabasePath = "-p=" + compiledDatabasePath;
-        argv[2] = sourceCodeFilePath.c_str();
+        argv[2] = compiledDatabasePath.c_str();
     }
-    std::vector<std::string> tmpvector = InputParamSaver::instance()->getSaver();
-    argc = tmpvector.size();
+
     for (int i = 0; i < argc; i++)
     {
-        argv[i] = tmpvector[i].c_str();
+        spdlog::info("argc = [{}], argv = [{}]\n", i, argv[i]);
     }
     clang::tooling::CommonOptionsParser op(argc, argv, ToolingSampleCategory);
     clang::tooling::ClangTool Tool(op.getCompilations(), op.getSourcePathList());
-    auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(sourceCodeErrorMessage);
+    auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(sourceCodeErrorMessage, sourceCodeFunctionMessage);
     MyFrontendActionFactory tmp;
     tmp.setPtr(tmpFrontendAction);
-    Tool.run(&tmp);
-
-    return true;
+    return Tool.run(&tmp);
 }
 
 SourceCodeErrorMessageList FunctionDeclAnalysis::GetErrorMessage() { return sourceCodeErrorMessage; }

@@ -4,6 +4,7 @@
 #include "Tools/InputParamSaver.hpp"
 #include "function/FunctionDeclAnalysis.h"
 
+#include <utility>
 #include <vector>
 
 
@@ -14,8 +15,8 @@ TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
     REQUIRE(fundeclanalysisptr != nullptr);
 
     {
-        bool result = fundeclanalysisptr->StartToAnalysis();
-        REQUIRE(result == true);
+        int result = fundeclanalysisptr->StartToAnalysis();
+        spdlog::info("StartToAnalysis Result is {}\n", result);
     }
 
     {
@@ -29,7 +30,7 @@ TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
     }
 
     {
-        // std::map<std::string, SourceCodeFunctionMessage> tmpvector = fundeclanalysisptr->GetFunctionMessage();
-        // REQUIRE(!tmpvector.empty());
+        std::map<std::string, SourceCodeFunctionMessage> tmpvector = fundeclanalysisptr->GetFunctionMessage();
+        REQUIRE(!tmpvector.empty());
     }
 }

@@ -100,6 +100,7 @@ void DiagramItem::createTextItem()
     mytextItem->setFlag(QGraphicsItem::ItemIsMovable, false);
     mytextItem->setFlag(QGraphicsItem::ItemIsSelectable, false);
 }
+void DiagramItem::setItemText(const QString& text) { mytextItem->setPlainText(text); }
 
 QPixmap DiagramItem::image() const
 {

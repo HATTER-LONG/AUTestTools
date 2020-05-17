@@ -51,6 +51,8 @@ public:
     void setTextColor(const QColor& color);
     void createTextItem();
 
+    void setItemText(const QString& text);
+
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;
     QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
