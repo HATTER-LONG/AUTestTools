@@ -12,7 +12,6 @@
 
 DiagramItem::DiagramItem(DiagramType diagramType, QGraphicsItem* parent) : QGraphicsPolygonItem(parent)
 {
-    spdlog::info("DiagramItem Build  diagramType = [{}]\n", diagramType);
     myDiagramType = diagramType;
     // myContextMenu = contextMenu;
 

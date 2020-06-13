@@ -123,7 +123,6 @@ public:
     }
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI, clang::StringRef file) override
     {
-        llvm::errs() << "** Creating AST consumer for: " << file << "\n";
         using namespace clang::ast_matchers;
         auto FuncDeclMatcher =
             functionDecl(isExpansionInMainFile(), anyOf(forEachDescendant(callExpr().bind("callExprFunction")),

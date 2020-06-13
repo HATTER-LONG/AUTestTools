@@ -7,10 +7,6 @@
 
 int main(int argc, char* argv[])
 {
-    for (int i = 0; i < argc; i++)
-    {
-        spdlog::info("{}={}", i, argv[i]);
-    }
     InputParamSaver::instance()->ToSaver(argc, argv);
     return Catch::Session().run();
 }

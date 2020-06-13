@@ -16,7 +16,18 @@ MainWindow::MainWindow()
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction("exit", this, SLOT(close()));
+    auto openFileAction = new QAction(tr("&Open"), this);
+    openFileAction->setShortcut(tr("Ctrl+P"));
+    openFileAction->setStatusTip(tr("Open source code file to analysis"));
+    connect(openFileAction, SIGNAL(triggered()), this, SLOT(openFileToAnalysis()));
+
+    auto exitAction = new QAction(QIcon(":/images/exit.png"), tr("&Exit"), this);
+    exitAction->setShortcut(QKeySequence::Quit);
+    exitAction->setStatusTip(tr("Quit"));
+    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+
+    fileMenu->addAction(openFileAction);
+    fileMenu->addAction(exitAction);
 
     itemMenu = menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(diagramSceneWindow->toFrontAction);
@@ -25,4 +36,15 @@ void MainWindow::createMenus()
 
     aboutMenu = menuBar()->addMenu(tr("&Help"));
     aboutMenu->addAction(diagramSceneWindow->aboutAction);
+}
+
+void MainWindow::openFileToAnalysis()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("open source code file"), "./", tr("All files (*.*)"));
+
+    if (!fileName.isEmpty())
+    {
+        spdlog::info("{} filename is {}\n", __FUNCTION__, fileName.toStdString().c_str());
+        diagramSceneWindow->fileopen(fileName);
+    }
 }

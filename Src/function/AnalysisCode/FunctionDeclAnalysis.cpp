@@ -1,12 +1,5 @@
 #include "FuncDeclASTFrontendAction.hpp"
 #include "function/FunctionDeclAnalysis.h"
-
-FunctionDeclAnalysis::FunctionDeclAnalysis(std::string filepath, std::string compiledatabase)
-        : sourceCodeFilePath(filepath), compiledDatabasePath(compiledatabase)
-{
-    spdlog::info("[{}] filepath = [{}] complieddatabase = [{}]\n", __FUNCTION__, filepath.c_str(),
-                 compiledatabase.c_str());
-}
 class MyFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
 public:
@@ -19,6 +12,13 @@ public:
 private:
     clang::FrontendAction* myFrontendAction;
 };
+
+FunctionDeclAnalysis::FunctionDeclAnalysis(std::string filepath, std::string compiledatabase)
+        : sourceCodeFilePath(filepath), compiledDatabasePath(compiledatabase)
+{
+    spdlog::info("[{}] filepath = [{}] complieddatabase = [{}]\n", __FUNCTION__, filepath.c_str(),
+                 compiledatabase.c_str());
+}
 
 int FunctionDeclAnalysis::StartToAnalysis()
 {

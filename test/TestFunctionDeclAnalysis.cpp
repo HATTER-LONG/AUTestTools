@@ -3,6 +3,7 @@
 
 #include "Tools/InputParamSaver.hpp"
 #include "function/FunctionDeclAnalysis.h"
+#include "test.h"
 
 #include <utility>
 #include <vector>
@@ -11,26 +12,33 @@
 
 TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
 {
-    auto* fundeclanalysisptr = new FunctionDeclAnalysis("./test/test.cxx", "./build/compile_commands.json");
+    std::string analysisFilePath = "./test/test.cxx";
+    std::string comipleCommandFilePath = "./build/compile_commands.json";
+    if (InputParamSaver::instance()->getSaver().size() == 3)
+    {
+        analysisFilePath = InputParamSaver::instance()->getSaver()[1];
+        comipleCommandFilePath = InputParamSaver::instance()->getSaver()[2];
+    }
+
+    spdlog::info("analysis file pathname is {}, comiple command file path is {}", analysisFilePath.c_str(),
+                 comipleCommandFilePath.c_str());
+    auto* fundeclanalysisptr = new FunctionDeclAnalysis(analysisFilePath, comipleCommandFilePath);
     REQUIRE(fundeclanalysisptr != nullptr);
 
     {
         int result = fundeclanalysisptr->StartToAnalysis();
-        spdlog::info("StartToAnalysis Result is {}\n", result);
+        // 0 on success; 1 if any error occurred; 2 if there is no error but some files are skipped due to missing
+        // compile commands.
+        REQUIRE(result == 0);
     }
 
     {
         std::vector<SourceCodeErrorMessage> tmpvector = fundeclanalysisptr->GetErrorMessage();
-        REQUIRE(!tmpvector.empty());
-        for (auto a : tmpvector)
-        {
-            spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(),
-                         a.GetErrorPos());
-        }
+        REQUIRE(tmpvector.size() == TESTCXX_ERRORCOUNT);
     }
 
     {
         std::map<std::string, SourceCodeFunctionMessage> tmpvector = fundeclanalysisptr->GetFunctionMessage();
-        REQUIRE(!tmpvector.empty());
+        REQUIRE(tmpvector.size() == TESTCXX_FUNCTIONCOUTN);
     }
 }

@@ -55,8 +55,6 @@ void DiagramSceneWindow::backgroundButtonGroupClicked(QAbstractButton* button)
 
     scene->update();
     view->update();
-
-    fileopen();
 }
 
 void DiagramSceneWindow::buttonGroupClicked(int id)
@@ -263,8 +261,8 @@ void DiagramSceneWindow::createToolBox()
     connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonGroupClicked(int)));
     auto* layout = new QGridLayout;
     layout->addWidget(createCellWidget(tr("Conditional"), DiagramItem::Conditional), 0, 0);
-    layout->addWidget(createCellWidget(tr("Process"), DiagramItem::Step), 0, 1);
-    layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
+    layout->addWidget(createCellWidget(tr("Process"), DiagramItem::Step), 1, 0);
+    layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 2, 0);
     //! [21]
 
     auto* textButton = new QToolButton;
@@ -277,10 +275,10 @@ void DiagramSceneWindow::createToolBox()
     textLayout->addWidget(new QLabel(tr("Text")), 1, 0, Qt::AlignCenter);
     auto* textWidget = new QWidget;
     textWidget->setLayout(textLayout);
-    layout->addWidget(textWidget, 1, 1);
+    layout->addWidget(textWidget, 3, 0);
 
-    layout->setRowStretch(3, 10);
-    layout->setColumnStretch(2, 10);
+    layout->setRowStretch(4, 10); //行列方向增加弹簧 https://www.mycode.net.cn/language/cpp/539.html
+    layout->setColumnStretch(1, 10);
 
     auto* itemWidget = new QWidget;
     itemWidget->setLayout(layout);
@@ -291,11 +289,11 @@ void DiagramSceneWindow::createToolBox()
 
     auto* backgroundLayout = new QGridLayout;
     backgroundLayout->addWidget(createBackgroundCellWidget(tr("Blue Grid"), ":/images/background1.png"), 0, 0);
-    backgroundLayout->addWidget(createBackgroundCellWidget(tr("White Grid"), ":/images/background2.png"), 0, 1);
-    backgroundLayout->addWidget(createBackgroundCellWidget(tr("Gray Grid"), ":/images/background3.png"), 1, 0);
-    backgroundLayout->addWidget(createBackgroundCellWidget(tr("No Grid"), ":/images/background4.png"), 1, 1);
+    backgroundLayout->addWidget(createBackgroundCellWidget(tr("White Grid"), ":/images/background2.png"), 1, 0);
+    backgroundLayout->addWidget(createBackgroundCellWidget(tr("Gray Grid"), ":/images/background3.png"), 2, 0);
+    backgroundLayout->addWidget(createBackgroundCellWidget(tr("No Grid"), ":/images/background4.png"), 3, 0);
 
-    backgroundLayout->setRowStretch(2, 10);
+    backgroundLayout->setRowStretch(4, 10);
     backgroundLayout->setColumnStretch(2, 10);
 
     auto* backgroundWidget = new QWidget;
@@ -324,11 +322,6 @@ void DiagramSceneWindow::createActions()
     deleteAction->setShortcut(tr("Delete"));
     deleteAction->setStatusTip(tr("Delete item from diagram"));
     connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteItem()));
-
-    exitAction = new QAction(QIcon(":/images/exit.png"), tr("E&xit"), this);
-    exitAction->setShortcut(QKeySequence::Quit);
-    exitAction->setStatusTip(tr("Quit"));
-    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
     boldAction = new QAction(tr("Bold"), this);
     boldAction->setCheckable(true);
@@ -532,7 +525,7 @@ void DiagramSceneWindow::itemColorChanged()
     fillButtonTriggered();
 }
 
-void DiagramSceneWindow::fileopen()
+void DiagramSceneWindow::fileopen(QString filename)
 {
     auto* fundeclanalysisptr = new FunctionDeclAnalysis("./test/test.cxx", "./build/compile_commands.json");
 
@@ -583,7 +576,7 @@ void DiagramSceneWindow::fileopen()
         std::vector<std::string> functioncallexpr = a.second.GetFunctionWhichCallExpr();
         DiagramItem* tmpItemcall = nullptr;
         DiagramItem* tmpItemcallLast = nullptr;
-        for (auto b = functioncallexpr.begin(); b != functioncallexpr.end(); b++)
+        for (auto& b : functioncallexpr)
         {
             QPointF pointf2;
             if (tmpItemcall == nullptr)
@@ -600,7 +593,7 @@ void DiagramSceneWindow::fileopen()
             }
 
             tmpItemcall = scene->createItem(DiagramItem::DiagramType::Step, pointf2);
-            auto iter = tmpFunctionMessageMap.find(*b);
+            auto iter = tmpFunctionMessageMap.find(b);
 
             std::vector<std::string> functionparam = iter->second.GetFunctionParam();
             std::string showText = functionparam[0];

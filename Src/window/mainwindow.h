@@ -27,8 +27,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
+private slots:
+    void openFileToAnalysis();
+
 private:
     void createMenus();
+
     DiagramSceneWindow* diagramSceneWindow;
     QMenu* fileMenu;
     QMenu* itemMenu;

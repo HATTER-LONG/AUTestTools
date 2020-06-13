@@ -28,6 +28,7 @@ class DiagramSceneWindow : public QMainWindow
 public:
     DiagramSceneWindow(QMainWindow* parent);
 
+    void fileopen(QString filename);
 private slots:
 
     void backgroundButtonGroupClicked(QAbstractButton* button);
@@ -62,10 +63,8 @@ private:
 
     QIcon createColorToolButtonIcon(const QString& image, QColor color);
     QIcon createColorIcon(QColor color);
-    void fileopen();
 
 public:
-    QAction* exitAction;
     QAction* addAction;
     QAction* deleteAction;
 
