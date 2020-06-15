@@ -15,12 +15,16 @@
 #include <llvm/Support/raw_ostream.h>
 #include <string>
 
+namespace MFunction
+{
 
 static llvm::cl::OptionCategory ToolingSampleCategory("Tooling Sample");
 class MatcherNodeFuncCall : public clang::ast_matchers::MatchFinder::MatchCallback
 {
 public:
-    MatcherNodeFuncCall(SourceCodeFunctionMessageMap& functionmessage) : functionMessageRef(functionmessage) {}
+    MatcherNodeFuncCall(MFunction::SourceCodeFunctionMessageMap& functionmessage) : functionMessageRef(functionmessage)
+    {
+    }
     void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
     {
         std::string callexprname;
@@ -121,7 +125,8 @@ public:
         delete nodeFuncCall;
         nodeFuncCall = nullptr;
     }
-    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI, clang::StringRef file) override
+    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI,
+                                                          clang::StringRef /*file*/) override
     {
         using namespace clang::ast_matchers;
         auto FuncDeclMatcher =
@@ -139,3 +144,5 @@ private:
     clang::ast_matchers::MatchFinder finder;
     SourceCodeErrorAnalysis* errorAnalysis;
 };
+
+} // namespace MFunction

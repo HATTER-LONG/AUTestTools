@@ -1,10 +1,10 @@
 
+#include "function/FunctionDeclAnalysis.h"
 #include "mainwindow.h"
 #include "spdlog/spdlog.h"
-
 #include <QtWidgets>
 
-MainWindow::MainWindow()
+MainWindow::MainWindow() : sourceCodeMessagePtr(nullptr)
 {
     diagramSceneWindow = new DiagramSceneWindow(this);
     createMenus();
@@ -45,6 +45,37 @@ void MainWindow::openFileToAnalysis()
     if (!fileName.isEmpty())
     {
         spdlog::info("{} filename is {}\n", __FUNCTION__, fileName.toStdString().c_str());
-        diagramSceneWindow->fileopen(fileName);
+        if (sourceCodeMessagePtr == nullptr)
+        {
+            sourceCodeMessagePtr =
+                new MFunction::FunctionDeclAnalysis(fileName.toStdString(), "./build/compile_commands.json");
+        }
+        else
+        {
+            sourceCodeMessagePtr->SetFilePathToAnalysis(fileName.toStdString());
+        }
+        try
+        {
+            int result = sourceCodeMessagePtr->StartToAnalysis();
+            spdlog::info("StartToAnalysis Result is {}\n", result);
+        }
+        catch (std::exception& e)
+        {
+            spdlog::info("Start to ananlysis error exception: {}", e.what());
+        }
+
+        MFunction::SourceCodeErrorMessageList& tmpErrorMessagevector = sourceCodeMessagePtr->GetErrorMessage();
+        for (auto a : tmpErrorMessagevector)
+        {
+            spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(),
+                         a.GetErrorPos());
+        }
+
+        MFunction::SourceCodeFunctionMessageMap& tmpFunctionMessageMap = sourceCodeMessagePtr->GetFunctionMessage();
+
+        diagramSceneWindow->drawReslutByCodeMessage(tmpFunctionMessageMap, tmpErrorMessagevector);
+
+        delete sourceCodeMessagePtr;
+        sourceCodeMessagePtr = nullptr;
     }
 }

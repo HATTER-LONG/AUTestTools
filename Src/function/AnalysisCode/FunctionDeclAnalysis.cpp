@@ -1,5 +1,9 @@
 #include "FuncDeclASTFrontendAction.hpp"
 #include "function/FunctionDeclAnalysis.h"
+#include <clang/Tooling/Tooling.h>
+namespace MFunction
+{
+
 class MyFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
 public:
@@ -29,8 +33,7 @@ int FunctionDeclAnalysis::StartToAnalysis()
     if (!compiledDatabasePath.empty())
     {
         argc++;
-        compiledDatabasePath = "-p=" + compiledDatabasePath;
-        argv[2] = compiledDatabasePath.c_str();
+        argv[2] = ("-p=" + compiledDatabasePath).c_str();
     }
 
     for (int i = 0; i < argc; i++)
@@ -38,13 +41,21 @@ int FunctionDeclAnalysis::StartToAnalysis()
         spdlog::info("argc = [{}], argv = [{}]\n", i, argv[i]);
     }
     clang::tooling::CommonOptionsParser op(argc, argv, ToolingSampleCategory);
-    clang::tooling::ClangTool Tool(op.getCompilations(), op.getSourcePathList());
+    std::vector<std::string> sourcepath;
+    sourcepath.emplace_back(argv[1]);
+    clang::tooling::ClangTool Tool(op.getCompilations(), sourcepath);
+
+    // sourceCodeErrorMessage.clear();
+    // sourceCodeFunctionMessage.clear();
+
     auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(sourceCodeErrorMessage, sourceCodeFunctionMessage);
     MyFrontendActionFactory tmp;
     tmp.setPtr(tmpFrontendAction);
     return Tool.run(&tmp);
 }
 
-SourceCodeErrorMessageList FunctionDeclAnalysis::GetErrorMessage() { return sourceCodeErrorMessage; }
+SourceCodeErrorMessageList& FunctionDeclAnalysis::GetErrorMessage() { return sourceCodeErrorMessage; }
 
-SourceCodeFunctionMessageMap FunctionDeclAnalysis::GetFunctionMessage() { return sourceCodeFunctionMessage; };
+SourceCodeFunctionMessageMap& FunctionDeclAnalysis::GetFunctionMessage() { return sourceCodeFunctionMessage; };
+
+} // namespace MFunction

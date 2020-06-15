@@ -6,6 +6,11 @@
 
 class DiagramScene;
 
+namespace MFunction
+{
+class FunctionDeclAnalysis;
+} // namespace MFunction
+
 QT_BEGIN_NAMESPACE
 class QAction;
 class QToolBox;
@@ -37,5 +42,7 @@ private:
     QMenu* fileMenu;
     QMenu* itemMenu;
     QMenu* aboutMenu;
+
+    MFunction::FunctionDeclAnalysis* sourceCodeMessagePtr;
 };
 #endif // MAINWINDOW_H

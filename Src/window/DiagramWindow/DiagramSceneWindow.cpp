@@ -21,6 +21,7 @@ DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent
     connect(scene, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(itemSelected(QGraphicsItem*)));
 
     view = new QGraphicsView(scene);
+    view->centerOn(0, 0);
     createToolbars();
 
     auto* layout = new QHBoxLayout;
@@ -525,25 +526,13 @@ void DiagramSceneWindow::itemColorChanged()
     fillButtonTriggered();
 }
 
-void DiagramSceneWindow::fileopen(QString filename)
+void DiagramSceneWindow::drawReslutByCodeMessage(MFunction::SourceCodeFunctionMessageMap& functionMessage,
+                                                 MFunction::SourceCodeErrorMessageList& /*errorMessage*/)
 {
-    auto* fundeclanalysisptr = new FunctionDeclAnalysis("./test/test.cxx", "./build/compile_commands.json");
-
-
-    int result = fundeclanalysisptr->StartToAnalysis();
-    spdlog::info("StartToAnalysis Result is {}\n", result);
-
-    SourceCodeErrorMessageList tmpErrorMessagevector = fundeclanalysisptr->GetErrorMessage();
-    for (auto a : tmpErrorMessagevector)
-    {
-        spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(),
-                     a.GetErrorPos());
-    }
-
-    SourceCodeFunctionMessageMap tmpFunctionMessageMap = fundeclanalysisptr->GetFunctionMessage();
-
+    scene->clear();
+    view->centerOn(0, 0);
     DiagramItem* tmpItem = nullptr;
-    for (auto a : tmpFunctionMessageMap)
+    for (auto a : functionMessage)
     {
         QPointF point;
         if (tmpItem == nullptr)
@@ -593,7 +582,7 @@ void DiagramSceneWindow::fileopen(QString filename)
             }
 
             tmpItemcall = scene->createItem(DiagramItem::DiagramType::Step, pointf2);
-            auto iter = tmpFunctionMessageMap.find(b);
+            auto iter = functionMessage.find(b);
 
             std::vector<std::string> functionparam = iter->second.GetFunctionParam();
             std::string showText = functionparam[0];

@@ -2,6 +2,7 @@
 #define __DIAGRAM_SCENE_WINDOW_H__
 
 #include "DiagramItem.h"
+#include "function/FunctionDeclAnalysis.h"
 #include <QMainWindow>
 
 class DiagramScene;
@@ -28,7 +29,8 @@ class DiagramSceneWindow : public QMainWindow
 public:
     DiagramSceneWindow(QMainWindow* parent);
 
-    void fileopen(QString filename);
+    void drawReslutByCodeMessage(MFunction::SourceCodeFunctionMessageMap& functionMessage,
+                                 MFunction::SourceCodeErrorMessageList& errorMessage);
 private slots:
 
     void backgroundButtonGroupClicked(QAbstractButton* button);

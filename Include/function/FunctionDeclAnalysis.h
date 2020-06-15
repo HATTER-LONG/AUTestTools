@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 #include <vector>
+namespace MFunction
+{
 
 class SourceCodeErrorMessage
 {
@@ -47,8 +49,11 @@ public:
     FunctionDeclAnalysis(std::string filepath, std::string compiledatabase);
 
     int StartToAnalysis();
-    std::vector<SourceCodeErrorMessage> GetErrorMessage();
-    std::map<std::string, SourceCodeFunctionMessage> GetFunctionMessage();
+
+    void SetFilePathToAnalysis(std::string filepath) { sourceCodeFilePath = filepath; }
+    void SetCompileDatabase(std::string compiledatabase) { compiledDatabasePath = compiledatabase; }
+    std::vector<SourceCodeErrorMessage>& GetErrorMessage();
+    std::map<std::string, SourceCodeFunctionMessage>& GetFunctionMessage();
 
 private:
     SourceCodeErrorMessageList sourceCodeErrorMessage;
@@ -58,4 +63,5 @@ private:
     std::string compiledDatabasePath;
 };
 
+} // namespace MFunction
 #endif //__FUNCTION_DECL_ANALYSIS_H__
