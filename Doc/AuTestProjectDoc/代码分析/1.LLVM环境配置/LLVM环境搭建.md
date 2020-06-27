@@ -1,5 +1,13 @@
 # Windows 下通过 CMAKE 搭建 LLVM 环境
 
+- [Windows 下通过 CMAKE 搭建 LLVM 环境](#windows-下通过-cmake-搭建-llvm-环境)
+  - [前因](#前因)
+  - [系统环境](#系统环境)
+  - [Let's Begin](#lets-begin)
+    - [获取 LLVM Project 源码](#获取-llvm-project-源码)
+    - [使用 Vscode 打开&编译 LLVM Project](#使用-vscode-打开编译-llvm-project)
+    - [Build](#build)
+
 本文主要介绍如何在 Windows 下通过 vscode 使用 Cmake+Ninja 来编译 LLVM 源码，从而搭建 LLVM 环境以及生成 clang 的 Tools 相关库。
 
 ## 前因

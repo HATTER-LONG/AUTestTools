@@ -12,8 +12,8 @@ const int InsertTextButton = 10;
 DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent)
 {
     createActions();
-    createToolBox();
-
+    // createToolBox();
+    createItemMenus();
     scene = new DiagramScene(itemMenu, this);
     scene->setSceneRect(QRectF(0, 0, 10000, 10000));
     connect(scene, SIGNAL(itemInserted(DiagramItem*)), this, SLOT(itemInserted(DiagramItem*)));
@@ -33,7 +33,32 @@ DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent
     diagramWidget->setLayout(layout);
     this->setCentralWidget(diagramWidget);
 }
-void DiagramSceneWindow::initDefconf() {}
+void DiagramSceneWindow::createItemMenus()
+{
+    itemMenu = new QMenu;
+    itemMenu->addAction(selectFuncAction);
+    connect(selectFuncAction, SIGNAL(triggered()), this, SLOT(itemSelectedToCreateSourceCode()));
+    itemMenu->addAction(toFrontAction);
+    itemMenu->addAction(sendBackAction);
+    itemMenu->addSeparator();
+    itemMenu->addAction(deleteAction);
+}
+
+void DiagramSceneWindow::itemSelectedToCreateSourceCode()
+{
+    spdlog::info("Select Item num is {}", scene->selectedItems().size());
+
+    foreach (auto* item, scene->selectedItems())
+    {
+        if (item->type() == DiagramItem::Type)
+        {
+            spdlog::info("Function Info is {}",
+                         qgraphicsitem_cast<DiagramItem*>(item)->getItemText().toStdString().c_str());
+            emit selectedFunctionInfo(qgraphicsitem_cast<DiagramItem*>(item)->getItemText());
+        }
+    }
+}
+
 void DiagramSceneWindow::backgroundButtonGroupClicked(QAbstractButton* button)
 {
     spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
@@ -344,6 +369,8 @@ void DiagramSceneWindow::createActions()
     aboutAction = new QAction(QIcon(":/images/about-48px.png"), tr("About Tips"), this);
     aboutAction->setStatusTip(tr("About Tips"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+
+    selectFuncAction = new QAction(tr("Create Soucre Code"), this);
 }
 
 void DiagramSceneWindow::createToolbars()
@@ -478,7 +505,7 @@ QWidget* DiagramSceneWindow::createCellWidget(const QString& text, DiagramItem::
 {
     spdlog::info("{}:{}:{} Call text is [{}]  type is [{}]!!!", __FILE__, __FUNCTION__, __LINE__,
                  text.toStdString().c_str(), type);
-    DiagramItem item(type);
+    DiagramItem item(type, itemMenu);
     QIcon icon(item.image());
 
     auto* button = new QToolButton;

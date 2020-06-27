@@ -93,7 +93,7 @@ void DiagramScene::editorLostFocus(DiagramTextItem* item)
 }
 DiagramItem* DiagramScene::createItem(DiagramItem::DiagramType type, QPointF point)
 {
-    auto* item = new DiagramItem(type);
+    auto* item = new DiagramItem(type, myItemMenu);
     item->setBrush(myItemColor);
     item->setFont(myFont);
     item->setTextColor(myTextColor);

@@ -10,10 +10,11 @@
 #include <QTextBlockFormat>
 #include <QTextCursor>
 
-DiagramItem::DiagramItem(DiagramType diagramType, QGraphicsItem* parent) : QGraphicsPolygonItem(parent)
+DiagramItem::DiagramItem(DiagramType diagramType, QMenu* contextMenu, QGraphicsItem* parent)
+        : QGraphicsPolygonItem(parent)
 {
     myDiagramType = diagramType;
-    // myContextMenu = contextMenu;
+    myContextMenu = contextMenu;
 
     QPainterPath path;
     switch (myDiagramType)
@@ -100,7 +101,7 @@ void DiagramItem::createTextItem()
     mytextItem->setFlag(QGraphicsItem::ItemIsSelectable, false);
 }
 void DiagramItem::setItemText(const QString& text) { mytextItem->setPlainText(text); }
-
+const QString DiagramItem::getItemText() { return mytextItem->toPlainText(); }
 QPixmap DiagramItem::image() const
 {
     QPixmap pixmap(250, 250);
@@ -113,12 +114,12 @@ QPixmap DiagramItem::image() const
     return pixmap;
 }
 
-void DiagramItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*/)
+void DiagramItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     spdlog::info("{}:{} call!!", __FILE__, __FUNCTION__);
     scene()->clearSelection();
     setSelected(true);
-    // myContextMenu->exec(event->screenPos());
+    myContextMenu->exec(event->screenPos());
 }
 
 QVariant DiagramItem::itemChange(GraphicsItemChange change, const QVariant& value)

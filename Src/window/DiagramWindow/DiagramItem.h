@@ -37,7 +37,7 @@ public:
         Io
     };
 
-    DiagramItem(DiagramType diagramType, QGraphicsItem* parent = nullptr);
+    DiagramItem(DiagramType diagramType, QMenu* contextMenu, QGraphicsItem* parent = nullptr);
     ~DiagramItem() override;
 
     void removeArrow(Arrow* arrow);
@@ -52,6 +52,7 @@ public:
     void createTextItem();
 
     void setItemText(const QString& text);
+    const QString getItemText();
 
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;

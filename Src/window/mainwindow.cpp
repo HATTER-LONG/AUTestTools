@@ -3,12 +3,25 @@
 #include "mainwindow.h"
 #include "spdlog/spdlog.h"
 #include <QtWidgets>
+#include <qboxlayout.h>
 
 MainWindow::MainWindow() : sourceCodeMessagePtr(nullptr)
 {
     diagramSceneWindow = new DiagramSceneWindow(this);
     createMenus();
-    setCentralWidget(diagramSceneWindow);
+
+    editwindow = new MineEditWindow(this);
+    connect(diagramSceneWindow, SIGNAL(selectedFunctionInfo(QString)), editwindow,
+            SLOT(createSelectFuncTestCode(QString)));
+    auto* layout = new QHBoxLayout;
+    auto* widgets = new QWidget;
+    setCentralWidget(widgets);
+
+    layout->addWidget(diagramSceneWindow);
+    layout->addWidget(editwindow);
+    layout->setStretch(0, 2);
+    layout->setStretch(1, 1);
+    widgets->setLayout(layout);
     setWindowTitle(tr("Diagramscene"));
     setUnifiedTitleAndToolBarOnMac(true);
 }

@@ -53,12 +53,16 @@ private slots:
     void handleFontChange();
     void itemSelected(QGraphicsItem* item);
     void about();
+    void itemSelectedToCreateSourceCode();
+
+signals:
+    void selectedFunctionInfo(QString funcName);
 
 private:
     void createActions();
     void createToolBox();
     void createToolbars();
-    void initDefconf();
+    void createItemMenus();
     QWidget* createBackgroundCellWidget(const QString& text, const QString& image);
     QWidget* createCellWidget(const QString& text, DiagramItem::DiagramType type);
     QMenu* createColorMenu(const char* slot, QColor defaultColor);
@@ -73,6 +77,8 @@ public:
     QAction* toFrontAction;
     QAction* sendBackAction;
     QAction* aboutAction;
+
+    QAction* selectFuncAction;
 
 private:
     DiagramScene* scene;
