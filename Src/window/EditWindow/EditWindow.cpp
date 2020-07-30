@@ -1,4 +1,5 @@
 #include "EditWindow.h"
+
 MineEditWindow::MineEditWindow(QWidget* parent) : QWidget(parent)
 {
     editor = new QTextEdit(this);
@@ -7,4 +8,4 @@ MineEditWindow::MineEditWindow(QWidget* parent) : QWidget(parent)
     this->setLayout(layout);
 }
 
-void MineEditWindow::createSelectFuncTestCode(QString funcname) { editor->setPlainText(funcname); }
+void MineEditWindow::createSelectFuncTestCode(QString funcname) { editor->append(funcname); }

@@ -1,5 +1,17 @@
 # Clang ASTMatcher 学习
 
+- [Clang ASTMatcher 学习](#clang-astmatcher-学习)
+  - [前言](#前言)
+  - [ASTMatcher 介绍](#astmatcher-介绍)
+    - [使用 clang-query](#使用-clang-query)
+  - [在程序中使用 AST Mathcer](#在程序中使用-ast-mathcer)
+  - [解析匹配节点](#解析匹配节点)
+  - [其他](#其他)
+    - [获取错误信息](#获取错误信息)
+  - [测试代码 test.cxx](#测试代码-testcxx)
+
+## 前言
+
 在上一章中介绍了一个通过递归遍历整个 AST 树的方法 `RecursiveASTVisitor` ，但当我们开始使用它来实现一些功能时发现可能由于代码结构比较复杂，想要找到我们需要的目标代码节点需要编写大量的代码来实现。本章介绍一个新的功能 clang ASTMatcher ，它提供了给我们一些语法、接口可以通过类似命令行的方式来实现快速匹配我们需要的节点，并且配合 clang-query 来快速验证查询语法的正确性，大大提高效率。
 
 ## ASTMatcher 介绍

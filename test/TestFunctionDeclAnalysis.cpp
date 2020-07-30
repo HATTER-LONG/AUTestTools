@@ -22,7 +22,7 @@ TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
 
     spdlog::info("analysis file pathname is {}, comiple command file path is {}", analysisFilePath.c_str(),
                  comipleCommandFilePath.c_str());
-    auto* fundeclanalysisptr = new FunctionDeclAnalysis(analysisFilePath, comipleCommandFilePath);
+    auto* fundeclanalysisptr = new MFunction::FunctionDeclAnalysis(analysisFilePath, comipleCommandFilePath);
     REQUIRE(fundeclanalysisptr != nullptr);
 
     {
@@ -33,12 +33,13 @@ TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
     }
 
     {
-        std::vector<SourceCodeErrorMessage> tmpvector = fundeclanalysisptr->GetErrorMessage();
+        std::vector<MFunction::SourceCodeErrorMessage> tmpvector = fundeclanalysisptr->GetErrorMessage();
         REQUIRE(tmpvector.size() == TESTCXX_ERRORCOUNT);
     }
 
     {
-        std::map<std::string, SourceCodeFunctionMessage> tmpvector = fundeclanalysisptr->GetFunctionMessage();
+        std::map<std::string, MFunction::SourceCodeFunctionMessage> tmpvector =
+            fundeclanalysisptr->GetFunctionMessage();
         REQUIRE(tmpvector.size() == TESTCXX_FUNCTIONCOUTN);
     }
 }

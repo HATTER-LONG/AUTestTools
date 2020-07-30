@@ -1,5 +1,17 @@
 # Clang AST 学习
 
+- [Clang AST 学习](#clang-ast-学习)
+  - [前言](#前言)
+  - [AST 结构基础](#ast-结构基础)
+    - [Example AST](#example-ast)
+    - [Decl](#decl)
+    - [Stmt](#stmt)
+  - [遍历 Clang AST](#遍历-clang-ast)
+  - [Example](#example)
+  - [其他注意](#其他注意)
+
+## 前言
+
 在之前搭建环境是就已经提到过，Clang 不仅仅可以作为一个编译器前端，同时还可以通过库的形式提供代码解析功能，将 C/C++ 程序源码转换为 abstract syntax tree （AST）语法树以及提供相应接口去操作 AST 语法树。[参考资料](http://swtv.kaist.ac.kr/courses/cs453-fall09)
 
 ## AST 结构基础
