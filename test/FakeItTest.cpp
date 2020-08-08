@@ -7,6 +7,7 @@ struct SomeInterface
 {
     virtual int foo(int) = 0;
     virtual int bar(string) = 0;
+    virtual int test(int a, int b) = 0;
 };
 
 TEST_CASE("fake it test", "fake it")
@@ -14,9 +15,11 @@ TEST_CASE("fake it test", "fake it")
     Mock<SomeInterface> mock;
 
     When(Method(mock, foo)).AlwaysReturn(1);
-
     SomeInterface& i = mock.get();
 
+    When(Method(mock, test)).AlwaysReturn(1);
+    auto testLambda = [](int a, int b) { return a > b; };
+    When(Method(mock, test).Matching(testLambda)).AlwaysReturn(2);
     // Production code
     i.foo(1);
 
@@ -27,4 +30,6 @@ TEST_CASE("fake it test", "fake it")
     Verify(Method(mock, foo).Using(1));
 
     REQUIRE(i.foo(1) == 1);
+    REQUIRE(i.test(1, 2) == 1);
+    REQUIRE(i.test(2, 1) == 2);
 }

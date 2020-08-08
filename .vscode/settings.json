@@ -8,5 +8,9 @@
     },
     "editor.formatOnSave": true,
     "C_Cpp.default.compileCommands": "${workspaceFolder}\\build\\compile_commands.json",
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "python.pythonPath": "F:\\Tools\\Anaconda3_64\\envs\\AutoUnitTestTool\\python.exe",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "cmake.generator": "MinGW Makefiles"
 }
