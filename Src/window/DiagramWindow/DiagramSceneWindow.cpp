@@ -25,7 +25,7 @@ DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent
     createToolbars();
 
     auto* layout = new QHBoxLayout;
-    layout->addWidget(toolBox);
+    // layout->addWidget(toolBox);
 
     layout->addWidget(view);
     setWindowFlags(Qt::FramelessWindowHint);

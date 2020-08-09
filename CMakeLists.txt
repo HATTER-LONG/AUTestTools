@@ -94,7 +94,7 @@ function(clang_target_link target type)
 endfunction()
 
 IF(WIN32)
-    
+    list(APPEND linkLib python38)
 elseif(UNIX)
     list(APPEND linkLib pthread)
     SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")

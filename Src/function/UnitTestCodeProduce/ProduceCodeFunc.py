@@ -1,6 +1,7 @@
-import sys
+def MyHelloWorld():
+    print("Hello World !")
 
-print("Hello World")
 
-if __name__ == "__main__":
-    pass
+def _add(x, y):
+    print("add X = ", x, "y = ", y)
+    return x+y
