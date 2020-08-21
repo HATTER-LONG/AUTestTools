@@ -10,7 +10,7 @@ MainWindow::MainWindow() : sourceCodeMessagePtr(nullptr)
     diagramSceneWindow = new DiagramSceneWindow(this);
     createMenus();
 
-    editwindow = new MineEditWindow(this);
+    editwindow = new ProduceWithEditWindow(this);
     connect(diagramSceneWindow, SIGNAL(selectedFunctionInfo(QString)), editwindow,
             SLOT(createSelectFuncTestCode(QString)));
     auto* layout = new QHBoxLayout;
@@ -19,7 +19,7 @@ MainWindow::MainWindow() : sourceCodeMessagePtr(nullptr)
 
     layout->addWidget(diagramSceneWindow);
     layout->addWidget(editwindow);
-    layout->setStretch(0, 2);
+    layout->setStretch(0, 1);
     layout->setStretch(1, 1);
     widgets->setLayout(layout);
     setWindowTitle(tr("Diagramscene"));

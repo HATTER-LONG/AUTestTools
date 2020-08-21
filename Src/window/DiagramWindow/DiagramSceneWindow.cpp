@@ -22,7 +22,7 @@ DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent
 
     view = new QGraphicsView(scene);
     view->centerOn(0, 0);
-    createToolbars();
+    // createToolbars();
 
     auto* layout = new QHBoxLayout;
     // layout->addWidget(toolBox);

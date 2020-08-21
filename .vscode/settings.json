@@ -12,5 +12,5 @@
     "python.pythonPath": "F:\\Tools\\Anaconda3_64\\envs\\AutoUnitTestTool\\python.exe",
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "cmake.generator": "MinGW Makefiles"
+    "cmake.generator": "Ninja"
 }

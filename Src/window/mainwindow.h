@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include "DiagramWindow/DiagramSceneWindow.h"
-#include "EditWindow/EditWindow.h"
+#include "ProduceWithEditWindow/ProduceWithEditWindow.h"
 #include <QMainWindow>
 
 class DiagramScene;
@@ -40,7 +40,7 @@ private:
     void createMenus();
 
     DiagramSceneWindow* diagramSceneWindow;
-    MineEditWindow* editwindow;
+    ProduceWithEditWindow* editwindow;
     QMenu* fileMenu;
     QMenu* itemMenu;
     QMenu* aboutMenu;
