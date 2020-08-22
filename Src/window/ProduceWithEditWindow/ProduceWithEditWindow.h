@@ -1,11 +1,11 @@
 #pragma once
-#include "qstatictext.h"
+#include "function/FunctionDeclAnalysis.h"
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
 class QGridLayout;
-class QButton;
+class QPushButton;
 class QLineEdit;
 class QLabel;
 QT_END_NAMESPACE
@@ -21,6 +21,9 @@ public slots:
     void createSelectFuncTestCode(QString funcname);
 
 private:
+    void createEditWindowItem();
+
+private:
     QGridLayout* layoutView;
     QTextEdit* editor;
     QLabel* nameSetLable;
@@ -33,5 +36,6 @@ private:
     QLineEdit* sectionSetEdit;
     QLineEdit* sectionCheckEdit;
 
-    QButton* buttonCreateMock;
+    QPushButton* buttonCreateTestCode;
+    QPushButton* buttonCreateMock;
 };
