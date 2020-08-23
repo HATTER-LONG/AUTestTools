@@ -2,6 +2,7 @@
 #define __DIAGRAM_ITEM_H__
 
 #include "DiagramTextItem.h"
+
 #include <QGraphicsPolygonItem>
 #include <QWidget>
 
@@ -54,6 +55,9 @@ public:
     void setItemText(const QString& text);
     const QString getItemText();
 
+    void setFunctionName(std::string functionName) { myFunctionName = functionName; }
+    std::string getFunctionName() const { return myFunctionName; }
+
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;
     QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
@@ -69,5 +73,7 @@ private:
 
     QColor myTextColor;
     QFont myFont;
+
+    std::string myFunctionName;
 };
 #endif

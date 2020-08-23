@@ -9,10 +9,10 @@ MainWindow::MainWindow() : sourceCodeMessagePtr(nullptr)
 {
     diagramSceneWindow = new DiagramSceneWindow(this);
     createMenus();
-
-    editwindow = new ProduceWithEditWindow(this);
-    connect(diagramSceneWindow, SIGNAL(selectedFunctionInfo(QString)), editwindow,
-            SLOT(createSelectFuncTestCode(QString)));
+    sourceCodeMessagePtr = new MFunction::FunctionDeclAnalysis("", "./build/compile_commands.json");
+    editwindow = new ProduceWithEditWindow(sourceCodeMessagePtr->GetFunctionMessageRef(), this);
+    connect(diagramSceneWindow, SIGNAL(selectedFunctionInfo(std::string)), editwindow,
+            SLOT(createSelectFuncTestCode(std::string)));
     auto* layout = new QHBoxLayout;
     auto* widgets = new QWidget;
     setCentralWidget(widgets);
@@ -58,15 +58,9 @@ void MainWindow::openFileToAnalysis()
     if (!fileName.isEmpty())
     {
         spdlog::info("{} filename is {}\n", __FUNCTION__, fileName.toStdString().c_str());
-        if (sourceCodeMessagePtr == nullptr)
-        {
-            sourceCodeMessagePtr =
-                new MFunction::FunctionDeclAnalysis(fileName.toStdString(), "./build/compile_commands.json");
-        }
-        else
-        {
-            sourceCodeMessagePtr->SetFilePathToAnalysis(fileName.toStdString());
-        }
+
+        sourceCodeMessagePtr->SetFilePathToAnalysis(fileName.toStdString());
+
         try
         {
             int result = sourceCodeMessagePtr->StartToAnalysis();
@@ -77,18 +71,14 @@ void MainWindow::openFileToAnalysis()
             spdlog::info("Start to ananlysis error exception: {}", e.what());
         }
 
-        MFunction::SourceCodeErrorMessageList& tmpErrorMessagevector = sourceCodeMessagePtr->GetErrorMessage();
+        const MFunction::SourceCodeErrorMessageList& tmpErrorMessagevector = sourceCodeMessagePtr->GetErrorMessageRef();
         for (auto a : tmpErrorMessagevector)
         {
             spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(),
                          a.GetErrorPos());
         }
 
-        MFunction::SourceCodeFunctionMessageMap& tmpFunctionMessageMap = sourceCodeMessagePtr->GetFunctionMessage();
-
-        diagramSceneWindow->drawReslutByCodeMessage(tmpFunctionMessageMap, tmpErrorMessagevector);
-
-        delete sourceCodeMessagePtr;
-        sourceCodeMessagePtr = nullptr;
+        diagramSceneWindow->drawReslutByCodeMessage(sourceCodeMessagePtr->GetFunctionMessageRef(),
+                                                    tmpErrorMessagevector);
     }
 }

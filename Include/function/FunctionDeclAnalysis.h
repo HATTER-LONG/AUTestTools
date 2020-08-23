@@ -23,6 +23,9 @@ private:
     std::string errorPos;
 };
 
+using FunctionParamList = std::vector<std::string>;
+using FunctionCallExprList = std::vector<std::string>;
+
 class SourceCodeFunctionMessage
 {
 public:
@@ -31,14 +34,14 @@ public:
     {
     }
     void AddFunctionWhichCallExpr(std::string callexprname) { functionCallExpr.push_back(callexprname); }
-    std::string GetFunctionName() { return functionName; }
-    std::vector<std::string> GetFunctionParam() { return functionParam; }
-    std::vector<std::string> GetFunctionWhichCallExpr() { return functionCallExpr; }
+    const std::string GetFunctionName() const { return functionName; }
+    const FunctionParamList& GetFunctionParam() const { return functionParam; }
+    const FunctionCallExprList& GetFunctionWhichCallExpr() const { return functionCallExpr; }
 
 private:
     std::string functionName;
-    std::vector<std::string> functionParam;
-    std::vector<std::string> functionCallExpr;
+    FunctionParamList functionParam;
+    FunctionCallExprList functionCallExpr;
 };
 
 using SourceCodeErrorMessageList = std::vector<SourceCodeErrorMessage>;
@@ -46,14 +49,14 @@ using SourceCodeFunctionMessageMap = std::map<std::string, SourceCodeFunctionMes
 class FunctionDeclAnalysis
 {
 public:
-    FunctionDeclAnalysis(std::string filepath, std::string compiledatabase);
+    FunctionDeclAnalysis(std::string filepath = "", std::string compiledatabase = "");
 
     int StartToAnalysis();
 
     void SetFilePathToAnalysis(std::string filepath) { sourceCodeFilePath = filepath; }
     void SetCompileDatabase(std::string compiledatabase) { compiledDatabasePath = compiledatabase; }
-    std::vector<SourceCodeErrorMessage>& GetErrorMessage();
-    std::map<std::string, SourceCodeFunctionMessage>& GetFunctionMessage();
+    const SourceCodeErrorMessageList& GetErrorMessageRef() const;
+    const SourceCodeFunctionMessageMap& GetFunctionMessageRef() const;
 
 private:
     SourceCodeErrorMessageList sourceCodeErrorMessage;

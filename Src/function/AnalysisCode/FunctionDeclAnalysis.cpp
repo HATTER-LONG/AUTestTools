@@ -45,8 +45,8 @@ int FunctionDeclAnalysis::StartToAnalysis()
     sourcepath.emplace_back(argv[1]);
     clang::tooling::ClangTool Tool(op.getCompilations(), sourcepath);
 
-    // sourceCodeErrorMessage.clear();
-    // sourceCodeFunctionMessage.clear();
+    sourceCodeErrorMessage.clear();
+    sourceCodeFunctionMessage.clear();
 
     auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(sourceCodeErrorMessage, sourceCodeFunctionMessage);
     MyFrontendActionFactory tmp;
@@ -54,8 +54,11 @@ int FunctionDeclAnalysis::StartToAnalysis()
     return Tool.run(&tmp);
 }
 
-SourceCodeErrorMessageList& FunctionDeclAnalysis::GetErrorMessage() { return sourceCodeErrorMessage; }
+const SourceCodeErrorMessageList& FunctionDeclAnalysis::GetErrorMessageRef() const { return sourceCodeErrorMessage; }
 
-SourceCodeFunctionMessageMap& FunctionDeclAnalysis::GetFunctionMessage() { return sourceCodeFunctionMessage; };
+const SourceCodeFunctionMessageMap& FunctionDeclAnalysis::GetFunctionMessageRef() const
+{
+    return sourceCodeFunctionMessage;
+};
 
 } // namespace MFunction

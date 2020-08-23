@@ -22,7 +22,7 @@ DiagramSceneWindow::DiagramSceneWindow(QMainWindow* parent) : QMainWindow(parent
 
     view = new QGraphicsView(scene);
     view->centerOn(0, 0);
-    createToolbars();
+    // createToolbars();
 
     auto* layout = new QHBoxLayout;
     // layout->addWidget(toolBox);
@@ -54,7 +54,7 @@ void DiagramSceneWindow::itemSelectedToCreateSourceCode()
         {
             spdlog::info("Function Info is {}",
                          qgraphicsitem_cast<DiagramItem*>(item)->getItemText().toStdString().c_str());
-            emit selectedFunctionInfo(qgraphicsitem_cast<DiagramItem*>(item)->getItemText());
+            emit selectedFunctionInfo(qgraphicsitem_cast<DiagramItem*>(item)->getFunctionName());
         }
     }
 }
@@ -553,8 +553,8 @@ void DiagramSceneWindow::itemColorChanged()
     fillButtonTriggered();
 }
 
-void DiagramSceneWindow::drawReslutByCodeMessage(MFunction::SourceCodeFunctionMessageMap& functionMessage,
-                                                 MFunction::SourceCodeErrorMessageList& /*errorMessage*/)
+void DiagramSceneWindow::drawReslutByCodeMessage(const MFunction::SourceCodeFunctionMessageMap& functionMessage,
+                                                 const MFunction::SourceCodeErrorMessageList& /*errorMessage*/) const
 {
     scene->clear();
     view->centerOn(0, 0);
@@ -574,7 +574,7 @@ void DiagramSceneWindow::drawReslutByCodeMessage(MFunction::SourceCodeFunctionMe
         }
 
         tmpItem = scene->createItem(DiagramItem::DiagramType::Step, point);
-        std::vector<std::string> functionparam = a.second.GetFunctionParam();
+        const MFunction::FunctionParamList& functionparam = a.second.GetFunctionParam();
         std::string showText = functionparam[0];
         showText += " ";
         showText += a.second.GetFunctionName();
@@ -588,8 +588,8 @@ void DiagramSceneWindow::drawReslutByCodeMessage(MFunction::SourceCodeFunctionMe
         showText += ")";
 
         tmpItem->setItemText(QString(showText.c_str()));
-
-        std::vector<std::string> functioncallexpr = a.second.GetFunctionWhichCallExpr();
+        tmpItem->setFunctionName(a.second.GetFunctionName());
+        const MFunction::FunctionCallExprList& functioncallexpr = a.second.GetFunctionWhichCallExpr();
         DiagramItem* tmpItemcall = nullptr;
         DiagramItem* tmpItemcallLast = nullptr;
         for (auto& b : functioncallexpr)
@@ -611,7 +611,7 @@ void DiagramSceneWindow::drawReslutByCodeMessage(MFunction::SourceCodeFunctionMe
             tmpItemcall = scene->createItem(DiagramItem::DiagramType::Step, pointf2);
             auto iter = functionMessage.find(b);
 
-            std::vector<std::string> functionparam = iter->second.GetFunctionParam();
+            const MFunction::FunctionParamList& functionparam = iter->second.GetFunctionParam();
             std::string showText = functionparam[0];
             showText += " ";
             showText += iter->second.GetFunctionName();
@@ -624,7 +624,7 @@ void DiagramSceneWindow::drawReslutByCodeMessage(MFunction::SourceCodeFunctionMe
             }
             showText += ")";
             tmpItemcall->setItemText(QString(showText.c_str()));
-
+            tmpItem->setFunctionName(iter->second.GetFunctionName());
             scene->setArrow(tmpItemcallLast, tmpItemcall);
         }
     }

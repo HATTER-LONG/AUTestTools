@@ -15,10 +15,10 @@ class ProduceWithEditWindow : public QWidget
 {
     Q_OBJECT
 public:
-    ProduceWithEditWindow(QWidget* parent = nullptr);
+    ProduceWithEditWindow(const MFunction::SourceCodeFunctionMessageMap& functionInfo, QWidget* parent = nullptr);
 
 public slots:
-    void createSelectFuncTestCode(QString funcname);
+    void createSelectFuncTestCode(std::string funcname);
 
 private:
     void createEditWindowItem();
@@ -38,4 +38,6 @@ private:
 
     QPushButton* buttonCreateTestCode;
     QPushButton* buttonCreateMock;
+
+    const MFunction::SourceCodeFunctionMessageMap& functionMessage;
 };

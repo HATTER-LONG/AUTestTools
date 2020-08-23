@@ -1,7 +1,9 @@
 #include "ProduceWithEditWindow.h"
 #include <QtWidgets>
 
-ProduceWithEditWindow::ProduceWithEditWindow(QWidget* parent) : QWidget(parent)
+ProduceWithEditWindow::ProduceWithEditWindow(const MFunction::SourceCodeFunctionMessageMap& functionInfo,
+                                             QWidget* parent)
+        : QWidget(parent), functionMessage(functionInfo)
 {
     createEditWindowItem();
     layoutView = new QGridLayout;
@@ -57,4 +59,7 @@ void ProduceWithEditWindow::createEditWindowItem()
     buttonCreateMock->setText(tr("Create Mock"));
 }
 
-void ProduceWithEditWindow::createSelectFuncTestCode(QString funcname) { editor->append(funcname); }
+void ProduceWithEditWindow::createSelectFuncTestCode(std::string funcname)
+{
+    editor->append(QString(funcname.c_str()));
+}

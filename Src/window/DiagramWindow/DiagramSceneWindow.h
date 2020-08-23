@@ -29,8 +29,8 @@ class DiagramSceneWindow : public QMainWindow
 public:
     DiagramSceneWindow(QMainWindow* parent);
 
-    void drawReslutByCodeMessage(MFunction::SourceCodeFunctionMessageMap& functionMessage,
-                                 MFunction::SourceCodeErrorMessageList& errorMessage);
+    void drawReslutByCodeMessage(const MFunction::SourceCodeFunctionMessageMap& functionMessage,
+                                 const MFunction::SourceCodeErrorMessageList& errorMessage) const;
 private slots:
 
     void backgroundButtonGroupClicked(QAbstractButton* button);
@@ -56,7 +56,7 @@ private slots:
     void itemSelectedToCreateSourceCode();
 
 signals:
-    void selectedFunctionInfo(QString funcName);
+    void selectedFunctionInfo(std::string funcName);
 
 private:
     void createActions();

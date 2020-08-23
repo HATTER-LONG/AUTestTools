@@ -33,13 +33,12 @@ TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
     }
 
     {
-        std::vector<MFunction::SourceCodeErrorMessage> tmpvector = fundeclanalysisptr->GetErrorMessage();
+        const MFunction::SourceCodeErrorMessageList& tmpvector = fundeclanalysisptr->GetErrorMessageRef();
         REQUIRE(tmpvector.size() == TESTCXX_ERRORCOUNT);
     }
 
     {
-        std::map<std::string, MFunction::SourceCodeFunctionMessage> tmpvector =
-            fundeclanalysisptr->GetFunctionMessage();
+        const MFunction::SourceCodeFunctionMessageMap& tmpvector = fundeclanalysisptr->GetFunctionMessageRef();
         REQUIRE(tmpvector.size() == TESTCXX_FUNCTIONCOUTN);
     }
 }
