@@ -559,8 +559,12 @@ void DiagramSceneWindow::drawReslutByCodeMessage(const MFunction::SourceCodeFunc
     scene->clear();
     view->centerOn(0, 0);
     DiagramItem* tmpItem = nullptr;
-    for (auto a : functionMessage)
+    for (const auto& a : functionMessage)
     {
+        if (a.second.GetFunctionWhichCallExpr().empty())
+        {
+            continue;
+        }
         QPointF point;
         if (tmpItem == nullptr)
         {
@@ -624,7 +628,7 @@ void DiagramSceneWindow::drawReslutByCodeMessage(const MFunction::SourceCodeFunc
             }
             showText += ")";
             tmpItemcall->setItemText(QString(showText.c_str()));
-            tmpItem->setFunctionName(iter->second.GetFunctionName());
+            tmpItemcall->setFunctionName(iter->second.GetFunctionName());
             scene->setArrow(tmpItemcallLast, tmpItemcall);
         }
     }

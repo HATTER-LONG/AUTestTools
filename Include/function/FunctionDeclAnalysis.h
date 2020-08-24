@@ -1,5 +1,5 @@
-#ifndef __FUNCTION_DECL_ANALYSIS_H__
-#define __FUNCTION_DECL_ANALYSIS_H__
+#pragma once
+
 #include <map>
 #include <string>
 #include <vector>
@@ -67,4 +67,3 @@ private:
 };
 
 } // namespace MFunction
-#endif //__FUNCTION_DECL_ANALYSIS_H__

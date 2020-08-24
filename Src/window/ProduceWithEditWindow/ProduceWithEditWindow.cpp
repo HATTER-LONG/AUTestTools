@@ -1,4 +1,5 @@
 #include "ProduceWithEditWindow.h"
+#include "spdlog/spdlog.h"
 #include <QtWidgets>
 
 ProduceWithEditWindow::ProduceWithEditWindow(const MFunction::SourceCodeFunctionMessageMap& functionInfo,
@@ -62,4 +63,18 @@ void ProduceWithEditWindow::createEditWindowItem()
 void ProduceWithEditWindow::createSelectFuncTestCode(std::string funcname)
 {
     editor->append(QString(funcname.c_str()));
+    auto function = (functionMessage.find(funcname))->second;
+    spdlog::info("functionMessage[{}] ", function.GetFunctionName().c_str());
+
+    auto paramlist = function.GetFunctionParam();
+
+    for (const auto& a : paramlist)
+    {
+        spdlog::info("call function param [{}]", a.c_str());
+    }
+    auto callexprlist = function.GetFunctionWhichCallExpr();
+    for (const auto& a : callexprlist)
+    {
+        spdlog::info("call function [{}]", a.c_str());
+    }
 }

@@ -71,8 +71,8 @@ public:
                         std::string paramwithname;
                         auto param = func->getParamDecl(i);
                         paramwithname += clang::QualType::getAsString(param->getType().split(), Policy);
-                        paramwithname += "  ";
-                        paramwithname += func->getParamDecl(i)->getNameAsString();
+                        // paramwithname += "  ";
+                        // paramwithname += func->getParamDecl(i)->getNameAsString();
                         functionparms.push_back(paramwithname);
                     }
                     functionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
