@@ -41,15 +41,7 @@ public:
                 std::vector<std::string> functionparms;
                 functionname = functionDecl->getQualifiedNameAsString();
                 functionparms.push_back(functionDecl->getReturnType().getAsString());
-                for (unsigned int i = 0; i < functionDecl->getNumParams(); i++)
-                {
-                    std::string paramwithname;
-                    auto param = functionDecl->getParamDecl(i);
-                    paramwithname += clang::QualType::getAsString(param->getType().split(), Policy);
-                    paramwithname += "  ";
-                    paramwithname += functionDecl->getParamDecl(i)->getNameAsString();
-                    functionparms.push_back(paramwithname);
-                }
+                getParams(functionparms, functionDecl);
 
                 iter = functionMessageRef
                            .insert(SourceCodeFunctionMessageMap::value_type(
@@ -66,20 +58,28 @@ public:
                     std::vector<std::string> functionparms;
                     functionname = func->getQualifiedNameAsString();
                     functionparms.push_back(func->getReturnType().getAsString());
-                    for (unsigned int i = 0; i < func->getNumParams(); i++)
-                    {
-                        std::string paramwithname;
-                        auto param = func->getParamDecl(i);
-                        paramwithname += clang::QualType::getAsString(param->getType().split(), Policy);
-                        // paramwithname += "  ";
-                        // paramwithname += func->getParamDecl(i)->getNameAsString();
-                        functionparms.push_back(paramwithname);
-                    }
+                    getParams(functionparms, func);
                     functionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
                         functionname, SourceCodeFunctionMessage(functionname, functionparms)));
                 }
                 iter->second.AddFunctionWhichCallExpr(func->getQualifiedNameAsString());
             }
+        }
+    }
+
+    void getParams(FunctionParamList& functionparms, const clang::FunctionDecl* func)
+    {
+        clang::LangOptions LangOpts;
+        LangOpts.CPlusPlus = true;
+        clang::PrintingPolicy Policy(LangOpts);
+        for (unsigned int i = 0; i < func->getNumParams(); i++)
+        {
+            std::string paramwithname;
+            auto param = func->getParamDecl(i);
+            paramwithname += clang::QualType::getAsString(param->getType().split(), Policy);
+            // paramwithname += "  ";
+            // paramwithname += func->getParamDecl(i)->getNameAsString();
+            functionparms.push_back(paramwithname);
         }
     }
 

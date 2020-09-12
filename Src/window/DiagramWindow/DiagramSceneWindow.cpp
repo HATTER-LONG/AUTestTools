@@ -523,6 +523,7 @@ QWidget* DiagramSceneWindow::createCellWidget(const QString& text, DiagramItem::
 
     return widget;
 }
+
 QWidget* DiagramSceneWindow::createBackgroundCellWidget(const QString& text, const QString& image)
 {
     spdlog::info("{}:{}:{} Call text is [{}]  image is [{}]!!!", __FILE__, __FUNCTION__, __LINE__,
@@ -561,10 +562,6 @@ void DiagramSceneWindow::drawReslutByCodeMessage(const MFunction::SourceCodeFunc
     DiagramItem* tmpItem = nullptr;
     for (const auto& a : functionMessage)
     {
-        if (a.second.GetFunctionWhichCallExpr().empty())
-        {
-            continue;
-        }
         QPointF point;
         if (tmpItem == nullptr)
         {

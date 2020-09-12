@@ -19,6 +19,7 @@ public:
 
 public slots:
     void createSelectFuncTestCode(std::string funcname);
+    void createCodeButtonClicked();
 
 private:
     void createEditWindowItem();

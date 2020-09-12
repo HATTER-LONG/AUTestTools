@@ -1,6 +1,8 @@
 #include "ProduceWithEditWindow.h"
+#include "function/UnitTestCodeProduce.h"
 #include "spdlog/spdlog.h"
 #include <QtWidgets>
+#include <string>
 
 ProduceWithEditWindow::ProduceWithEditWindow(const MFunction::SourceCodeFunctionMessageMap& functionInfo,
                                              QWidget* parent)
@@ -56,25 +58,26 @@ void ProduceWithEditWindow::createEditWindowItem()
 
     buttonCreateTestCode = new QPushButton;
     buttonCreateTestCode->setText(tr("Create Code"));
+    connect(buttonCreateTestCode, SIGNAL(clicked()), this, SLOT(createCodeButtonClicked()));
     buttonCreateMock = new QPushButton;
     buttonCreateMock->setText(tr("Create Mock"));
 }
 
 void ProduceWithEditWindow::createSelectFuncTestCode(std::string funcname)
 {
-    editor->append(QString(funcname.c_str()));
     auto function = (functionMessage.find(funcname))->second;
     spdlog::info("functionMessage[{}] ", function.GetFunctionName().c_str());
 
-    auto paramlist = function.GetFunctionParam();
+    MyFunction::UnitTestCodeProduceFunc produceCode;
+    std::string functionMessage = produceCode.createMockSourceCode(function);
+    editor->setText(QString(functionMessage.c_str()));
+}
 
-    for (const auto& a : paramlist)
-    {
-        spdlog::info("call function param [{}]", a.c_str());
-    }
-    auto callexprlist = function.GetFunctionWhichCallExpr();
-    for (const auto& a : callexprlist)
-    {
-        spdlog::info("call function [{}]", a.c_str());
-    }
+void ProduceWithEditWindow::createCodeButtonClicked()
+{
+    MyFunction::UnitTestCodeProduceFunc produceCode;
+
+    std::string functionCode2MOCK = produceCode.createMockSourceCode(functionMessage);
+
+    editor->setText(QString(functionCode2MOCK.c_str()));
 }
