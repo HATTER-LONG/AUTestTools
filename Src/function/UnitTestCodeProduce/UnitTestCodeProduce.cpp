@@ -56,6 +56,38 @@ void UnitTestCodeProduceFunc::getFuncReturnValue(string& returnValue, const stri
     }
 }
 
-string UnitTestCodeProduceFunc::createUnitTestCode(string testName, string Tag) { return (string("")); }
+string UnitTestCodeProduceFunc::createUnitTestCode(const MFunction::SourceCodeFunctionMessage& Func,
+                                                   const UnitTestInfo& Info)
+{
+    string unitTestCode = CatchUnitTestCaseTemplate;
+    string unitTestSectionCode;
+    for (const auto& a : Info.testSection)
+    {
+        unitTestSectionCode += getSectionCode(Func, a);
+    }
+    subreplace(unitTestCode, "${TESTSECTION}", unitTestSectionCode);
 
-string UnitTestCodeProduceFunc::createUnitTestSectionCode(string sectionName, string checkInfo) { return (string("")); }
+    string tmpTestTag;
+    for (const auto& a : Info.testTags)
+    {
+        tmpTestTag += "[" + a + "]";
+    }
+    subreplace(unitTestCode, "${TESTTAGS}", tmpTestTag);
+    subreplace(unitTestCode, "${TESTNAME}", Info.testName);
+    return (unitTestCode);
+}
+
+string UnitTestCodeProduceFunc::getSectionCode(const MFunction::SourceCodeFunctionMessage& Func,
+                                               const UnitTestSectionInfo& sectionInfo)
+{
+    string tmpSectionCode = CatchUnitTestSectionTemplate;
+    subreplace(tmpSectionCode, "${SECTIONNAME}", sectionInfo.sectionName);
+
+    string tmpFuncCallName = Func.GetFunctionName();
+    string tmpFuncParam;
+    getParamList(tmpFuncParam, Func.GetFunctionParam());
+    tmpFuncCallName += "(" + tmpFuncCallName + ")";
+    subreplace(tmpSectionCode, "${SECTIONCHECK}", tmpFuncCallName + sectionInfo.checkInfo);
+
+    return tmpSectionCode;
+}

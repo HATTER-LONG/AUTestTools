@@ -65,6 +65,7 @@ void ProduceWithEditWindow::createEditWindowItem()
 
 void ProduceWithEditWindow::createSelectFuncTestCode(std::string funcname)
 {
+    funcNameSelected = funcname;
     auto function = (functionMessage.find(funcname))->second;
     spdlog::info("functionMessage[{}] ", function.GetFunctionName().c_str());
 

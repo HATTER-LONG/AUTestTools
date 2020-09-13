@@ -51,7 +51,7 @@ inline const string GetFunctionName(const string& srcStr)
 static string CppFunctionTemplate = "\n\
 ${PARAMRETURN} ${CLASSNAME}::${FUNCTIONNAME}(${PARAM})\n\
 {\n\
-    return ${RETURNVALUE};\n\
+    ${RETURNVALUE}\n\
 }";
 
 static string FunctionTemplate = "\n\
@@ -60,4 +60,16 @@ ${PARAMRETURN} ${FUNCTIONNAME}(${PARAM})\n\
     ${RETURNVALUE}\n\
 }";
 
+static string CatchUnitTestCaseTemplate = "\n\
+TEST_CASE(\"${TESTNAME}\",\"${TESTTAGS}\") \
+{\n\
+    ${TESTSECTION}\
+}\n\
+";
+
+static string CatchUnitTestSectionTemplate = "\n\
+SECTION(${SECTIONNAME})\n\
+{\n\
+    REQUIRE(${SECTIONCHECK})\n\
+}";
 } // namespace MyFunction

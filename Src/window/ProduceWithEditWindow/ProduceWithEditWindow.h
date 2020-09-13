@@ -41,4 +41,5 @@ private:
     QPushButton* buttonCreateMock;
 
     const MFunction::SourceCodeFunctionMessageMap& functionMessage;
+    std::string funcNameSelected;
 };
