@@ -1,6 +1,7 @@
 #pragma once
 #include "function/FunctionDeclAnalysis.h"
 #include <QWidget>
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -19,10 +20,12 @@ public:
 
 public slots:
     void createSelectFuncTestCode(std::string funcname);
-    void createCodeButtonClicked();
+    void createMockCodeButtonClicked();
+    void createUnitTestCodeButtonClicked();
 
 private:
     void createEditWindowItem();
+    void getTagName(std::vector<std::string>&);
 
 private:
     QGridLayout* layoutView;

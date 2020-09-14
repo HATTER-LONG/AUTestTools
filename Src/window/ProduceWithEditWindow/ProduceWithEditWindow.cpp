@@ -58,27 +58,79 @@ void ProduceWithEditWindow::createEditWindowItem()
 
     buttonCreateTestCode = new QPushButton;
     buttonCreateTestCode->setText(tr("Create Code"));
-    connect(buttonCreateTestCode, SIGNAL(clicked()), this, SLOT(createCodeButtonClicked()));
+    connect(buttonCreateTestCode, SIGNAL(clicked()), this, SLOT(createUnitTestCodeButtonClicked()));
     buttonCreateMock = new QPushButton;
     buttonCreateMock->setText(tr("Create Mock"));
+    connect(buttonCreateMock, SIGNAL(clicked()), this, SLOT(createMockCodeButtonClicked()));
 }
 
 void ProduceWithEditWindow::createSelectFuncTestCode(std::string funcname)
 {
     funcNameSelected = funcname;
-    auto function = (functionMessage.find(funcname))->second;
-    spdlog::info("functionMessage[{}] ", function.GetFunctionName().c_str());
+    auto functioniter = functionMessage.find(funcname);
 
-    MyFunction::UnitTestCodeProduceFunc produceCode;
-    std::string functionMessage = produceCode.createMockSourceCode(function);
-    editor->setText(QString(functionMessage.c_str()));
+    if (functioniter != functionMessage.end())
+    {
+        spdlog::info("functionMessage[{}] ", functioniter->second.GetFunctionName().c_str());
+
+        MyFunction::UnitTestCodeProduceFunc produceCode;
+        std::string functionMessage = produceCode.createMockSourceCode(functioniter->second);
+        editor->setText(QString(functionMessage.c_str()));
+    }
+    else
+    {
+        spdlog::info("{} can't find selected function[{}] Info", __FUNCTION__, funcNameSelected.c_str());
+    }
 }
 
-void ProduceWithEditWindow::createCodeButtonClicked()
+void ProduceWithEditWindow::createMockCodeButtonClicked()
 {
     MyFunction::UnitTestCodeProduceFunc produceCode;
 
     std::string functionCode2MOCK = produceCode.createMockSourceCode(functionMessage);
 
     editor->setText(QString(functionCode2MOCK.c_str()));
+}
+
+void ProduceWithEditWindow::createUnitTestCodeButtonClicked()
+{
+    MyFunction::UnitTestCodeProduceFunc produceCode;
+
+    MyFunction::UnitTestSectionInfo unitTestSectionInfo;
+    unitTestSectionInfo.sectionName = sectionSetEdit->text().toStdString();
+    unitTestSectionInfo.checkInfo = sectionCheckEdit->text().toStdString();
+
+    MyFunction::UnitTestInfo unitTestinfo;
+    unitTestinfo.testSection.emplace_back(unitTestSectionInfo);
+    unitTestinfo.testName = testNameEdit->text().toStdString();
+    getTagName(unitTestinfo.testTags);
+
+    auto iter = functionMessage.find(funcNameSelected);
+    if (iter != functionMessage.end())
+    {
+        std::string unitTestCode = produceCode.createUnitTestCode(iter->second, unitTestinfo);
+        editor->setText(QString(unitTestCode.c_str()));
+    }
+    else
+    {
+        spdlog::info("{} can't find selected function[{}] Info", __FUNCTION__, funcNameSelected.c_str());
+    }
+}
+
+void ProduceWithEditWindow::getTagName(std::vector<std::string>& tagBox)
+{
+    std::string tagTextSplitWithBlank = testTageEdit->text().toStdString();
+    std::string tmptag;
+    std::string::size_type posSubstringStart;
+    std::string::size_type posSeparator;
+
+    posSeparator = tagTextSplitWithBlank.find(' ');
+    posSubstringStart = 0;
+    while (std::string::npos != posSeparator)
+    {
+        tagBox.emplace_back(tagTextSplitWithBlank.substr(0, posSeparator));
+        tagTextSplitWithBlank = tagTextSplitWithBlank.substr(posSeparator + 1, tagTextSplitWithBlank.length());
+        posSeparator = tagTextSplitWithBlank.find(' ');
+    }
+    tagBox.emplace_back(tagTextSplitWithBlank);
 }

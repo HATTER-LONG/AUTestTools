@@ -61,15 +61,15 @@ ${PARAMRETURN} ${FUNCTIONNAME}(${PARAM})\n\
 }";
 
 static string CatchUnitTestCaseTemplate = "\n\
-TEST_CASE(\"${TESTNAME}\",\"${TESTTAGS}\") \
-{\n\
+TEST_CASE(\"${TESTNAME}\",\"${TESTTAGS}\") \n\
+{\
     ${TESTSECTION}\
-}\n\
-";
+}";
 
 static string CatchUnitTestSectionTemplate = "\n\
-SECTION(${SECTIONNAME})\n\
-{\n\
-    REQUIRE(${SECTIONCHECK})\n\
-}";
+    SECTION(\"${SECTIONNAME}\")\n\
+    {\
+        REQUIRE(${SECTIONCHECK})\n\
+    }\n\
+";
 } // namespace MyFunction

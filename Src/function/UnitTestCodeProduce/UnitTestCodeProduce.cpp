@@ -86,7 +86,7 @@ string UnitTestCodeProduceFunc::getSectionCode(const MFunction::SourceCodeFuncti
     string tmpFuncCallName = Func.GetFunctionName();
     string tmpFuncParam;
     getParamList(tmpFuncParam, Func.GetFunctionParam());
-    tmpFuncCallName += "(" + tmpFuncCallName + ")";
+    tmpFuncCallName += "(" + tmpFuncParam + ")";
     subreplace(tmpSectionCode, "${SECTIONCHECK}", tmpFuncCallName + sectionInfo.checkInfo);
 
     return tmpSectionCode;
