@@ -29,7 +29,7 @@ class DiagramSceneWindow : public QMainWindow
 public:
     DiagramSceneWindow(QMainWindow* parent);
 
-    void drawReslutByCodeMessage(const MFunction::SourceCodeFunctionMessageMap& functionMessage,
+    void drawResultByCodeMessage(const MFunction::SourceCodeFunctionMessageMap& functionMessage,
                                  const MFunction::SourceCodeErrorMessageList& errorMessage) const;
 private slots:
 

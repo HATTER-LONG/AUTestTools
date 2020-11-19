@@ -30,7 +30,7 @@ void pythonCallTest()
     PyObject* pv = PyObject_GetAttrString(pModule, "_add");
     if (!pv || !PyCallable_Check(pv))
     {
-        cout << "Can't find funftion (_add)" << endl;
+        cout << "Can't find function (_add)" << endl;
         return;
     }
     cout << "Get function (_add) succeed." << endl;
@@ -62,13 +62,8 @@ void pythonCallTest()
 
 int main(int argc, char* argv[])
 {
-    for (auto i = 0; i < argc; i++)
-    {
-        info("argv[{}] = {}\n", i, argv[i]);
-    }
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    pythonCallTest();
     return a.exec();
 }

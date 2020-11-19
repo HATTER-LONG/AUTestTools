@@ -20,7 +20,7 @@ TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
         comipleCommandFilePath = InputParamSaver::instance()->getSaver()[2];
     }
 
-    spdlog::info("analysis file pathname is {}, comiple command file path is {}", analysisFilePath.c_str(),
+    spdlog::info("analysis file pathname is {}, compile command file path is {}", analysisFilePath.c_str(),
                  comipleCommandFilePath.c_str());
     auto* fundeclanalysisptr = new MFunction::FunctionDeclAnalysis(analysisFilePath, comipleCommandFilePath);
     REQUIRE(fundeclanalysisptr != nullptr);
@@ -39,6 +39,6 @@ TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
 
     {
         const MFunction::SourceCodeFunctionMessageMap& tmpvector = fundeclanalysisptr->GetFunctionMessageRef();
-        REQUIRE(tmpvector.size() == TESTCXX_FUNCTIONCOUTN);
+        REQUIRE(tmpvector.size() == TESTCXX_FUNCTIONCOUNT);
     }
 }

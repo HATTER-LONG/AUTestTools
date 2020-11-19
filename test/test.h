@@ -4,7 +4,7 @@
 
 //注意修改 test.h 与 test.cpp 文件的同时需要更新以下两个宏，避免单元测试失败
 #define TESTCXX_ERRORCOUNT 6
-#define TESTCXX_FUNCTIONCOUTN 25
+#define TESTCXX_FUNCTIONCOUNT 25
 
 class TestClass2
 {

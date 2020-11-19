@@ -68,7 +68,7 @@ void MainWindow::openFileToAnalysis()
         }
         catch (std::exception& e)
         {
-            spdlog::info("Start to ananlysis error exception: {}", e.what());
+            spdlog::info("Start to analysis error exception: {}", e.what());
         }
 
         const MFunction::SourceCodeErrorMessageList& tmpErrorMessagevector = sourceCodeMessagePtr->GetErrorMessageRef();
@@ -78,7 +78,7 @@ void MainWindow::openFileToAnalysis()
                          a.GetErrorPos());
         }
 
-        diagramSceneWindow->drawReslutByCodeMessage(sourceCodeMessagePtr->GetFunctionMessageRef(),
+        diagramSceneWindow->drawResultByCodeMessage(sourceCodeMessagePtr->GetFunctionMessageRef(),
                                                     tmpErrorMessagevector);
     }
 }

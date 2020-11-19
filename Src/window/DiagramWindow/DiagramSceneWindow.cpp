@@ -370,7 +370,7 @@ void DiagramSceneWindow::createActions()
     aboutAction->setStatusTip(tr("About Tips"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
-    selectFuncAction = new QAction(tr("Create Soucre Code"), this);
+    selectFuncAction = new QAction(tr("Create Source Code"), this);
 }
 
 void DiagramSceneWindow::createToolbars()
@@ -554,7 +554,7 @@ void DiagramSceneWindow::itemColorChanged()
     fillButtonTriggered();
 }
 
-void DiagramSceneWindow::drawReslutByCodeMessage(const MFunction::SourceCodeFunctionMessageMap& functionMessage,
+void DiagramSceneWindow::drawResultByCodeMessage(const MFunction::SourceCodeFunctionMessageMap& functionMessage,
                                                  const MFunction::SourceCodeErrorMessageList& /*errorMessage*/) const
 {
     scene->clear();
@@ -595,21 +595,21 @@ void DiagramSceneWindow::drawReslutByCodeMessage(const MFunction::SourceCodeFunc
         DiagramItem* tmpItemcallLast = nullptr;
         for (auto& b : functioncallexpr)
         {
-            QPointF pointf2;
+            QPointF point_f2;
             if (tmpItemcall == nullptr)
             {
-                pointf2 = tmpItem->pos();
-                pointf2.setY(pointf2.y() + tmpItem->boundingRect().height() + 100);
+                point_f2 = tmpItem->pos();
+                point_f2.setY(point_f2.y() + tmpItem->boundingRect().height() + 100);
                 tmpItemcallLast = tmpItem;
             }
             else
             {
-                pointf2 = tmpItemcall->pos();
-                pointf2.setY(pointf2.y() + tmpItemcall->boundingRect().height() + 100);
+                point_f2 = tmpItemcall->pos();
+                point_f2.setY(point_f2.y() + tmpItemcall->boundingRect().height() + 100);
                 tmpItemcallLast = tmpItemcall;
             }
 
-            tmpItemcall = scene->createItem(DiagramItem::DiagramType::Step, pointf2);
+            tmpItemcall = scene->createItem(DiagramItem::DiagramType::Step, point_f2);
             auto iter = functionMessage.find(b);
 
             const MFunction::FunctionParamList& functionparam = iter->second.GetFunctionParam();
