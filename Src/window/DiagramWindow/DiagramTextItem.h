@@ -23,7 +23,6 @@ public:
     };
 
     DiagramTextItem(QGraphicsItem* parent = nullptr);
-    ~DiagramTextItem() override;
     int type() const override { return Type; }
 
 signals:

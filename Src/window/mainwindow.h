@@ -1,12 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "DiagramWindow/DiagramSceneWindow.h"
-#include "ProduceWithEditWindow/ProduceWithEditWindow.h"
 #include <QMainWindow>
 
-class DiagramScene;
-
+class DiagramSceneWindow;
+class ProduceWithEditWindow;
 namespace MFunction
 {
 class FunctionDeclAnalysis;
@@ -35,6 +33,7 @@ public:
 
 private slots:
     void openFileToAnalysis();
+    void setCompileDateBaseFile();
 
 private:
     void createMenus();

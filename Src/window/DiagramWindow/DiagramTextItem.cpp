@@ -8,8 +8,6 @@ DiagramTextItem::DiagramTextItem(QGraphicsItem* parent) : QGraphicsTextItem(pare
     setFlag(QGraphicsItem::ItemIsSelectable);
 }
 
-DiagramTextItem::~DiagramTextItem() { spdlog::info("{}:{}:{}", __FILE__, __FUNCTION__, __LINE__); }
-
 QVariant DiagramTextItem::itemChange(GraphicsItemChange change, const QVariant& value)
 {
     if (change == QGraphicsItem::ItemSelectedHasChanged)

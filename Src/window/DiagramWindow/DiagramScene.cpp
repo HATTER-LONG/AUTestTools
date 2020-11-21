@@ -30,7 +30,6 @@ bool DiagramScene::isItemChange(int type)
 
 void DiagramScene::setLineColor(const QColor& color)
 {
-    spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
     myLineColor = color;
     if (isItemChange(Arrow::Type))
     {
@@ -42,7 +41,6 @@ void DiagramScene::setLineColor(const QColor& color)
 
 void DiagramScene::setTextColor(const QColor& color)
 {
-    spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
     myTextColor = color;
     if (isItemChange(DiagramTextItem::Type))
     {
@@ -53,7 +51,6 @@ void DiagramScene::setTextColor(const QColor& color)
 
 void DiagramScene::setItemColor(const QColor& color)
 {
-    spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
     myItemColor = color;
     if (isItemChange(DiagramItem::Type))
     {
@@ -64,7 +61,6 @@ void DiagramScene::setItemColor(const QColor& color)
 
 void DiagramScene::setFont(const QFont& font)
 {
-    spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
     myFont = font;
     if (isItemChange(DiagramTextItem::Type))
     {
