@@ -32,7 +32,7 @@ public:
         clang::LangOptions LangOpts;
         LangOpts.CPlusPlus = true;
         clang::PrintingPolicy Policy(LangOpts);
-        if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("FunctiondFeclWithCall"))
+        if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("FunctionDeclWithCall"))
         {
             auto iter = functionMessageRef.find(functionDecl->getQualifiedNameAsString());
             if (iter == functionMessageRef.end())
@@ -48,9 +48,9 @@ public:
                                functionname, SourceCodeFunctionMessage(functionname, functionparms)))
                            .first;
             }
-            if (auto const* callexprtdec = Result.Nodes.getNodeAs<clang::CallExpr>("callExprFunction"))
+            if (auto const* callexprdec = Result.Nodes.getNodeAs<clang::CallExpr>("callExprFunction"))
             {
-                auto func = callexprtdec->getDirectCallee();
+                auto func = callexprdec->getDirectCallee();
                 auto callexprIter = functionMessageRef.find(func->getQualifiedNameAsString());
                 if (callexprIter == functionMessageRef.end())
                 {
@@ -132,7 +132,7 @@ public:
         auto FuncDeclMatcher =
             functionDecl(isExpansionInMainFile(), anyOf(forEachDescendant(callExpr().bind("callExprFunction")),
                                                         unless(forEachDescendant(callExpr()))))
-                .bind("FunctiondFeclWithCall");
+                .bind("FunctionDeclWithCall");
         finder.addMatcher(FuncDeclMatcher, nodeFuncCall);
         // setClient 第二个参数默认为 true 迁移 DiagnosticConsumer 所有权
         CI.getDiagnostics().setClient(errorAnalysis);
