@@ -27,8 +27,6 @@ public:
     }
     void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
     {
-        std::string callexprname;
-        std::string callexprparms;
         clang::LangOptions LangOpts;
         LangOpts.CPlusPlus = true;
         clang::PrintingPolicy Policy(LangOpts);
