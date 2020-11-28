@@ -2,11 +2,6 @@ cmake_minimum_required(VERSION 3.5)
 
 project(Automated_UnitTest LANGUAGES CXX)
 
-# set (CMAKE_PREFIX_PATH "/home/xxx/Qt5.13.2/5.13.2/gcc_64")
-# or
-# CMAKE_PREFIX_PATH=/home/xxx/Qt5.13.2/5.13.2/gcc_64
-# 请检查环境变量CMAKE_PREFIX_PATH 是否新增 Qt 相关路径
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -94,19 +89,10 @@ function(clang_target_link target type)
   endif()
 endfunction()
 
-IF(WIN32)
-    list(APPEND linkLib python38)
-elseif(UNIX)
-    list(APPEND linkLib pthread)
-    SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
-else()
-    message(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
-ENDIF()
-
+list(APPEND linkLib pthread)
+SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 add_subdirectory(test)
 
-#target_link_libraries(
- #   ${PROJECT_NAME} 
- #   ${linkLib}
-#)
+
+
 clang_target_link(${PROJECT_NAME} PRIVATE ${linkLib} ${CLANG_LINK_LIBRARIES})
