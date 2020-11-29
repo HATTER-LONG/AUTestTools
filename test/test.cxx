@@ -52,6 +52,7 @@ std::string notcallall(TestClass3 b)
         int h = 0;
         h++;
     }
+    return std::string("my test");
 }
 
 class testclassparent

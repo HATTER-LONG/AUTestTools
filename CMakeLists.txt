@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(Automated_UnitTest LANGUAGES CXX)
+project(Automated_UnitTest_Tools LANGUAGES CXX)
 
+# 1. QT 以及 C++ 环境相关配置
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -12,52 +13,22 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Threads) #查找 多线程库
+find_package(Threads)
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
+set(QT5_LINK_LIBRARY Qt5::Widgets Qt5::Core Qt5::Gui)
 
-find_package(Clang REQUIRED CONFIG)
-
-#静态库的方式连接 spdlog
-add_definitions(-DSPDLOG_COMPILED_LIB) 
-#指定连结库的路径
-link_directories(./Lib ${CLANG_LIBRARY_DIRS} ${LLVM_LIBRARY_DIRS}) 
-#指定头文件查找路径
-include_directories(Include ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS})
-
+## QT 资源文件添加
 file(GLOB_RECURSE QRC_SOURCE_FILES "./*.qrc")
 set(QRC_SOURCE_FILES image.qrc)
 qt5_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
 
+# 2. Clang 库配置 提供库 Target 以及头文件路径标识 ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS}
+find_package(Clang REQUIRED CONFIG)
 
-#查找当前文件夹中的所有源代码文件，也可以通过Set命令将所有文件设置为一个变量
-FILE(GLOB SRC_FILES 
-    "./Src/*.cpp" 
-    "./Src/window/*.cpp" 
-    "./Src/window/DiagramWindow/*.cpp"
-    "./Src/window/ProduceWithEditWindow/*.cpp"
-    "./Src/function/*.cpp"
-    "./Src/function/AnalysisCode/*.cpp"
-    "./Src/function/UnitTestCodeProduce/*.cpp") 
-#同理，查找当前文件夹中所有的头文件
-FILE(GLOB HEAD_FILES "Include/*") 
-#同理，查找当前文件夹中所有的ui文件
-FILE(GLOB UI_FILES "./Src/window/*.ui")
-
-add_executable(
-    ${PROJECT_NAME}
-    ${QRC_FILES}
-    ${SRC_FILES}
-    ${HEAD_FILES}
-)
-
-set(linkLib Qt5::Widgets Qt5::Core Qt5::Gui  libclang)
-
-IF (CMAKE_BUILD_TYPE STREQUAL Debug)
-    add_definitions(-DDEBUG)
-    list(APPEND linkLib spdlogd)
-ELSE()
-    list(APPEND linkLib spdlog)
-ENDIF()
+set(LocalLibClang_DEFINITIONS  -fno-rtti 
+    -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS 
+    -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS)
+add_definitions(${LocalLibClang_DEFINITIONS})
 
 set(CLANG_LINK_LIBRARIES
   libclang
@@ -81,6 +52,20 @@ set(CLANG_LINK_LIBRARIES
   clangCodeGen
 )
 
+
+
+# 3. 添加本地库与头文件搜索路径
+set(LOCAL_LINK_LIB ${LocalLib} ${QT5_LINK_LIBRARY}  ${CLANG_LINK_LIBRARIES} pthread)
+##通过通过静态链接使用 spdlog 库
+add_definitions(-DSPDLOG_COMPILED_LIB)
+add_subdirectory(Lib)
+
+## 指定头文件、库查找路径
+include_directories(Include)
+link_directories(Lib)
+
+message(STATUS "LOCAL_LINK_LIB = ${LOCAL_LINK_LIB}")
+
 function(clang_target_link target type)
   if (CLANG_LINK_CLANG_DYLIB)
     target_link_libraries(${target} ${type} clang_shared)
@@ -89,10 +74,5 @@ function(clang_target_link target type)
   endif()
 endfunction()
 
-list(APPEND linkLib pthread)
-SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+add_subdirectory(Src)
 add_subdirectory(test)
-
-
-
-clang_target_link(${PROJECT_NAME} PRIVATE ${linkLib} ${CLANG_LINK_LIBRARIES})

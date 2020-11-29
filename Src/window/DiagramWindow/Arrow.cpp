@@ -57,7 +57,7 @@ void Arrow::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
     {
         p2 = endPolygon.at(i) + myEndItem->pos();
         polyLine = QLineF(p1, p2);
-        QLineF::IntersectType intersectType = polyLine.intersect(centerLine, &intersectPoint);
+        QLineF::IntersectType intersectType = polyLine.intersects(centerLine, &intersectPoint);
         if (intersectType == QLineF::BoundedIntersection)
             break;
         p1 = p2;
