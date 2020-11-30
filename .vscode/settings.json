@@ -9,8 +9,11 @@
     "editor.formatOnSave": true,
     "C_Cpp.default.compileCommands": "${workspaceFolder}\\build\\compile_commands.json",
     "cmake.configureOnOpen": true,
-    "python.pythonPath": "F:\\Tools\\Anaconda3_64\\envs\\AutoUnitTestTool\\python.exe",
-    "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true,
-    "cmake.generator": ""
+    "C_Cpp.workspaceParsingPriority": "low",
+    "C_Cpp.intelliSenseEngine": "Disabled",
+    "C_Cpp.errorSquiggles": "Disabled",
+    "C_Cpp.enhancedColorization": "Disabled",
+    "C_Cpp.configurationWarnings": "Disabled",
+    "C_Cpp.codeFolding": "Disabled",
+    "C_Cpp.autocomplete": "Disabled"
 }

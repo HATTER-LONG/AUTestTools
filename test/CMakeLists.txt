@@ -1,5 +1,4 @@
 message(STATUS "Config unittest current dir is ${CMAKE_CURRENT_SOURCE_DIR}")
-#set(CMAKE_VERBOSE_MAKEFILE ON)
 #find_package(GTest QUIET CONFIG)
 find_package(Catch2 QUIET CONFIG)
 

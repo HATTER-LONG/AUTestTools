@@ -1,6 +1,7 @@
 #include "FuncDeclASTFrontendAction.hpp"
 #include "function/FunctionDeclAnalysis.h"
 #include <clang/Tooling/Tooling.h>
+#include <string>
 namespace MFunction
 {
 
@@ -27,19 +28,24 @@ FunctionDeclAnalysis::FunctionDeclAnalysis(std::string filepath, std::string com
 int FunctionDeclAnalysis::StartToAnalysis()
 {
     int argc = 2;
-    const char* argv[3];
-    argv[0] = "";
-    argv[1] = sourceCodeFilePath.c_str();
+    char argv_tmp[3][128] = {{0},};
+    strcpy(argv_tmp[0], "test");
+    strncpy(argv_tmp[1], sourceCodeFilePath.c_str(), sourceCodeFilePath.length()); 
+    spdlog::info("compiledDatabasePath is {}\n", ("-p=" + compiledDatabasePath).c_str());
     if (!compiledDatabasePath.empty())
     {
         argc++;
-        argv[2] = ("-p=" + compiledDatabasePath).c_str();
+        std::string tmpstr = "-p=" + compiledDatabasePath;
+        strncpy(argv_tmp[2], tmpstr.c_str(), tmpstr.length());
     }
 
+    const char * argv[3];
     for (int i = 0; i < argc; i++)
     {
-        spdlog::info("argc = [{}], argv = [{}]\n", i, argv[i]);
+        spdlog::info("argc = [{}], argv = [{}]\n", i, argv_tmp[i]);
+        argv[i] = argv_tmp[i];
     }
+    
     clang::tooling::CommonOptionsParser op(argc, argv, ToolingSampleCategory);
     std::vector<std::string> sourcepath;
     sourcepath.emplace_back(argv[1]);

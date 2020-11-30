@@ -10,8 +10,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 14)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
+
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_definitions(-Wall -pedantic)
 
 find_package(Threads)
 find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
