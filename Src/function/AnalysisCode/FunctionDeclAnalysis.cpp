@@ -1,10 +1,11 @@
 #include "FuncDeclASTFrontendAction.hpp"
 #include "function/FunctionDeclAnalysis.h"
+#include "function/utilities.h"
 #include <clang/Tooling/Tooling.h>
 #include <string>
+using namespace clang::tooling;
 namespace MFunction
 {
-
 class MyFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
 public:
@@ -21,8 +22,6 @@ private:
 FunctionDeclAnalysis::FunctionDeclAnalysis(std::string filepath, std::string compiledatabase)
         : sourceCodeFilePath(filepath), compiledDatabasePath(compiledatabase)
 {
-    spdlog::info("[{}] filepath = [{}] complieddatabase = [{}]\n", __FUNCTION__, filepath.c_str(),
-                 compiledatabase.c_str());
 }
 
 int FunctionDeclAnalysis::StartToAnalysis()
@@ -31,9 +30,8 @@ int FunctionDeclAnalysis::StartToAnalysis()
     char argv_tmp[3][128] = {
         {0},
     };
-    strcpy(argv_tmp[0], "test");
+    strcpy(argv_tmp[0], "__READY_TO_ANALYSIS__");
     strncpy(argv_tmp[1], sourceCodeFilePath.c_str(), sourceCodeFilePath.length());
-    spdlog::info("compiledDatabasePath is {}\n", ("-p=" + compiledDatabasePath).c_str());
     if (!compiledDatabasePath.empty())
     {
         argc++;
@@ -52,14 +50,16 @@ int FunctionDeclAnalysis::StartToAnalysis()
     std::vector<std::string> sourcepath;
     sourcepath.emplace_back(argv[1]);
     clang::tooling::ClangTool Tool(op.getCompilations(), sourcepath);
+    ArgumentsAdjuster ardj1 = getInsertArgumentAdjuster(MyFunction::CLANG_ARGS2APPEND.c_str());
+    Tool.appendArgumentsAdjuster(ardj1);
 
     sourceCodeErrorMessage.clear();
     sourceCodeFunctionMessage.clear();
 
     auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(sourceCodeErrorMessage, sourceCodeFunctionMessage);
-    MyFrontendActionFactory tmp;
-    tmp.setPtr(tmpFrontendAction);
-    return Tool.run(&tmp);
+    MyFrontendActionFactory frontACtionFactory;
+    frontACtionFactory.setPtr(tmpFrontendAction);
+    return Tool.run(&frontACtionFactory);
 }
 
 const SourceCodeErrorMessageList& FunctionDeclAnalysis::GetErrorMessageRef() const { return sourceCodeErrorMessage; }

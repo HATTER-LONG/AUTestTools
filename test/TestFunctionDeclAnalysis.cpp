@@ -5,20 +5,18 @@
 #include "function/FunctionDeclAnalysis.h"
 #include "test.h"
 
+#include "function/utilities.h"
 #include <utility>
 #include <vector>
 
 
-
 TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
 {
-    std::string analysisFilePath = "./test/test.cxx";
-    std::string comipleCommandFilePath = "./build/compile_commands.json";
-    if (InputParamSaver::instance()->getSaver().size() == 3)
-    {
-        analysisFilePath = InputParamSaver::instance()->getSaver()[1];
-        comipleCommandFilePath = InputParamSaver::instance()->getSaver()[2];
-    }
+    std::string analysisFilePath = MyFunction::TESTCODEFILE;
+    std::string comipleCommandFilePath = MyFunction::COMPILECOMMANDS_INFOFILE;
+
+    REQUIRE(!analysisFilePath.empty());
+    REQUIRE(!comipleCommandFilePath.empty());
 
     spdlog::info("analysis file pathname is {}, compile command file path is {}", analysisFilePath.c_str(),
                  comipleCommandFilePath.c_str());

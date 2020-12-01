@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <vector>
+
 namespace MFunction
 {
 
@@ -46,6 +47,7 @@ private:
 
 using SourceCodeErrorMessageList = std::vector<SourceCodeErrorMessage>;
 using SourceCodeFunctionMessageMap = std::map<std::string, SourceCodeFunctionMessage>;
+
 class FunctionDeclAnalysis
 {
 public:
