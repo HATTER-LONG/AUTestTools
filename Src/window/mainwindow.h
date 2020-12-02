@@ -5,10 +5,10 @@
 
 class DiagramSceneWindow;
 class ProduceWithEditWindow;
-namespace MFunction
+namespace MyFunction
 {
 class FunctionDeclAnalysis;
-} // namespace MFunction
+} // namespace MyFunction
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -44,6 +44,6 @@ private:
     QMenu* itemMenu;
     QMenu* aboutMenu;
 
-    MFunction::FunctionDeclAnalysis* sourceCodeMessagePtr;
+    MyFunction::FunctionDeclAnalysis* sourceCodeMessagePtr;
 };
 #endif // MAINWINDOW_H

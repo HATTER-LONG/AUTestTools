@@ -4,7 +4,7 @@
 using namespace MyFunction;
 using namespace std;
 
-string UnitTestCodeProduceFunc::createMockSourceCode(const MFunction::SourceCodeFunctionMessage& info)
+string UnitTestCodeProduceFunc::createMockSourceCode(const MyFunction::SourceCodeFunctionMessage& info)
 {
     string functionParam;
     getParamList(functionParam, info.GetFunctionParam());
@@ -20,7 +20,7 @@ string UnitTestCodeProduceFunc::createMockSourceCode(const MFunction::SourceCode
     return (functionCode);
 }
 
-string UnitTestCodeProduceFunc::createMockSourceCode(const MFunction::SourceCodeFunctionMessageMap& infoList)
+string UnitTestCodeProduceFunc::createMockSourceCode(const MyFunction::SourceCodeFunctionMessageMap& infoList)
 {
     string listFunctionCode;
     for (const auto& a : infoList)
@@ -32,7 +32,7 @@ string UnitTestCodeProduceFunc::createMockSourceCode(const MFunction::SourceCode
     return (listFunctionCode);
 }
 
-void UnitTestCodeProduceFunc::getParamList(string& functionParam, const MFunction::FunctionParamList& info)
+void UnitTestCodeProduceFunc::getParamList(string& functionParam, const MyFunction::FunctionParamList& info)
 {
     for (size_t i = 1; i < info.size(); i++)
     {
@@ -56,7 +56,7 @@ void UnitTestCodeProduceFunc::getFuncReturnValue(string& returnValue, const stri
     }
 }
 
-string UnitTestCodeProduceFunc::createUnitTestCode(const MFunction::SourceCodeFunctionMessage& Func,
+string UnitTestCodeProduceFunc::createUnitTestCode(const MyFunction::SourceCodeFunctionMessage& Func,
                                                    const UnitTestInfo& Info)
 {
     string unitTestCode = CatchUnitTestCaseTemplate;
@@ -77,7 +77,7 @@ string UnitTestCodeProduceFunc::createUnitTestCode(const MFunction::SourceCodeFu
     return (unitTestCode);
 }
 
-string UnitTestCodeProduceFunc::getSectionCode(const MFunction::SourceCodeFunctionMessage& Func,
+string UnitTestCodeProduceFunc::getSectionCode(const MyFunction::SourceCodeFunctionMessage& Func,
                                                const UnitTestSectionInfo& sectionInfo)
 {
     string tmpSectionCode = CatchUnitTestSectionTemplate;

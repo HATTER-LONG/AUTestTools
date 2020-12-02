@@ -4,7 +4,7 @@
 #include <clang/Tooling/Tooling.h>
 #include <string>
 using namespace clang::tooling;
-namespace MFunction
+namespace MyFunction
 {
 class MyFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
@@ -69,4 +69,4 @@ const SourceCodeFunctionMessageMap& FunctionDeclAnalysis::GetFunctionMessageRef(
     return sourceCodeFunctionMessage;
 };
 
-} // namespace MFunction
+} // namespace MyFunction

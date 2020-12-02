@@ -4,7 +4,7 @@
 #include <QtWidgets>
 #include <string>
 
-ProduceWithEditWindow::ProduceWithEditWindow(const MFunction::SourceCodeFunctionMessageMap& functionInfo,
+ProduceWithEditWindow::ProduceWithEditWindow(const MyFunction::SourceCodeFunctionMessageMap& functionInfo,
                                              QWidget* parent)
         : QWidget(parent), functionMessage(functionInfo)
 {

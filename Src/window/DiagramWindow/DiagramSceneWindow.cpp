@@ -554,8 +554,8 @@ void DiagramSceneWindow::itemColorChanged()
     fillButtonTriggered();
 }
 
-void DiagramSceneWindow::drawResultByCodeMessage(const MFunction::SourceCodeFunctionMessageMap& functionMessage,
-                                                 const MFunction::SourceCodeErrorMessageList& /*errorMessage*/) const
+void DiagramSceneWindow::drawResultByCodeMessage(const MyFunction::SourceCodeFunctionMessageMap& functionMessage,
+                                                 const MyFunction::SourceCodeErrorMessageList& /*errorMessage*/) const
 {
     scene->clear();
     view->centerOn(0, 0);
@@ -575,7 +575,7 @@ void DiagramSceneWindow::drawResultByCodeMessage(const MFunction::SourceCodeFunc
         }
 
         tmpItem = scene->createItem(DiagramItem::DiagramType::Step, point);
-        const MFunction::FunctionParamList& functionparam = a.second.GetFunctionParam();
+        const MyFunction::FunctionParamList& functionparam = a.second.GetFunctionParam();
         std::string showText = functionparam[0];
         showText += " ";
         showText += a.second.GetFunctionName();
@@ -590,7 +590,7 @@ void DiagramSceneWindow::drawResultByCodeMessage(const MFunction::SourceCodeFunc
 
         tmpItem->setItemText(QString(showText.c_str()));
         tmpItem->setFunctionName(a.second.GetFunctionName());
-        const MFunction::FunctionCallExprList& functioncallexpr = a.second.GetFunctionWhichCallExpr();
+        const MyFunction::FunctionCallExprList& functioncallexpr = a.second.GetFunctionWhichCallExpr();
         DiagramItem* tmpItemcall = nullptr;
         DiagramItem* tmpItemcallLast = nullptr;
         for (auto& b : functioncallexpr)
@@ -612,7 +612,7 @@ void DiagramSceneWindow::drawResultByCodeMessage(const MFunction::SourceCodeFunc
             tmpItemcall = scene->createItem(DiagramItem::DiagramType::Step, point_f2);
             auto iter = functionMessage.find(b);
 
-            const MFunction::FunctionParamList& functionparam = iter->second.GetFunctionParam();
+            const MyFunction::FunctionParamList& functionparam = iter->second.GetFunctionParam();
             std::string showText = functionparam[0];
             showText += " ";
             showText += iter->second.GetFunctionName();

@@ -15,14 +15,14 @@
 #include <llvm/Support/raw_ostream.h>
 #include <string>
 
-namespace MFunction
+namespace MyFunction
 {
 
 static llvm::cl::OptionCategory ToolingSampleCategory("Tooling Sample");
 class MatcherNodeFuncCall : public clang::ast_matchers::MatchFinder::MatchCallback
 {
 public:
-    MatcherNodeFuncCall(MFunction::SourceCodeFunctionMessageMap& functionmessage) : functionMessageRef(functionmessage)
+    MatcherNodeFuncCall(MyFunction::SourceCodeFunctionMessageMap& functionmessage) : functionMessageRef(functionmessage)
     {
     }
     void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
@@ -143,4 +143,4 @@ private:
     SourceCodeErrorAnalysis* errorAnalysis;
 };
 
-} // namespace MFunction
+} // namespace MyFunction

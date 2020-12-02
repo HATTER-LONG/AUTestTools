@@ -13,7 +13,7 @@ MainWindow::MainWindow() : sourceCodeMessagePtr(nullptr)
 {
     diagramSceneWindow = new DiagramSceneWindow(this);
     createMenus();
-    sourceCodeMessagePtr = new MFunction::FunctionDeclAnalysis();
+    sourceCodeMessagePtr = new MyFunction::FunctionDeclAnalysis();
     editwindow = new ProduceWithEditWindow(sourceCodeMessagePtr->GetFunctionMessageRef(), this);
     connect(diagramSceneWindow, SIGNAL(selectedFunctionInfo(std::string)), editwindow,
             SLOT(createSelectFuncTestCode(std::string)));
@@ -91,7 +91,8 @@ void MainWindow::openFileToAnalysis()
             spdlog::info("Start to analysis error exception: {}", e.what());
         }
 
-        const MFunction::SourceCodeErrorMessageList& tmpErrorMessagevector = sourceCodeMessagePtr->GetErrorMessageRef();
+        const MyFunction::SourceCodeErrorMessageList& tmpErrorMessagevector =
+            sourceCodeMessagePtr->GetErrorMessageRef();
         for (auto a : tmpErrorMessagevector)
         {
             spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(),
