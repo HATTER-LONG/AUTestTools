@@ -55,7 +55,6 @@ set(CLANG_LINK_LIBRARIES
   clangRewriteFrontend
   clangSema
   clangSerialization
-  clangCodeGen
 )
 
 # 3. 添加本地库与头文件搜索路径
