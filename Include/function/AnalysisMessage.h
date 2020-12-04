@@ -14,9 +14,9 @@ public:
             : errorLevel(errorlevel), errorMessage(errormessage), errorPos(errorpos)
     {
     }
-    int GetErrorLevel() { return errorLevel; }
-    std::string GetErrorMessage() { return errorMessage; }
-    std::string GetErrorPos() { return errorPos; }
+    int GetErrorLevel() const noexcept { return errorLevel; }
+    std::string GetErrorMessage() const noexcept { return errorMessage; }
+    std::string GetErrorPos() const noexcept { return errorPos; }
 
 private:
     int errorLevel;
@@ -35,9 +35,9 @@ public:
     {
     }
     void AddFunctionWhichCallExpr(std::string callexprname) { functionCallExpr.push_back(callexprname); }
-    const std::string GetFunctionName() const { return functionName; }
-    const FunctionParamList& GetFunctionParam() const { return functionParam; }
-    const FunctionCallExprList& GetFunctionWhichCallExpr() const { return functionCallExpr; }
+    const std::string GetFunctionName() const noexcept { return functionName; }
+    const FunctionParamList& GetFunctionParam() const noexcept { return functionParam; }
+    const FunctionCallExprList& GetFunctionWhichCallExpr() const noexcept { return functionCallExpr; }
 
 private:
     std::string functionName;
