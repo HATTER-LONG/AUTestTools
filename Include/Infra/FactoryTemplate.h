@@ -60,8 +60,9 @@ public:
         auto iter = m_ProductClassRegistry.find(ID);
         if (iter != m_ProductClassRegistry.end())
         {
-            spdlog::info("[{}] Error with Repeatedly insert the class with ID[{}] into the factory, pls check it", __FUNCTION__,
+            spdlog::warn("[{}] Error with Repeatedly insert the class with ID[{}] into the factory, pls check it", __FUNCTION__,
                          ID.c_str());
+
             return;
         }
         m_ProductClassRegistry[ID] = registry;
@@ -79,8 +80,8 @@ public:
         {
             return m_ProductClassRegistry[ID]->CreateProduct();
         }
-        spdlog::info("{} No product class found for ID[{}]", __FUNCTION__, ID.c_str());
-        return std::make_unique<CustomProductType_t, nullptr>;
+        spdlog::warn("{} No product class found for ID[{}]", __FUNCTION__, ID.c_str());
+        return std::unique_ptr<CustomProductType_t>(nullptr);
     }
 
     ProductClassFactory(const ProductClassFactory&) = delete;
@@ -115,7 +116,7 @@ public:
      */
     explicit ProductClassRegistrar(std::string ID)
     {
-        ProductClassFactory<CustomProductType_t>::instance().RegisterProduct(this, ID);
+        ProductClassFactory<CustomProductType_t>::instance().RegisterClassWithID(this, ID);
     }
 
     /**
@@ -123,6 +124,9 @@ public:
      *
      * @return std::unique_ptr<CustomProductType_t>
      */
-    std::unique_ptr<CustomProductType_t> CreateProduct() { return new CustomProductImpl_t(); }
+    std::unique_ptr<CustomProductType_t> CreateProduct()
+    {
+        return std::unique_ptr<CustomProductType_t>(std::make_unique<CustomProductImpl_t>());
+    }
 };
 } // namespace Infra

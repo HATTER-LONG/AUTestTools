@@ -1,4 +1,5 @@
-#include "function/AnalysisMessage.h"
+#include "function/FunctionDeclAnalysis.h"
+#include "spdlog/spdlog.h"
 
 #include <clang-c/Index.h>
 #include <clang/AST/DeclObjC.h>
@@ -21,7 +22,9 @@ static llvm::cl::OptionCategory ToolingSampleCategory("Tooling Sample");
 class MatcherNodeFuncCall : public clang::ast_matchers::MatchFinder::MatchCallback
 {
 public:
-    MatcherNodeFuncCall(MyFunction::SourceCodeFunctionMessageMap& functionmessage) : functionMessageRef(functionmessage) {}
+    MatcherNodeFuncCall(MyFunction::SourceCodeFunctionMessageMap& functionmessage) : functionMessageRef(functionmessage)
+    {
+    }
     void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
     {
         clang::LangOptions LangOpts;
@@ -109,7 +112,8 @@ private:
 class FuncDeclAnalysisFrontendAction : public clang::ASTFrontendAction
 {
 public:
-    FuncDeclAnalysisFrontendAction(SourceCodeFunctionMessageMap& functionmessage, SourceCodeErrorMessageList& errormessage)
+    FuncDeclAnalysisFrontendAction(SourceCodeErrorMessageList& errormessage,
+                                   SourceCodeFunctionMessageMap& functionmessage)
     {
         errorAnalysis = new SourceCodeErrorAnalysis(errormessage);
         nodeFuncCall = new MatcherNodeFuncCall(functionmessage);
@@ -119,12 +123,14 @@ public:
         delete nodeFuncCall;
         nodeFuncCall = nullptr;
     }
-    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI, clang::StringRef /*file*/) override
+    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI,
+                                                          clang::StringRef /*file*/) override
     {
         using namespace clang::ast_matchers;
-        auto FuncDeclMatcher = functionDecl(isExpansionInMainFile(), anyOf(forEachDescendant(callExpr().bind("callExprFunction")),
-                                                                           unless(forEachDescendant(callExpr()))))
-                                   .bind("FunctionDeclWithCall");
+        auto FuncDeclMatcher =
+            functionDecl(isExpansionInMainFile(), anyOf(forEachDescendant(callExpr().bind("callExprFunction")),
+                                                        unless(forEachDescendant(callExpr()))))
+                .bind("FunctionDeclWithCall");
         finder.addMatcher(FuncDeclMatcher, nodeFuncCall);
         // setClient 第二个参数默认为 true 迁移 DiagnosticConsumer 所有权
         CI.getDiagnostics().setClient(errorAnalysis);

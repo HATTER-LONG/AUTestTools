@@ -61,8 +61,7 @@ void MainWindow::createMenus()
 
 void MainWindow::setCompileDateBaseFile()
 {
-    QString fileName =
-        QFileDialog::getOpenFileName(this, tr("open compile database file"), "./", tr("json files (*.json)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("open compile database file"), "./", tr("json files (*.json)"));
 
     if (!fileName.isEmpty())
     {
@@ -91,15 +90,12 @@ void MainWindow::openFileToAnalysis()
             spdlog::info("Start to analysis error exception: {}", e.what());
         }
 
-        const MyFunction::SourceCodeErrorMessageList& tmpErrorMessagevector =
-            sourceCodeMessagePtr->GetErrorMessageRef();
-        for (auto a : tmpErrorMessagevector)
+        const MyFunction::SourceCodeErrorMessageList& tmpErrorMessagevector = sourceCodeMessagePtr->GetErrorMessageRef();
+        for (const auto& a : tmpErrorMessagevector)
         {
-            spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(),
-                         a.GetErrorPos());
+            spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(), a.GetErrorPos());
         }
 
-        diagramSceneWindow->drawResultByCodeMessage(sourceCodeMessagePtr->GetFunctionMessageRef(),
-                                                    tmpErrorMessagevector);
+        diagramSceneWindow->drawResultByCodeMessage(sourceCodeMessagePtr->GetFunctionMessageRef(), tmpErrorMessagevector);
     }
 }

@@ -2,7 +2,7 @@
 #define __DIAGRAM_SCENE_WINDOW_H__
 
 #include "DiagramItem.h"
-#include "function/FunctionDeclAnalysis.h"
+#include "function/AnalysisMessage.h"
 #include <QMainWindow>
 
 class DiagramScene;

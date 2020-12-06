@@ -1,29 +1,30 @@
 #include "FuncDeclASTFrontendAction.hpp"
-#include "FunctionDeclAnalysis.h"
-#include "Infra/FactoryTemplate.h"
+#include "function/FunctionDeclAnalysis.h"
 #include "function/utilities.h"
-#include "spdlog/spdlog.h"
 #include <clang/Tooling/Tooling.h>
-#include <cmath>
 #include <string>
 using namespace clang::tooling;
-
-static Infra::ProductClassRegistrar<MyFunction::SourceCodeAnalysisFunc, MyFunction::FunctionDeclAnalysis>
-    funcdeclAnalysisMethod(MyFunction::FunctionDeclAnalysis::GetFactoryID());
 namespace MyFunction
 {
 class MyFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
 public:
-    std::unique_ptr<clang::FrontendAction> create() override { return std::unique_ptr<clang::FrontendAction>(myFrontendAction); }
+    std::unique_ptr<clang::FrontendAction> create() override
+    {
+        return std::unique_ptr<clang::FrontendAction>(myFrontendAction);
+    }
     void setPtr(clang::FrontendAction* tmpptr) { myFrontendAction = tmpptr; }
 
 private:
     clang::FrontendAction* myFrontendAction;
 };
 
-bool FunctionDeclAnalysis::StartToAnalysisSourceCode(SourceCodeFunctionMessageMap& functionmessage,
-                                                     SourceCodeErrorMessageList& errormessage)
+FunctionDeclAnalysis::FunctionDeclAnalysis(std::string filepath, std::string compiledatabase)
+        : sourceCodeFilePath(filepath), compiledDatabasePath(compiledatabase)
+{
+}
+
+int FunctionDeclAnalysis::StartToAnalysis()
 {
     int argc = 2;
     char argv_tmp[3][128] = {
@@ -52,21 +53,20 @@ bool FunctionDeclAnalysis::StartToAnalysisSourceCode(SourceCodeFunctionMessageMa
     ArgumentsAdjuster ardj1 = getInsertArgumentAdjuster(MyFunction::CLANG_ARGS2APPEND.c_str());
     Tool.appendArgumentsAdjuster(ardj1);
 
-    functionmessage.clear();
-    errormessage.clear();
+    sourceCodeErrorMessage.clear();
+    sourceCodeFunctionMessage.clear();
 
-    auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(functionmessage, errormessage);
+    auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(sourceCodeErrorMessage, sourceCodeFunctionMessage);
     MyFrontendActionFactory frontACtionFactory;
     frontACtionFactory.setPtr(tmpFrontendAction);
-    // 0 on success; 1 if any error occurred; 2 if there is no error but some files are skipped due to missing
-    // compile commands.
-    int errorcode = Tool.run(&frontACtionFactory);
-    if (errorcode != 0)
-    {
-        spdlog::info("[{}] error for analysis file[{}] errnocode[{}]", __FUNCTION__, sourceCodeFilePath, errorcode);
-        return false;
-    }
-    return true;
+    return Tool.run(&frontACtionFactory);
 }
+
+const SourceCodeErrorMessageList& FunctionDeclAnalysis::GetErrorMessageRef() const { return sourceCodeErrorMessage; }
+
+const SourceCodeFunctionMessageMap& FunctionDeclAnalysis::GetFunctionMessageRef() const
+{
+    return sourceCodeFunctionMessage;
+};
 
 } // namespace MyFunction

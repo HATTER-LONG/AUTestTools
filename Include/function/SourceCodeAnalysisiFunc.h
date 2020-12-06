@@ -11,8 +11,8 @@ namespace MyFunction
 class SourceCodeAnalysisFunc
 {
 public:
-    SourceCodeAnalysisFunc();
-    virtual ~SourceCodeAnalysisFunc();
+    SourceCodeAnalysisFunc() = default;
+    virtual ~SourceCodeAnalysisFunc() = default;
 
     /**
      * @brief Start to analysis source code
