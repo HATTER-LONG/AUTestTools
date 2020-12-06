@@ -1,15 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "function/AnalysisMessage.h"
+#include "function/SourceCodeAnalysisiFunc.h"
 #include <QMainWindow>
-
 class DiagramSceneWindow;
 class ProduceWithEditWindow;
-namespace MyFunction
-{
-class FunctionDeclAnalysis;
-} // namespace MyFunction
-
 QT_BEGIN_NAMESPACE
 class QAction;
 class QToolBox;
@@ -44,6 +40,8 @@ private:
     QMenu* itemMenu;
     QMenu* aboutMenu;
 
-    MyFunction::FunctionDeclAnalysis* sourceCodeMessagePtr;
+    std::unique_ptr<MyFunction::SourceCodeAnalysisFunc> sourceCodeMessagePtr;
+    MyFunction::SourceCodeFunctionMessageMap functionMessageMap;
+    MyFunction::SourceCodeErrorMessageList errorMessageList;
 };
 #endif // MAINWINDOW_H

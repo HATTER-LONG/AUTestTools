@@ -1,7 +1,7 @@
 
 #include "DiagramWindow/DiagramSceneWindow.h"
 #include "ProduceWithEditWindow/ProduceWithEditWindow.h"
-#include "function/FunctionDeclAnalysis.h"
+
 #include "mainwindow.h"
 #include "spdlog/spdlog.h"
 #include <QtWidgets>
@@ -13,8 +13,8 @@ MainWindow::MainWindow() : sourceCodeMessagePtr(nullptr)
 {
     diagramSceneWindow = new DiagramSceneWindow(this);
     createMenus();
-    sourceCodeMessagePtr = new MyFunction::FunctionDeclAnalysis();
-    editwindow = new ProduceWithEditWindow(sourceCodeMessagePtr->GetFunctionMessageRef(), this);
+    sourceCodeMessagePtr = MyFunction::g_SourceCodeAnalysisFactory::instance().GetProductClass("level_1");
+    editwindow = new ProduceWithEditWindow(functionMessageMap, this);
     connect(diagramSceneWindow, SIGNAL(selectedFunctionInfo(std::string)), editwindow,
             SLOT(createSelectFuncTestCode(std::string)));
     auto* layout = new QHBoxLayout;
@@ -82,7 +82,7 @@ void MainWindow::openFileToAnalysis()
 
         try
         {
-            int result = sourceCodeMessagePtr->StartToAnalysis();
+            int result = sourceCodeMessagePtr->StartToAnalysisSourceCode(functionMessageMap, errorMessageList);
             spdlog::info("StartToAnalysis Result is {}\n", result);
         }
         catch (std::exception& e)
@@ -90,12 +90,11 @@ void MainWindow::openFileToAnalysis()
             spdlog::info("Start to analysis error exception: {}", e.what());
         }
 
-        const MyFunction::SourceCodeErrorMessageList& tmpErrorMessagevector = sourceCodeMessagePtr->GetErrorMessageRef();
-        for (const auto& a : tmpErrorMessagevector)
+        for (const auto& a : errorMessageList)
         {
             spdlog::info("errorLevel[{}] && message[{}] && filepos[{}]", a.GetErrorLevel(), a.GetErrorMessage(), a.GetErrorPos());
         }
 
-        diagramSceneWindow->drawResultByCodeMessage(sourceCodeMessagePtr->GetFunctionMessageRef(), tmpErrorMessagevector);
+        diagramSceneWindow->drawResultByCodeMessage(functionMessageMap, errorMessageList);
     }
 }

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "function/AnalysisMessage.h"
+#include "AnalysisMessage.h"
+#include "Infra/FactoryTemplate.h"
 #include <string>
 namespace MyFunction
 {
@@ -39,4 +40,5 @@ public:
     virtual void SetCompileDatabase(std::string compiledatabase) = 0;
 };
 
+using g_SourceCodeAnalysisFactory = Infra::ProductClassFactory<MyFunction::SourceCodeAnalysisFunc>;
 } // namespace MyFunction

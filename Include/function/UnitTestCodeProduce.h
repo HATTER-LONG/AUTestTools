@@ -1,5 +1,5 @@
 #pragma once
-#include "FunctionDeclAnalysis.h"
+#include "AnalysisMessage.h"
 #include <string>
 #include <vector>
 

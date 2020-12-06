@@ -3,7 +3,6 @@
 #include "function/AnalysisMessage.h"
 #include "spdlog/spdlog.h"
 
-#include "Infra/FactoryTemplate.h"
 #include "Tools/InputParamSaver.hpp"
 #include "function/SourceCodeAnalysisiFunc.h"
 #include "test.h"
@@ -22,8 +21,7 @@ TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
 
     spdlog::info("analysis file pathname is {}, compile command file path is {}", analysisFilePath.c_str(),
                  comipleCommandFilePath.c_str());
-    auto fundeclanalysisptr =
-        Infra::ProductClassFactory<MyFunction::SourceCodeAnalysisFunc>::instance().GetProductClass("level_1");
+    auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().GetProductClass("level_1");
     REQUIRE(fundeclanalysisptr != nullptr);
     MyFunction::SourceCodeErrorMessageList errormessage;
     MyFunction::SourceCodeFunctionMessageMap funcmessagemap;

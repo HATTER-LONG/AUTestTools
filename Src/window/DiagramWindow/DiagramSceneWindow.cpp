@@ -3,7 +3,7 @@
 #include "DiagramItem.h"
 #include "DiagramScene.h"
 #include "DiagramSceneWindow.h"
-#include "function/FunctionDeclAnalysis.h"
+#include "function/AnalysisMessage.h"
 #include "spdlog/spdlog.h"
 #include <QtWidgets>
 
@@ -52,8 +52,7 @@ void DiagramSceneWindow::itemSelectedToCreateSourceCode()
     {
         if (item->type() == DiagramItem::Type)
         {
-            spdlog::info("Function Info is {}",
-                         qgraphicsitem_cast<DiagramItem*>(item)->getItemText().toStdString().c_str());
+            spdlog::info("Function Info is {}", qgraphicsitem_cast<DiagramItem*>(item)->getItemText().toStdString().c_str());
             emit selectedFunctionInfo(qgraphicsitem_cast<DiagramItem*>(item)->getFunctionName());
         }
     }
@@ -229,8 +228,7 @@ void DiagramSceneWindow::lineColorChanged()
     spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
 
     lineAction = qobject_cast<QAction*>(sender());
-    lineColorToolButton->setIcon(
-        createColorToolButtonIcon(":/images/linecolor.png", qvariant_cast<QColor>(lineAction->data())));
+    lineColorToolButton->setIcon(createColorToolButtonIcon(":/images/linecolor.png", qvariant_cast<QColor>(lineAction->data())));
     lineButtonTriggered();
 }
 void DiagramSceneWindow::textButtonTriggered()
@@ -503,8 +501,8 @@ QIcon DiagramSceneWindow::createColorIcon(QColor color)
 
 QWidget* DiagramSceneWindow::createCellWidget(const QString& text, DiagramItem::DiagramType type)
 {
-    spdlog::info("{}:{}:{} Call text is [{}]  type is [{}]!!!", __FILE__, __FUNCTION__, __LINE__,
-                 text.toStdString().c_str(), type);
+    spdlog::info("{}:{}:{} Call text is [{}]  type is [{}]!!!", __FILE__, __FUNCTION__, __LINE__, text.toStdString().c_str(),
+                 type);
     DiagramItem item(type, itemMenu);
     QIcon icon(item.image());
 
@@ -526,8 +524,8 @@ QWidget* DiagramSceneWindow::createCellWidget(const QString& text, DiagramItem::
 
 QWidget* DiagramSceneWindow::createBackgroundCellWidget(const QString& text, const QString& image)
 {
-    spdlog::info("{}:{}:{} Call text is [{}]  image is [{}]!!!", __FILE__, __FUNCTION__, __LINE__,
-                 text.toStdString().c_str(), image.toStdString().c_str());
+    spdlog::info("{}:{}:{} Call text is [{}]  image is [{}]!!!", __FILE__, __FUNCTION__, __LINE__, text.toStdString().c_str(),
+                 image.toStdString().c_str());
 
     auto* button = new QToolButton;
     button->setText(text);

@@ -1,5 +1,5 @@
 #pragma once
-#include "function/FunctionDeclAnalysis.h"
+#include "function/AnalysisMessage.h"
 #include <QWidget>
 #include <vector>
 
