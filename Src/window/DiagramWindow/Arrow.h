@@ -22,7 +22,7 @@ public:
         Type = UserType + 4
     };
 
-    Arrow(DiagramItem* startItem, DiagramItem* endItem, QGraphicsItem* parent = 0);
+    Arrow(DiagramItem* startItem, DiagramItem* endItem, QGraphicsItem* parent = nullptr);
 
     int type() const override { return Type; }
     QRectF boundingRect() const override;
@@ -34,7 +34,7 @@ public:
     void updatePosition();
 
 protected:
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) override;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
 private:
     DiagramItem* myStartItem;

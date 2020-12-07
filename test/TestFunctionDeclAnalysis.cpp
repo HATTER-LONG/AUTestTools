@@ -1,13 +1,10 @@
-#include "catch2/catch.hpp"
-
-#include "function/AnalysisMessage.h"
-#include "spdlog/spdlog.h"
-
 #include "Tools/InputParamSaver.hpp"
+#include "catch2/catch.hpp"
+#include "function/AnalysisMessage.h"
 #include "function/SourceCodeAnalysisiFunc.h"
-#include "test.h"
-
 #include "function/utilities.h"
+#include "spdlog/spdlog.h"
+#include "test.h"
 #include <utility>
 #include <vector>
 

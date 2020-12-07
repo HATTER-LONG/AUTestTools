@@ -80,10 +80,26 @@ public:
         {
             return m_ProductClassRegistry[ID]->CreateProduct();
         }
-        spdlog::warn("{} No product class found for ID[{}]", __FUNCTION__, ID.c_str());
+        spdlog::warn("[{}] No product class found for ID[{}]", __FUNCTION__, ID.c_str());
         return std::unique_ptr<CustomProductType_t>(nullptr);
     }
 
+
+    /**
+     * @brief 删除一个已注册的产品注册生成器
+     * TODO:[此接口不应对外，本已实现当产品注册生成器生命周期终止时会自动删除此注册器，不应由使用者管理是否删除，可以通过派生类实现此接口对外基类隐藏]
+     */
+    void removeProductClassByID(std::string produceID)
+    {
+        auto iter = m_ProductClassRegistry.find(produceID);
+        if (iter != m_ProductClassRegistry.end())
+        {
+            m_ProductClassRegistry.erase(iter);
+            return;
+        }
+        spdlog::warn("[{}] remove the produce ID[{}] register failed that not found, pls check it", __FUNCTION__,
+                     produceID.c_str());
+    }
     ProductClassFactory(const ProductClassFactory&) = delete;
     const ProductClassFactory& operator=(const ProductClassFactory&) = delete;
 
@@ -114,11 +130,20 @@ public:
      *
      * @param ID
      */
-    explicit ProductClassRegistrar(std::string ID)
+    explicit ProductClassRegistrar(std::string ID) : CustomProductImplID(ID)
     {
         ProductClassFactory<CustomProductType_t>::instance().RegisterClassWithID(this, ID);
     }
-
+    /**
+     * @brief 删除析构掉的产品注册器 Destroy the Product Class Registrar object
+     * TODO:[不应该在注册器中保存过多的信息，应该提供出基类模板供所有产品继承用于提供获取 produceID 信息]
+     */
+    ~ProductClassRegistrar()
+    {
+        spdlog::warn("[{}] Produce  ID[{}] register[{}] called destructor", __FUNCTION__, CustomProductImplID.c_str(),
+                     fmt::ptr(this));
+        ProductClassFactory<CustomProductType_t>::instance().removeProductClassByID(CustomProductImplID);
+    }
     /**
      * @brief Create a Product object
      *
@@ -128,5 +153,8 @@ public:
     {
         return std::unique_ptr<CustomProductType_t>(std::make_unique<CustomProductImpl_t>());
     }
+
+private:
+    std::string CustomProductImplID;
 };
 } // namespace Infra
