@@ -1,7 +1,7 @@
 #include "Tools/InputParamSaver.hpp"
 #include "catch2/catch.hpp"
 #include "function/AnalysisMessage.h"
-#include "function/SourceCodeAnalysisiFunc.h"
+#include "function/SourceCodeAnalysisFunc.h"
 #include "function/utilities.h"
 #include "spdlog/spdlog.h"
 #include "test.h"

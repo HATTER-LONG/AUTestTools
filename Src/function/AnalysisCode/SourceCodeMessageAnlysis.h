@@ -1,19 +1,20 @@
 #pragma once
 
 #include "function/SourceCodeAnalysisFunc.h"
+
 namespace MyFunction
 {
-class FunctionDeclAnalysis : public SourceCodeAnalysisFunc
+class SourceCodeMessageAnalysis : public SourceCodeAnalysisFunc
 {
 public:
-    FunctionDeclAnalysis() : SourceCodeAnalysisFunc() {}
-    ~FunctionDeclAnalysis() override = default;
+    SourceCodeMessageAnalysis() : SourceCodeAnalysisFunc() {}
+    ~SourceCodeMessageAnalysis() override = default;
     bool StartToAnalysisSourceCode(SourceCodeFunctionMessageMap& functionmessage,
                                    SourceCodeErrorMessageList& errormessage) override;
 
     void SetFilePathToAnalysis(std::string filepath) override { sourceCodeFilePath = filepath; }
     void SetCompileDatabase(std::string compiledatabase) override { compiledDatabasePath = compiledatabase; }
-    static std::string GetFactoryID() { return "level_1"; };
+    static std::string GetFactoryID() { return "level_2"; };
 
 private:
     std::string sourceCodeFilePath;

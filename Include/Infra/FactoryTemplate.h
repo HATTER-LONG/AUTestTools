@@ -138,12 +138,7 @@ public:
      * @brief 删除析构掉的产品注册器 Destroy the Product Class Registrar object
      * TODO:[不应该在注册器中保存过多的信息，应该提供出基类模板供所有产品继承用于提供获取 produceID 信息]
      */
-    ~ProductClassRegistrar()
-    {
-        spdlog::warn("[{}] Produce  ID[{}] register[{}] called destructor", __FUNCTION__, CustomProductImplID.c_str(),
-                     fmt::ptr(this));
-        ProductClassFactory<CustomProductType_t>::instance().removeProductClassByID(CustomProductImplID);
-    }
+    ~ProductClassRegistrar() { ProductClassFactory<CustomProductType_t>::instance().removeProductClassByID(CustomProductImplID); }
     /**
      * @brief Create a Product object
      *

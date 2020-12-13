@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include "function/AnalysisMessage.h"
-#include "function/SourceCodeAnalysisiFunc.h"
+#include "function/SourceCodeAnalysisFunc.h"
 #include <QMainWindow>
 class DiagramSceneWindow;
 class ProduceWithEditWindow;
