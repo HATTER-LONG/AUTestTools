@@ -1,7 +1,7 @@
 #include "spdlog/spdlog.h"
 #include "test.h"
 #include <iostream>
-
+int ExternFunctionHasNoBody(int param) { return param; }
 extern int testExternFunction(int param);
 enum class Cpp11Enum
 {

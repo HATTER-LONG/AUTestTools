@@ -1,16 +1,13 @@
 #include "Tools/InputParamSaver.hpp"
+#include "TrainingCode/test.h"
 #include "catch2/catch.hpp"
-#include "function/AnalysisMessage.h"
 #include "function/SourceCodeAnalysisFunc.h"
 #include "function/utilities.h"
 #include "spdlog/spdlog.h"
-#include "test.h"
-#include <utility>
-#include <vector>
 
 TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
 {
-    std::string analysisFilePath = MyFunction::TESTCODEFILE;
+    std::string analysisFilePath = MyFunction::TRAININGCODE_FILEPATH + "test.cxx";
     std::string comipleCommandFilePath = MyFunction::COMPILECOMMANDS_INFOFILE;
 
     REQUIRE(!analysisFilePath.empty());

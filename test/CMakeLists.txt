@@ -11,14 +11,15 @@ FILE(GLOB AUTESTSRC
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx"
     "${CMAKE_CURRENT_SOURCE_DIR}/Tools/*.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/TrainingCode/*.cxx"
     "${CMAKE_SOURCE_DIR}/Src/function/*.cpp"
     "${CMAKE_SOURCE_DIR}/Src/function/AnalysisCode/*.cpp")
 
 ## 指定测试用的代码路径
-set(TESTCODE_FILENAMEANDFULLPATH "${CMAKE_CURRENT_SOURCE_DIR}/test.cxx")
+set(TESTCODE_FULLPATH "${CMAKE_CURRENT_SOURCE_DIR}/TrainingCode/")
 set(COMPILE_COMMANDS_FILEPATH ${CMAKE_BINARY_DIR})
 add_definitions(-D_CRT_SECURE_NO_WARNINGS 
-                -DTESTCODE_FILENAMEANDFULLPATH="${TESTCODE_FILENAMEANDFULLPATH}" 
+                -DTESTCODE_FULLPATH="${TESTCODE_FULLPATH}" 
                 -DCOMPILE_COMMANDS_FILEPATH="${COMPILE_COMMANDS_FILEPATH}")
 
 
@@ -27,7 +28,6 @@ list(APPEND LOCAL_LINK_LIB Catch2::Catch2)
 set(PROJECTNAME automatedtools_unittests)
 
 add_executable(${PROJECTNAME} ${AUTESTSRC})
-
 clang_target_link(${PROJECTNAME} PRIVATE ${LOCAL_LINK_LIB})
 
 
