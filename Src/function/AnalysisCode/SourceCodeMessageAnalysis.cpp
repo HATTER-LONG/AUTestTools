@@ -47,6 +47,8 @@ bool SourceCodeMessageAnalysis::StartToAnalysisSourceCode(SourceCodeFunctionMess
     clang::ast_matchers::MatchFinder finder;
     FunctionDefLister fp(functionmessage);
     finder.addMatcher(fp.matcher(), &fp);
+    SourceCodeErrorAnalysis diagnosticConsumer(errormessage);
+    Tool.setDiagnosticConsumer(&diagnosticConsumer);
     int ret = Tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
     if (ret != 0)
     {

@@ -8,6 +8,8 @@ class FunctionDefLister : public clang::ast_matchers::MatchFinder::MatchCallback
 {
 public:
     // clang-format off
+
+    //m callExpr(unless(isExpansionInSystemHeader()), hasDescendant(declRefExpr(to(functionDecl().bind("function"))))) 得到自定义的调用函数信息
     auto matcher()
     {
         using namespace clang::ast_matchers;
@@ -82,5 +84,29 @@ public:
 
 private:
     SourceCodeFunctionMessageMap& functionMessageRef;
-}; // namespace MyFunction;
+};
+
+class SourceCodeErrorAnalysis : public clang::DiagnosticConsumer
+{
+public:
+    SourceCodeErrorAnalysis(SourceCodeErrorMessageList& errorMessageList) : errorMessageListRef(errorMessageList) {}
+    ~SourceCodeErrorAnalysis() override = default;
+    void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel, const clang::Diagnostic& Info) override
+    {
+        clang::SmallString<100> OutStr;
+        Info.FormatDiagnostic(OutStr);
+
+        llvm::raw_svector_ostream DiagMessageStream(OutStr);
+        auto aa = clang::FullSourceLoc(Info.getLocation(), Info.getSourceManager()).getFileLoc();
+        int Line = aa.getLineNumber();
+        std::string filename(aa.getPresumedLoc().getFilename());
+
+        filename += ":";
+        filename += std::to_string(Line);
+        errorMessageListRef.push_back(SourceCodeErrorMessage(DiagLevel, DiagMessageStream.str().str(), filename));
+    }
+
+private:
+    SourceCodeErrorMessageList& errorMessageListRef;
+};
 } // namespace MyFunction

@@ -6,7 +6,7 @@
 
 
 
-TEST_CASE("Test Level_2 analysis code tool functions Get normally", "[Source code analysis function]")
+TEST_CASE("Test Level_'ID' analysis code tool functions Get normally", "[Source code analysis function]")
 {
     std::string analysisFilePath = MyFunction::TRAININGCODE_FILEPATH + "FunctionInfoTestCode.cxx";
     std::string comipleCommandFilePath = MyFunction::COMPILECOMMANDS_INFOFILE;
@@ -38,6 +38,7 @@ TEST_CASE("Test Level_2 analysis code tool functions Get normally", "[Source cod
             }
 
             THEN("Check infomation about source code") { REQUIRE(funcmessagemap.size() == TESTCXX_FUNCTIONCOUNT); }
+            THEN("Check infomation about error info") { REQUIRE(errormessage.size() == TESTCXX_ERRORCOUNT); }
         }
     }
 }
