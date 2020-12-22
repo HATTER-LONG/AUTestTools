@@ -23,7 +23,7 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS
                 -DCOMPILE_COMMANDS_FILEPATH="${COMPILE_COMMANDS_FILEPATH}")
 
 
-list(APPEND LOCAL_LINK_LIB Catch2::Catch2)
+list(APPEND LOCAL_LINK_LIB Catch2::Catch2WithMain)
 
 set(PROJECTNAME automatedtools_unittests)
 

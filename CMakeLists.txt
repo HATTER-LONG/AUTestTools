@@ -36,26 +36,7 @@ set(LocalLibClang_DEFINITIONS  -fno-rtti
     -DCLANG_ANALYSIS_ARGS_APPEND="${CLANG_ANALYSIS_ARGS_APPEND}")
 add_definitions(${LocalLibClang_DEFINITIONS})
 
-set(CLANG_LINK_LIBRARIES
-  libclang
-  clangTooling
-  clangARCMigrate
-  clangAST
-  clangASTMatchers
-  clangAnalysis
-  clangBasic
-  clangCodeGen
-  clangDriver
-  clangEdit
-  clangFrontend
-  clangFrontendTool
-  clangLex
-  clangParse
-  clangRewrite
-  clangRewriteFrontend
-  clangSema
-  clangSerialization
-)
+set(CLANG_LINK_LIBRARIES clangTooling)
 
 # 3. 添加本地库与头文件搜索路径
 set(LOCAL_LINK_LIB ${LocalLib} ${QT5_LINK_LIBRARY}  ${CLANG_LINK_LIBRARIES} pthread)
