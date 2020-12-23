@@ -40,10 +40,16 @@ set(CLANG_LINK_LIBRARIES clangTooling)
 
 # 3. 添加本地库与头文件搜索路径
 set(LOCAL_LINK_LIB ${LocalLib} ${QT5_LINK_LIBRARY}  ${CLANG_LINK_LIBRARIES} pthread)
-##通过通过静态链接使用 spdlog 库
-add_definitions(-DSPDLOG_COMPILED_LIB)
-add_subdirectory(Lib)
 
+find_package(spdlog QUIET CONFIG)
+if(spdlog_FOUND)
+    list(APPEND LOCAL_LINK_LIB spdlog::spdlog)
+elseif(spdlog_FOUND)
+    ##通过通过静态链接使用 spdlog 库
+    add_definitions(-DSPDLOG_COMPILED_LIB)
+    add_subdirectory(Lib)
+    include_directories(Lib/spdlog)
+endif(spdlog_FOUND)
 ## 指定头文件、库查找路径
 include_directories(Include)
 link_directories(Lib)
