@@ -39,7 +39,7 @@ public:
 
 using g_BaseClassFactory = Infra::ProductClassFactory<class BaseClass>;
 
-TEST_CASE("Factory register Product functions", "[factory template test]")
+TEST_CASE("Test an empty factory template function", "[factory template test]")
 {
     GIVEN("Factory without products")
     {
@@ -58,13 +58,16 @@ TEST_CASE("Factory register Product functions", "[factory template test]")
                 REQUIRE(oneProduct4DerivedClass->GetClassProductID() == DerivedClass::ProductID());
             }
         }
-        WHEN("after local var register DerivedClass to factory try get the Product again")
+        WHEN("after local register DerivedClass leave the lifecycle try get the Product again")
         {
             auto oneProduct4DerivedClass = g_BaseClassFactory::instance().GetProductClass(DerivedClass::ProductID());
             THEN("Check the return value") { REQUIRE(oneProduct4DerivedClass == nullptr); }
         }
     }
+}
 
+TEST_CASE("Test the factory template function of a product", "[factory template test]")
+{
     GIVEN("Factory with a product")
     {
         Infra::ProductClassRegistrar<class BaseClass, class DerivedClass> registProduct(DerivedClass::ProductID());
