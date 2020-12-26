@@ -22,25 +22,25 @@ public:
         Type = UserType + 4
     };
 
-    Arrow(DiagramItem* startItem, DiagramItem* endItem, QGraphicsItem* parent = nullptr);
+    Arrow(DiagramItem* StartItem, DiagramItem* EndItem, QGraphicsItem* Parent = nullptr);
 
     int type() const override { return Type; }
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-    void setColor(const QColor& color) { myColor = color; }
-    DiagramItem* startItem() const { return myStartItem; }
-    DiagramItem* endItem() const { return myEndItem; }
+    void setColor(const QColor& Color) { MyColor = Color; }
+    DiagramItem* startItem() const { return MyStartItem; }
+    DiagramItem* endItem() const { return MyEndItem; }
 
     void updatePosition();
 
 protected:
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+    void paint(QPainter* Painter, const QStyleOptionGraphicsItem* Option, QWidget* Widget = nullptr) override;
 
 private:
-    DiagramItem* myStartItem;
-    DiagramItem* myEndItem;
-    QColor myColor;
-    QPolygonF arrowHead;
+    DiagramItem* MyStartItem;
+    DiagramItem* MyEndItem;
+    QColor MyColor;
+    QPolygonF ArrowHead;
 };
 
-#endif // ARROW_H
+#endif   // ARROW_H

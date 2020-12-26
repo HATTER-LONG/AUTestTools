@@ -12,15 +12,18 @@ public:
         return &o;
     }
 
-    void ToSaver(int argc, char* argv[])
+    void toSaver(int Argc, char* Argv[])
     {
-        for (int i = 0; i < argc; i++)
+        for (int i = 0; i < Argc; i++)
         {
-            Saver.emplace_back(argv[i]);
+            Saver.emplace_back(Argv[i]);
         }
     }
 
-    const std::vector<std::string> getSaver() { return Saver; }
+    const std::vector<std::string> getSaver()
+    {
+        return Saver;
+    }
 
 private:
     std::vector<std::string> Saver;

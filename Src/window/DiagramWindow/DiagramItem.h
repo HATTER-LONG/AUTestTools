@@ -38,42 +38,43 @@ public:
         Io
     };
 
-    DiagramItem(DiagramType diagramType, QMenu* contextMenu, QGraphicsItem* parent = nullptr);
+    DiagramItem(DiagramType DiagramType, QMenu* ContextMenu, QGraphicsItem* Parent = nullptr);
     ~DiagramItem() override;
 
-    void removeArrow(Arrow* arrow);
+    void removeArrow(Arrow* Arrow);
     void removeArrows();
-    DiagramType diagramType() const { return myDiagramType; }
-    QPolygonF polygon() const { return myPolygon; }
-    void addArrow(Arrow* arrow);
+    DiagramType diagramType() const { return MyDiagramType; }
+    QPolygonF polygon() const { return MyPolygon; }
+    void addArrow(Arrow* Arrow);
     QPixmap image() const;
     int type() const override { return Type; }
-    void setFont(const QFont& font);
-    void setTextColor(const QColor& color);
+    void setFont(const QFont& Font);
+    void setTextColor(const QColor& Color);
     void createTextItem();
 
-    void setItemText(const QString& text);
+    void setItemText(const QString& Text);
     const QString getItemText();
 
-    void setFunctionName(std::string functionName) { myFunctionName = functionName; }
-    std::string getFunctionName() const { return myFunctionName; }
+    void setFunctionName(std::string FunctionName) { MyFunctionName = FunctionName; }
+    std::string getFunctionName() const { return MyFunctionName; }
 
 protected:
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;
-    QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-    void focusOutEvent(QFocusEvent* event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* Event) override;
+    QVariant itemChange(GraphicsItemChange Change,
+        const QVariant& Value) override;
+    void focusOutEvent(QFocusEvent* Event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* Event) override;
 
 private:
-    DiagramType myDiagramType;
-    QPolygonF myPolygon;
-    QMenu* myContextMenu;
-    QList<Arrow*> arrows;
-    DiagramTextItem* mytextItem;
+    DiagramType MyDiagramType;
+    QPolygonF MyPolygon;
+    QMenu* MyContextMenu;
+    QList<Arrow*> ArrowList;
+    DiagramTextItem* MyTestItem;
 
-    QColor myTextColor;
-    QFont myFont;
+    QColor MyTestColor;
+    QFont MyFont;
 
-    std::string myFunctionName;
+    std::string MyFunctionName;
 };
 #endif

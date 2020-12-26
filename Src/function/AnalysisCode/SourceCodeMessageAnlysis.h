@@ -7,18 +7,21 @@ namespace MyFunction
 class SourceCodeMessageAnalysis : public SourceCodeAnalysisFunc
 {
 public:
-    SourceCodeMessageAnalysis() : SourceCodeAnalysisFunc() {}
+    SourceCodeMessageAnalysis()
+            : SourceCodeAnalysisFunc()
+    {
+    }
     ~SourceCodeMessageAnalysis() override = default;
-    bool StartToAnalysisSourceCode(SourceCodeFunctionMessageMap& functionmessage,
-                                   SourceCodeErrorMessageList& errormessage) override;
+    bool startToAnalysisSourceCode(
+        SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage) override;
 
-    void SetFilePathToAnalysis(std::string filepath) override { sourceCodeFilePath = filepath; }
-    void SetCompileDatabase(std::string compiledatabase) override { compiledDatabasePath = compiledatabase; }
-    static std::string GetFactoryID() { return "level_2"; };
+    void setFilePathToAnalysis(std::string Filepath) override { SourceCodeFilePath = Filepath; }
+    void setCompileDatabase(std::string Compiledatabase) override { CompiledDatabasePath = Compiledatabase; }
+    static std::string getFactoryID() { return "level_2"; };
 
 private:
-    std::string sourceCodeFilePath;
-    std::string compiledDatabasePath;
+    std::string SourceCodeFilePath;
+    std::string CompiledDatabasePath;
 };
 
-} // namespace MyFunction
+}   // namespace MyFunction

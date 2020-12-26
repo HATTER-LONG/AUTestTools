@@ -1,85 +1,86 @@
 #include "ProduceWithEditWindow.h"
 #include "function/UnitTestCodeProduce.h"
 #include "spdlog/spdlog.h"
+
 #include <QtWidgets>
 #include <string>
 
-ProduceWithEditWindow::ProduceWithEditWindow(const MyFunction::SourceCodeFunctionMessageMap& functionInfo,
-                                             QWidget* parent)
-        : QWidget(parent), functionMessage(functionInfo)
+ProduceWithEditWindow::ProduceWithEditWindow(const MyFunction::SourceCodeFunctionMessageMap& FunctionInfo, QWidget* Parent)
+        : QWidget(Parent)
+        , FunctionMessageMap(FunctionInfo)
 {
     createEditWindowItem();
-    layoutView = new QGridLayout;
+    LayoutView = new QGridLayout;
 
-    layoutView->addWidget(nameSetLable, 0, 0);
-    layoutView->addWidget(testNameEdit, 0, 1);
-    layoutView->addWidget(testTageEdit, 0, 2);
-    layoutView->addWidget(paramSetLable, 1, 0);
-    layoutView->addWidget(paramEdit, 1, 1, 1, 2);
-    layoutView->addWidget(sectionNameSetLabel, 2, 0);
-    layoutView->addWidget(sectionSetEdit, 2, 1);
-    layoutView->addWidget(sectionCheckEdit, 2, 2);
-    layoutView->addWidget(buttonCreateTestCode, 3, 1);
-    layoutView->addWidget(buttonCreateMock, 3, 2);
-    layoutView->setColumnStretch(0, 1);
-    layoutView->setColumnStretch(1, 2);
-    layoutView->setColumnStretch(2, 2);
+    LayoutView->addWidget(InputNameLabel, 0, 0);
+    LayoutView->addWidget(TestNameEdit, 0, 1);
+    LayoutView->addWidget(TestTageEdit, 0, 2);
+    LayoutView->addWidget(InputParamLabel, 1, 0);
+    LayoutView->addWidget(ParamEdit, 1, 1, 1, 2);
+    LayoutView->addWidget(InputSectionNamelabel, 2, 0);
+    LayoutView->addWidget(SectionSetEdit, 2, 1);
+    LayoutView->addWidget(SectionCheckEdit, 2, 2);
+    LayoutView->addWidget(CreateTestCodeButton, 3, 1);
+    LayoutView->addWidget(CreateMockCodeButton, 3, 2);
+    LayoutView->setColumnStretch(0, 1);
+    LayoutView->setColumnStretch(1, 2);
+    LayoutView->setColumnStretch(2, 2);
     auto* layoutViewWidget = new QWidget;
-    layoutViewWidget->setLayout(layoutView);
+    layoutViewWidget->setLayout(LayoutView);
 
     auto* widgetLayout = new QVBoxLayout;
     widgetLayout->addWidget(layoutViewWidget);
 
-    editor = new QTextEdit;
-    widgetLayout->addWidget(editor);
+    Editor = new QTextEdit;
+    widgetLayout->addWidget(Editor);
     this->setLayout(widgetLayout);
 }
 
 void ProduceWithEditWindow::createEditWindowItem()
 {
-    nameSetLable = new QLabel;
+    InputNameLabel = new QLabel;
     QFont ft("Microsoft YaHei", 10);
-    nameSetLable->setText(tr("Test Name"));
-    nameSetLable->setFont(ft);
-    testNameEdit = new QLineEdit;
-    testTageEdit = new QLineEdit;
+    InputNameLabel->setText(tr("Test Name"));
+    InputNameLabel->setFont(ft);
+    TestNameEdit = new QLineEdit;
+    TestTageEdit = new QLineEdit;
 
-    paramSetLable = new QLabel;
-    paramSetLable->setText(tr("Param"));
-    paramSetLable->setFont(ft);
-    paramEdit = new QLineEdit;
+    InputParamLabel = new QLabel;
+    InputParamLabel->setText(tr("Param"));
+    InputParamLabel->setFont(ft);
+    ParamEdit = new QLineEdit;
 
-    sectionNameSetLabel = new QLabel;
-    sectionNameSetLabel->setText(tr("Section & Check"));
-    sectionNameSetLabel->setFont(ft);
+    InputSectionNamelabel = new QLabel;
+    InputSectionNamelabel->setText(tr("Section & Check"));
+    InputSectionNamelabel->setFont(ft);
 
-    sectionSetEdit = new QLineEdit;
-    sectionCheckEdit = new QLineEdit;
+    SectionSetEdit = new QLineEdit;
+    SectionCheckEdit = new QLineEdit;
 
-    buttonCreateTestCode = new QPushButton;
-    buttonCreateTestCode->setText(tr("Create Code"));
-    connect(buttonCreateTestCode, SIGNAL(clicked()), this, SLOT(createUnitTestCodeButtonClicked()));
-    buttonCreateMock = new QPushButton;
-    buttonCreateMock->setText(tr("Create Mock"));
-    connect(buttonCreateMock, SIGNAL(clicked()), this, SLOT(createMockCodeButtonClicked()));
+    CreateTestCodeButton = new QPushButton;
+    CreateTestCodeButton->setText(tr("Create Code"));
+    connect(CreateTestCodeButton, SIGNAL(clicked()), this, SLOT(createUnitTestCodeButtonClicked()));
+    CreateMockCodeButton = new QPushButton;
+    CreateMockCodeButton->setText(tr("Create Mock"));
+    connect(CreateMockCodeButton, SIGNAL(clicked()), this, SLOT(createMockCodeButtonClicked()));
 }
 
-void ProduceWithEditWindow::createSelectFuncTestCode(std::string funcname)
+void ProduceWithEditWindow::createSelectFuncTestCode(std::string Funcname)
 {
-    funcNameSelected = funcname;
-    auto functioniter = functionMessage.find(funcname);
+    FuncNameHasSelected = Funcname;
+    auto functioniter = FunctionMessageMap.find(Funcname);
 
-    if (functioniter != functionMessage.end())
+    if (functioniter != FunctionMessageMap.end())
     {
-        spdlog::info("functionMessage[{}] ", functioniter->second.GetFunctionName().c_str());
+        spdlog::info("functionMessage[{}] ", functioniter->second.getFunctionName().c_str());
 
         MyFunction::UnitTestCodeProduceFunc produceCode;
         std::string functionMessage = produceCode.createMockSourceCode(functioniter->second);
-        editor->setText(QString(functionMessage.c_str()));
+        Editor->setText(QString(functionMessage.c_str()));
     }
     else
     {
-        spdlog::info("{} can't find selected function[{}] Info", __FUNCTION__, funcNameSelected.c_str());
+        spdlog::info("{} can't find selected function[{}] Info", __FUNCTION__, FuncNameHasSelected.c_str());
     }
 }
 
@@ -87,9 +88,9 @@ void ProduceWithEditWindow::createMockCodeButtonClicked()
 {
     MyFunction::UnitTestCodeProduceFunc produceCode;
 
-    std::string functionCode2MOCK = produceCode.createMockSourceCode(functionMessage);
+    std::string functionCode2MOCK = produceCode.createMockSourceCode(FunctionMessageMap);
 
-    editor->setText(QString(functionCode2MOCK.c_str()));
+    Editor->setText(QString(functionCode2MOCK.c_str()));
 }
 
 void ProduceWithEditWindow::createUnitTestCodeButtonClicked()
@@ -97,29 +98,29 @@ void ProduceWithEditWindow::createUnitTestCodeButtonClicked()
     MyFunction::UnitTestCodeProduceFunc produceCode;
 
     MyFunction::UnitTestSectionInfo unitTestSectionInfo;
-    unitTestSectionInfo.sectionName = sectionSetEdit->text().toStdString();
-    unitTestSectionInfo.checkInfo = sectionCheckEdit->text().toStdString();
+    unitTestSectionInfo.SectionName = SectionSetEdit->text().toStdString();
+    unitTestSectionInfo.CheckInfo = SectionCheckEdit->text().toStdString();
 
     MyFunction::UnitTestInfo unitTestinfo;
-    unitTestinfo.testSection.emplace_back(unitTestSectionInfo);
-    unitTestinfo.testName = testNameEdit->text().toStdString();
-    getTagName(unitTestinfo.testTags);
+    unitTestinfo.TestSection.emplace_back(unitTestSectionInfo);
+    unitTestinfo.TestName = TestNameEdit->text().toStdString();
+    getTagName(unitTestinfo.TestTags);
 
-    auto iter = functionMessage.find(funcNameSelected);
-    if (iter != functionMessage.end())
+    auto iter = FunctionMessageMap.find(FuncNameHasSelected);
+    if (iter != FunctionMessageMap.end())
     {
         std::string unitTestCode = produceCode.createUnitTestCode(iter->second, unitTestinfo);
-        editor->setText(QString(unitTestCode.c_str()));
+        Editor->setText(QString(unitTestCode.c_str()));
     }
     else
     {
-        spdlog::info("{} can't find selected function[{}] Info", __FUNCTION__, funcNameSelected.c_str());
+        spdlog::info("{} can't find selected function[{}] Info", __FUNCTION__, FuncNameHasSelected.c_str());
     }
 }
 
-void ProduceWithEditWindow::getTagName(std::vector<std::string>& tagBox)
+void ProduceWithEditWindow::getTagName(std::vector<std::string>& TagBox)
 {
-    std::string tagTextSplitWithBlank = testTageEdit->text().toStdString();
+    std::string tagTextSplitWithBlank = TestTageEdit->text().toStdString();
     std::string tmptag;
     std::string::size_type posSubstringStart;
     std::string::size_type posSeparator;
@@ -128,9 +129,9 @@ void ProduceWithEditWindow::getTagName(std::vector<std::string>& tagBox)
     posSubstringStart = 0;
     while (std::string::npos != posSeparator)
     {
-        tagBox.emplace_back(tagTextSplitWithBlank.substr(0, posSeparator));
+        TagBox.emplace_back(tagTextSplitWithBlank.substr(0, posSeparator));
         tagTextSplitWithBlank = tagTextSplitWithBlank.substr(posSeparator + 1, tagTextSplitWithBlank.length());
         posSeparator = tagTextSplitWithBlank.find(' ');
     }
-    tagBox.emplace_back(tagTextSplitWithBlank);
+    TagBox.emplace_back(tagTextSplitWithBlank);
 }

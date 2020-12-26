@@ -1,5 +1,6 @@
 #pragma once
 #include "function/AnalysisMessage.h"
+
 #include <QWidget>
 #include <vector>
 
@@ -16,10 +17,11 @@ class ProduceWithEditWindow : public QWidget
 {
     Q_OBJECT
 public:
-    ProduceWithEditWindow(const MyFunction::SourceCodeFunctionMessageMap& functionInfo, QWidget* parent = nullptr);
+    ProduceWithEditWindow(const MyFunction::SourceCodeFunctionMessageMap& FunctionInfo,
+        QWidget* Parent = nullptr);
 
 public slots:
-    void createSelectFuncTestCode(std::string funcname);
+    void createSelectFuncTestCode(std::string Funcname);
     void createMockCodeButtonClicked();
     void createUnitTestCodeButtonClicked();
 
@@ -28,21 +30,21 @@ private:
     void getTagName(std::vector<std::string>&);
 
 private:
-    QGridLayout* layoutView;
-    QTextEdit* editor;
-    QLabel* nameSetLable;
-    QLabel* paramSetLable;
-    QLabel* sectionNameSetLabel;
+    QGridLayout* LayoutView;
+    QTextEdit* Editor;
+    QLabel* InputNameLabel;
+    QLabel* InputParamLabel;
+    QLabel* InputSectionNamelabel;
 
-    QLineEdit* testNameEdit;
-    QLineEdit* testTageEdit;
-    QLineEdit* paramEdit;
-    QLineEdit* sectionSetEdit;
-    QLineEdit* sectionCheckEdit;
+    QLineEdit* TestNameEdit;
+    QLineEdit* TestTageEdit;
+    QLineEdit* ParamEdit;
+    QLineEdit* SectionSetEdit;
+    QLineEdit* SectionCheckEdit;
 
-    QPushButton* buttonCreateTestCode;
-    QPushButton* buttonCreateMock;
+    QPushButton* CreateTestCodeButton;
+    QPushButton* CreateMockCodeButton;
 
-    const MyFunction::SourceCodeFunctionMessageMap& functionMessage;
-    std::string funcNameSelected;
+    const MyFunction::SourceCodeFunctionMessageMap& FunctionMessageMap;
+    std::string FuncNameHasSelected;
 };

@@ -3,6 +3,7 @@
 
 #include "DiagramItem.h"
 #include "function/AnalysisMessage.h"
+
 #include <QMainWindow>
 
 class DiagramScene;
@@ -27,23 +28,23 @@ class DiagramSceneWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    DiagramSceneWindow(QMainWindow* parent);
+    DiagramSceneWindow(QMainWindow* Parent);
 
-    void drawResultByCodeMessage(const MyFunction::SourceCodeFunctionMessageMap& functionMessage,
-                                 const MyFunction::SourceCodeErrorMessageList& errorMessage) const;
+    void drawResultByCodeMessage(const MyFunction::SourceCodeFunctionMessageMap& FunctionMessage,
+        const MyFunction::SourceCodeErrorMessageList& ErrorMessage) const;
 private slots:
 
-    void backgroundButtonGroupClicked(QAbstractButton* button);
-    void buttonGroupClicked(int id);
+    void backgroundButtonGroupClicked(QAbstractButton* Button);
+    void buttonGroupClicked(int Id);
     void deleteItem();
-    void pointerGroupClicked(int id);
+    void pointerGroupClicked(int Id);
     void bringToFront();
     void sendToBack();
-    void itemInserted(DiagramItem* item);
-    void textInserted(QGraphicsTextItem* item);
-    void currentFontChanged(const QFont& font);
-    void fontSizeChanged(const QString& size);
-    void sceneScaleChanged(const QString& scale);
+    void itemInserted(DiagramItem* Item);
+    void textInserted(QGraphicsTextItem* Item);
+    void currentFontChanged(const QFont& Font);
+    void fontSizeChanged(const QString& Size);
+    void sceneScaleChanged(const QString& Scale);
     void textColorChanged();
     void itemColorChanged();
     void lineColorChanged();
@@ -51,70 +52,71 @@ private slots:
     void fillButtonTriggered();
     void lineButtonTriggered();
     void handleFontChange();
-    void itemSelected(QGraphicsItem* item);
+    void itemSelected(QGraphicsItem* Item);
     void about();
     void itemSelectedToCreateSourceCode();
 
 signals:
-    void selectedFunctionInfo(std::string funcName);
+    void selectedFunctionInfo(std::string FuncName);
 
 private:
     void createActions();
     void createToolBox();
     void createToolbars();
     void createItemMenus();
-    QWidget* createBackgroundCellWidget(const QString& text, const QString& image);
-    QWidget* createCellWidget(const QString& text, DiagramItem::DiagramType type);
-    QMenu* createColorMenu(const char* slot, QColor defaultColor);
+    QWidget* createBackgroundCellWidget(const QString& Text, const QString& Image);
+    QWidget* createCellWidget(const QString& Text, DiagramItem::DiagramType Type);
+    QMenu* createColorMenu(const char* Slot, QColor DefaultColor);
 
-    QIcon createColorToolButtonIcon(const QString& image, QColor color);
-    QIcon createColorIcon(QColor color);
+    QIcon createColorToolButtonIcon(const QString& Image, QColor Color);
+    QIcon createColorIcon(QColor Color);
 
 public:
-    QAction* addAction;
-    QAction* deleteAction;
+    QAction* AddAction;
+    QAction* DeleteAction;
 
-    QAction* toFrontAction;
-    QAction* sendBackAction;
-    QAction* aboutAction;
+    QAction* ToFrontAction;
+    QAction* SendBackAction;
+    QAction* AboutAction;
 
-    QAction* selectFuncAction;
+    QAction* SelectFuncAction;
 
 private:
-    DiagramScene* scene;
-    QGraphicsView* view;
+    // TODO: 整理多余的空间,删除代码逻辑
+    DiagramScene* MyDiagramScene;
+    QGraphicsView* MyView;
 
-    QButtonGroup* buttonGroup;
-    QButtonGroup* pointerTypeGroup;
-    QButtonGroup* backgroundButtonGroup;
+    QButtonGroup* ButtonGroup;
+    QButtonGroup* PointerTypeGroup;
+    QButtonGroup* BackgroundButtonGroup;
 
-    QToolButton* fontColorToolButton;
-    QToolButton* fillColorToolButton;
-    QToolButton* lineColorToolButton;
+    QToolButton* FontColorToolButton;
+    QToolButton* FillColorToolButton;
+    QToolButton* LineColorToolButton;
 
-    QComboBox* sceneScaleCombo;
-    QComboBox* itemColorCombo;
-    QComboBox* textColorCombo;
-    QComboBox* fontSizeCombo;
-    QFontComboBox* fontCombo;
+    QComboBox* SceneScaleCombo;
+    QComboBox* ItemColorCombo;
+    QComboBox* TextColorCombo;
+    QComboBox* FontSizeCombo;
+    QFontComboBox* FontCombo;
 
-    QToolBar* textToolBar;
-    QToolBar* editToolBar;
-    QToolBar* colorToolBar;
-    QToolBar* pointerToolbar;
+    QToolBar* TextToolBar;
+    QToolBar* EditToolBar;
+    QToolBar* ColorToolBar;
+    QToolBar* PointerToolbar;
 
-    QMenu* fileMenu;
-    QMenu* itemMenu;
-    QMenu* aboutMenu;
+    QMenu* FileMenu;
+    QMenu* ItemMenu;
+    QMenu* AboutMenu;
 
-    QToolBox* toolBox;
+    QToolBox* ToolBox;
 
-    QAction* boldAction;
-    QAction* underlineAction;
-    QAction* italicAction;
-    QAction* textAction;
-    QAction* fillAction;
-    QAction* lineAction;
+    QAction* BoldAction;
+    QAction* UnderlineAction;
+    QAction* ItalicAction;
+    QAction* TextAction;
+    QAction* FillAction;
+    QAction* LineAction;
 };
 
 #endif

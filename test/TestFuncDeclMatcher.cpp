@@ -4,8 +4,6 @@
 #include "function/utilities.h"
 #include "spdlog/spdlog.h"
 
-
-
 TEST_CASE("Test Level_'ID' analysis code tool functions Get normally", "[Source code analysis function]")
 {
     std::string analysisFilePath = MyFunction::TRAININGCODE_FILEPATH + "FunctionInfoTestCode.cxx";
@@ -19,7 +17,7 @@ TEST_CASE("Test Level_'ID' analysis code tool functions Get normally", "[Source 
     {
         WHEN("Try to obtain the Level_'ID' source code message function from factory")
         {
-            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().GetProductClass(ID);
+            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(ID);
             THEN("Check return value") { REQUIRE(fundeclanalysisptr != nullptr); }
         }
         WHEN("start analysis code infomation")
@@ -29,10 +27,10 @@ TEST_CASE("Test Level_'ID' analysis code tool functions Get normally", "[Source 
 
             THEN("start analysis and Check return value")
             {
-                auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().GetProductClass(ID);
-                fundeclanalysisptr->SetFilePathToAnalysis(analysisFilePath);
-                fundeclanalysisptr->SetCompileDatabase(comipleCommandFilePath);
-                bool result = fundeclanalysisptr->StartToAnalysisSourceCode(funcmessagemap, errormessage);
+                auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(ID);
+                fundeclanalysisptr->setFilePathToAnalysis(analysisFilePath);
+                fundeclanalysisptr->setCompileDatabase(comipleCommandFilePath);
+                bool result = fundeclanalysisptr->startToAnalysisSourceCode(funcmessagemap, errormessage);
 
                 REQUIRE(result == true);
             }

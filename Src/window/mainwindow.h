@@ -3,6 +3,7 @@
 
 #include "function/AnalysisMessage.h"
 #include "function/SourceCodeAnalysisFunc.h"
+
 #include <QMainWindow>
 class DiagramSceneWindow;
 class ProduceWithEditWindow;
@@ -34,14 +35,14 @@ private slots:
 private:
     void createMenus();
 
-    DiagramSceneWindow* diagramSceneWindow;
-    ProduceWithEditWindow* editwindow;
-    QMenu* fileMenu;
-    QMenu* itemMenu;
-    QMenu* aboutMenu;
+    DiagramSceneWindow* DiagramSceneWindowMember;
+    ProduceWithEditWindow* EditWindow;
+    QMenu* FileMenu;
+    QMenu* ItemMenu;
+    QMenu* AboutInfoMenu;
 
-    std::unique_ptr<MyFunction::SourceCodeAnalysisFunc> sourceCodeMessagePtr;
-    MyFunction::SourceCodeFunctionMessageMap functionMessageMap;
-    MyFunction::SourceCodeErrorMessageList errorMessageList;
+    std::unique_ptr<MyFunction::SourceCodeAnalysisFunc> SourceCodeMessagePtr;
+    MyFunction::SourceCodeFunctionMessageMap FunctionMessageMap;
+    MyFunction::SourceCodeErrorMessageList ErrorMessageList;
 };
-#endif // MAINWINDOW_H
+#endif   // MAINWINDOW_H

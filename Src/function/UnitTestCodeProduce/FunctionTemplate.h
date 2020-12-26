@@ -9,41 +9,41 @@ namespace MyFunction
 
 using namespace std;
 
-inline void subreplace(string& resource_str, const string& sub_str, const string& new_str)
+inline void subreplace(string& ResourceStr, const string& SubStr, const string& NewStr)
 {
     string::size_type pos = 0;
-    while ((pos = resource_str.find(sub_str)) != string::npos) //替换所有指定子串
+    while ((pos = ResourceStr.find(SubStr)) != string::npos)   //替换所有指定子串
     {
-        resource_str.replace(pos, sub_str.length(), new_str);
+        ResourceStr.replace(pos, SubStr.length(), NewStr);
     }
 }
 
-inline const string GetClassName(const string& srcStr)
+inline const string getClassName(const string& SrcStr)
 {
     string::size_type posSubstringStart;
     string::size_type posSeparator;
 
-    posSeparator = srcStr.find("::");
+    posSeparator = SrcStr.find("::");
     posSubstringStart = 0;
     if (string::npos != posSeparator)
     {
-        cout << srcStr.substr(posSubstringStart, posSeparator - posSubstringStart) << endl;
-        return srcStr.substr(posSubstringStart, posSeparator - posSubstringStart);
+        cout << SrcStr.substr(posSubstringStart, posSeparator - posSubstringStart) << endl;
+        return SrcStr.substr(posSubstringStart, posSeparator - posSubstringStart);
     }
     return "";
 }
 
-inline const string GetFunctionName(const string& srcStr)
+inline const string getFunctionName(const string& SrcStr)
 {
     string::size_type posSubstringStart;
     string::size_type posSeparator;
 
-    posSeparator = srcStr.size();
-    posSubstringStart = srcStr.find("::") + 2;
+    posSeparator = SrcStr.size();
+    posSubstringStart = SrcStr.find("::") + 2;
     if (string::npos != posSeparator)
     {
-        cout << srcStr.substr(posSubstringStart, posSeparator - posSubstringStart) << endl;
-        return srcStr.substr(posSubstringStart, posSeparator - posSubstringStart);
+        cout << SrcStr.substr(posSubstringStart, posSeparator - posSubstringStart) << endl;
+        return SrcStr.substr(posSubstringStart, posSeparator - posSubstringStart);
     }
     return "";
 }
@@ -72,4 +72,4 @@ static string CatchUnitTestSectionTemplate = "\n\
         REQUIRE(${SECTIONCHECK})\n\
     }\n\
 ";
-} // namespace MyFunction
+}   // namespace MyFunction

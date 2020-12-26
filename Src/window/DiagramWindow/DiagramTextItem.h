@@ -11,7 +11,6 @@ class QGraphicsScene;
 class QGraphicsSceneMouseEvent;
 QT_END_NAMESPACE
 
-//! [0]
 class DiagramTextItem : public QGraphicsTextItem
 {
     Q_OBJECT
@@ -22,18 +21,17 @@ public:
         Type = UserType + 3
     };
 
-    DiagramTextItem(QGraphicsItem* parent = nullptr);
+    DiagramTextItem(QGraphicsItem* Parent = nullptr);
     int type() const override { return Type; }
 
 signals:
-    void lostFocus(DiagramTextItem* item);
-    void selectedChange(QGraphicsItem* item);
+    void lostFocus(DiagramTextItem* Item);
+    void selectedChange(QGraphicsItem* Item);
 
 protected:
-    QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-    void focusOutEvent(QFocusEvent* event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+    QVariant itemChange(GraphicsItemChange Change, const QVariant& Value) override;
+    void focusOutEvent(QFocusEvent* Event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* Event) override;
 };
-//! [0]
 
-#endif // DIAGRAMTEXTITEM_H
+#endif   // DIAGRAMTEXTITEM_H

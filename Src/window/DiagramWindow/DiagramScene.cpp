@@ -2,177 +2,189 @@
 #include "DiagramScene.h"
 #include "spdlog/spdlog.h"
 
-
 #include <QGraphicsSceneMouseEvent>
 #include <QTextCursor>
 
-DiagramScene::DiagramScene(QMenu* itemMenu, QObject* parent) : QGraphicsScene(parent)
+DiagramScene::DiagramScene(QMenu* ItemMenu, QObject* Parent)
+        : QGraphicsScene(Parent)
 {
-    myItemMenu = itemMenu;
-    myMode = MoveItem;
-    myItemType = DiagramItem::Step;
-    line = nullptr;
-    textItem = nullptr;
-    myItemColor = Qt::white;
-    myTextColor = Qt::black;
-    myLineColor = Qt::black;
+    MyItemMenu = ItemMenu;
+    MyMode = MoveItem;
+    MyItemType = DiagramItem::Step;
+    Line = nullptr;
+    TextItem = nullptr;
+    MyItemColor = Qt::white;
+    MyTextColor = Qt::black;
+    MyLineColor = Qt::black;
 }
 
-bool DiagramScene::isItemChange(int type)
+bool DiagramScene::isItemChange(int Type)
 {
     foreach (QGraphicsItem* item, selectedItems())
     {
-        if (item->type() == type)
-            return true;
+        if (item->type() == Type) return true;
     }
     return false;
 }
 
-void DiagramScene::setLineColor(const QColor& color)
+void DiagramScene::setLineColor(const QColor& Color)
 {
-    myLineColor = color;
+    MyLineColor = Color;
     if (isItemChange(Arrow::Type))
     {
         auto* item = qgraphicsitem_cast<Arrow*>(selectedItems().first());
-        item->setColor(myLineColor);
+        item->setColor(MyLineColor);
         update();
     }
 }
 
-void DiagramScene::setTextColor(const QColor& color)
+void DiagramScene::setTextColor(const QColor& Color)
 {
-    myTextColor = color;
+    MyTextColor = Color;
     if (isItemChange(DiagramTextItem::Type))
     {
-        auto* item = qgraphicsitem_cast<DiagramTextItem*>(selectedItems().first());
-        item->setDefaultTextColor(myTextColor);
+        auto* item =
+            qgraphicsitem_cast<DiagramTextItem*>(selectedItems().first());
+        item->setDefaultTextColor(MyTextColor);
     }
 }
 
-void DiagramScene::setItemColor(const QColor& color)
+void DiagramScene::setItemColor(const QColor& Color)
 {
-    myItemColor = color;
+    MyItemColor = Color;
     if (isItemChange(DiagramItem::Type))
     {
         auto* item = qgraphicsitem_cast<DiagramItem*>(selectedItems().first());
-        item->setBrush(myItemColor);
+        item->setBrush(MyItemColor);
     }
 }
 
-void DiagramScene::setFont(const QFont& font)
+void DiagramScene::setFont(const QFont& Font)
 {
-    myFont = font;
+    MyFont = Font;
     if (isItemChange(DiagramTextItem::Type))
     {
-        QGraphicsTextItem* item = qgraphicsitem_cast<DiagramTextItem*>(selectedItems().first());
-        // At this point the selection can change so the first selected item might not be a DiagramTextItem
-        if (item)
-            item->setFont(myFont);
+        QGraphicsTextItem* item =
+            qgraphicsitem_cast<DiagramTextItem*>(selectedItems().first());
+        // At this point the selection can change so the first selected item
+        // might not be a DiagramTextItem
+        if (item) item->setFont(MyFont);
     }
 }
 
-void DiagramScene::setMode(Mode mode) { myMode = mode; }
-
-void DiagramScene::setItemType(DiagramItem::DiagramType type) { myItemType = type; }
-
-void DiagramScene::editorLostFocus(DiagramTextItem* item)
+void DiagramScene::setMode(Mode Mode)
 {
-    QTextCursor cursor = item->textCursor();
+    MyMode = Mode;
+}
+
+void DiagramScene::setItemType(DiagramItem::DiagramType Type)
+{
+    MyItemType = Type;
+}
+
+void DiagramScene::editorLostFocus(DiagramTextItem* Item)
+{
+    QTextCursor cursor = Item->textCursor();
     cursor.clearSelection();
-    item->setTextCursor(cursor);
+    Item->setTextCursor(cursor);
 
-    if (item->toPlainText().isEmpty())
+    if (Item->toPlainText().isEmpty())
     {
-        removeItem(item);
-        item->deleteLater();
+        removeItem(Item);
+        Item->deleteLater();
     }
 }
-DiagramItem* DiagramScene::createItem(DiagramItem::DiagramType type, QPointF point)
+DiagramItem* DiagramScene::createItem(DiagramItem::DiagramType Type,
+    QPointF Point)
 {
-    auto* item = new DiagramItem(type, myItemMenu);
-    item->setBrush(myItemColor);
-    item->setFont(myFont);
-    item->setTextColor(myTextColor);
-    item->setPos(point);
+    auto* item = new DiagramItem(Type, MyItemMenu);
+    item->setBrush(MyItemColor);
+    item->setFont(MyFont);
+    item->setTextColor(MyTextColor);
+    item->setPos(Point);
     addItem(item);
     return item;
 }
 
-void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
+void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent* MouseEvent)
 {
-    if (mouseEvent->button() != Qt::LeftButton)
-        return;
+    if (MouseEvent->button() != Qt::LeftButton) return;
 
-    switch (myMode)
+    switch (MyMode)
     {
-    case InsertItem:
-        emit itemInserted(createItem(myItemType, mouseEvent->scenePos()));
-        break;
-    case InsertLine:
-        line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(), mouseEvent->scenePos()));
-        line->setPen(QPen(myLineColor, 2));
-        addItem(line);
-        break;
-    case InsertText:
-        textItem = new DiagramTextItem();
-        textItem->setFont(myFont);
-        textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
-        textItem->setZValue(1000.0);
-        connect(textItem, SIGNAL(lostFocus(DiagramTextItem*)), this, SLOT(editorLostFocus(DiagramTextItem*)));
-        connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)), this, SIGNAL(itemSelected(QGraphicsItem*)));
-        addItem(textItem);
-        textItem->setDefaultTextColor(myTextColor);
-        textItem->setPos(mouseEvent->scenePos());
-        emit textInserted(textItem);
-    default:;
+        case InsertItem:
+            emit itemInserted(createItem(MyItemType, MouseEvent->scenePos()));
+            break;
+        case InsertLine:
+            Line = new QGraphicsLineItem(
+                QLineF(MouseEvent->scenePos(), MouseEvent->scenePos()));
+            Line->setPen(QPen(MyLineColor, 2));
+            addItem(Line);
+            break;
+        case InsertText:
+            TextItem = new DiagramTextItem();
+            TextItem->setFont(MyFont);
+            TextItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+            TextItem->setZValue(1000.0);
+            connect(TextItem, SIGNAL(lostFocus(DiagramTextItem*)), this,
+                SLOT(editorLostFocus(DiagramTextItem*)));
+            connect(TextItem, SIGNAL(selectedChange(QGraphicsItem*)), this,
+                SIGNAL(itemSelected(QGraphicsItem*)));
+            addItem(TextItem);
+            TextItem->setDefaultTextColor(MyTextColor);
+            TextItem->setPos(MouseEvent->scenePos());
+            emit textInserted(TextItem);
+        default:;
     }
-    QGraphicsScene::mousePressEvent(mouseEvent);
+    QGraphicsScene::mousePressEvent(MouseEvent);
 }
 
-void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
+void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent* MouseEvent)
 {
-    if (myMode == InsertLine && line != nullptr)
+    if (MyMode == InsertLine && Line != nullptr)
     {
-        QLineF newLine(line->line().p1(), mouseEvent->scenePos());
-        line->setLine(newLine);
+        QLineF newLine(Line->line().p1(), MouseEvent->scenePos());
+        Line->setLine(newLine);
     }
-    else if (myMode == MoveItem)
+    else if (MyMode == MoveItem)
     {
-        QGraphicsScene::mouseMoveEvent(mouseEvent);
+        QGraphicsScene::mouseMoveEvent(MouseEvent);
     }
 }
 
-void DiagramScene::setArrow(DiagramItem* startItem, DiagramItem* endItem)
+void DiagramScene::setArrow(DiagramItem* StartItem, DiagramItem* EndItem)
 {
-    auto* arrow = new Arrow(startItem, endItem);
-    arrow->setColor(myLineColor);
-    startItem->addArrow(arrow);
-    endItem->addArrow(arrow);
+    auto* arrow = new Arrow(StartItem, EndItem);
+    arrow->setColor(MyLineColor);
+    StartItem->addArrow(arrow);
+    EndItem->addArrow(arrow);
     arrow->setZValue(-1000.0);
     addItem(arrow);
     arrow->updatePosition();
 }
 
-bool DiagramScene::isDiagramItem(QGraphicsItem* item)
+bool DiagramScene::isDiagramItem(QGraphicsItem* Item)
 {
-    return item->type() == DiagramItem::Type ||
-           (item->parentItem() != nullptr && item->parentItem()->type() == DiagramItem::Type);
+    return Item->type() == DiagramItem::Type ||
+           (Item->parentItem() != nullptr &&
+               Item->parentItem()->type() == DiagramItem::Type);
 }
-void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
+void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* MouseEvent)
 {
-    if (line != nullptr && myMode == InsertLine)
+    if (Line != nullptr && MyMode == InsertLine)
     {
-        QList<QGraphicsItem*> startItems = items(line->line().p1());
-        if (startItems.count() && startItems.first() == line)
+        QList<QGraphicsItem*> startItems = items(Line->line().p1());
+        if (startItems.count() && startItems.first() == Line)
             startItems.removeFirst();
-        QList<QGraphicsItem*> endItems = items(line->line().p2());
-        if (endItems.count() && endItems.first() == line)
+        QList<QGraphicsItem*> endItems = items(Line->line().p2());
+        if (endItems.count() && endItems.first() == Line)
             endItems.removeFirst();
 
-        removeItem(line);
-        delete line;
+        removeItem(Line);
+        delete Line;
 
-        if (startItems.count() > 0 && endItems.count() > 0 && startItems.first() != endItems.first())
+        if (startItems.count() > 0 && endItems.count() > 0 &&
+            startItems.first() != endItems.first())
         {
             auto* startItem = startItems.first();
             auto* endItem = endItems.first();
@@ -187,7 +199,8 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
                 {
                     endItem = endItem->parentItem();
                 }
-                setArrow(qgraphicsitem_cast<DiagramItem*>(startItem), qgraphicsitem_cast<DiagramItem*>(endItem));
+                setArrow(qgraphicsitem_cast<DiagramItem*>(startItem),
+                    qgraphicsitem_cast<DiagramItem*>(endItem));
             }
             else
             {
@@ -196,6 +209,6 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
         }
     }
 
-    line = nullptr;
-    QGraphicsScene::mouseReleaseEvent(mouseEvent);
+    Line = nullptr;
+    QGraphicsScene::mouseReleaseEvent(MouseEvent);
 }

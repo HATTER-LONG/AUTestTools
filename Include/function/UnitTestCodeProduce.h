@@ -1,5 +1,6 @@
 #pragma once
 #include "AnalysisMessage.h"
+
 #include <string>
 #include <vector>
 
@@ -9,16 +10,16 @@ namespace MyFunction
 class UnitTestSectionInfo
 {
 public:
-    std::string sectionName;
-    std::string checkInfo;
+    std::string SectionName;
+    std::string CheckInfo;
 };
 
 class UnitTestInfo
 {
 public:
-    std::string testName;
-    std::vector<std::string> testTags;
-    std::vector<UnitTestSectionInfo> testSection;
+    std::string TestName;
+    std::vector<std::string> TestTags;
+    std::vector<UnitTestSectionInfo> TestSection;
 };
 
 class UnitTestCodeProduceFunc
@@ -33,8 +34,8 @@ public:
     std::string createUnitTestCode(const MyFunction::SourceCodeFunctionMessage&, const UnitTestInfo&);
 
 private:
-    void getParamList(std::string& functionParam, const MyFunction::FunctionParamList& info);
-    void getFuncReturnValue(std::string& returnValue, const std::string& returnType);
+    void getParamList(std::string& FunctionParam, const MyFunction::FunctionParamList& Info);
+    void getFuncReturnValue(std::string& ReturnValue, const std::string& ReturnType);
     std::string getSectionCode(const MyFunction::SourceCodeFunctionMessage& Func, const UnitTestSectionInfo&);
 };
-} // namespace MyFunction
+}   // namespace MyFunction

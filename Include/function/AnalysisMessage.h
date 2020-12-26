@@ -7,7 +7,7 @@
 namespace MyFunction
 {
 /**
- * @brief 记录源码分检测出的错误信息，信息为三个维度分别是 【错误等级、错误信息、错误位置】
+ * @brief 记录源码分检测出的错误信息，信息为三个维度分别是【错误等级、错误信息、错误位置】
  *
  */
 class SourceCodeErrorMessage
@@ -20,8 +20,10 @@ public:
      * @param errormessage
      * @param errorpos
      */
-    SourceCodeErrorMessage(int errorlevel, std::string errormessage, std::string errorpos)
-            : errorLevel(errorlevel), errorMessage(errormessage), errorPos(errorpos)
+    SourceCodeErrorMessage(int Errorlevel, std::string Errormessage, std::string Errorpos)
+            : ErrorLevel(Errorlevel)
+            , ErrorMessage(Errormessage)
+            , ErrorPos(Errorpos)
     {
     }
 
@@ -30,26 +32,26 @@ public:
      *
      * @return int
      */
-    int GetErrorLevel() const noexcept { return errorLevel; }
+    int getErrorLevel() const noexcept { return ErrorLevel; }
 
     /**
      * @brief Get the Error Message object
      *
      * @return std::string
      */
-    std::string GetErrorMessage() const noexcept { return errorMessage; }
+    std::string getErrorMessage() const noexcept { return ErrorMessage; }
 
     /**
      * @brief Get the Error Pos object
      *
      * @return std::string
      */
-    std::string GetErrorPos() const noexcept { return errorPos; }
+    std::string getErrorPos() const noexcept { return ErrorPos; }
 
 private:
-    int errorLevel;
-    std::string errorMessage;
-    std::string errorPos;
+    int ErrorLevel;
+    std::string ErrorMessage;
+    std::string ErrorPos;
 };
 /**
  * @brief 记录函数方法参数信息列表
@@ -76,8 +78,9 @@ public:
      * @param functionname
      * @param functionparam
      */
-    SourceCodeFunctionMessage(std::string functionname, std::vector<std::string> functionparam)
-            : functionName(functionname), functionParam(functionparam)
+    SourceCodeFunctionMessage(std::string Functionname, std::vector<std::string> Functionparam)
+            : FunctionName(Functionname)
+            , FunctionParam(Functionparam)
     {
     }
     /**
@@ -85,33 +88,33 @@ public:
      *
      * @param callexprname
      */
-    void AddFunctionWhichCallExpr(std::string callexprname) { functionCallExpr.push_back(callexprname); }
+    void addFunctionWhichCallExpr(std::string Callexprname) { FunctionCallExpr.push_back(Callexprname); }
 
     /**
      * @brief Get the Function Name object
      *
      * @return const std::string
      */
-    const std::string GetFunctionName() const noexcept { return functionName; }
+    const std::string getFunctionName() const noexcept { return FunctionName; }
 
     /**
      * @brief Get the Function Param object
      *
      * @return const FunctionParamList&
      */
-    const FunctionParamList& GetFunctionParam() const noexcept { return functionParam; }
+    const FunctionParamList& getFunctionParam() const noexcept { return FunctionParam; }
 
     /**
      * @brief Get the Function Which Call Expr object
      *
      * @return const FunctionCallExprList&
      */
-    const FunctionCallExprList& GetFunctionWhichCallExpr() const noexcept { return functionCallExpr; }
+    const FunctionCallExprList& getFunctionWhichCallExpr() const noexcept { return FunctionCallExpr; }
 
 private:
-    std::string functionName;
-    FunctionParamList functionParam;
-    FunctionCallExprList functionCallExpr;
+    std::string FunctionName;
+    FunctionParamList FunctionParam;
+    FunctionCallExprList FunctionCallExpr;
 };
 
 /**
@@ -124,4 +127,4 @@ using SourceCodeErrorMessageList = std::vector<SourceCodeErrorMessage>;
  *
  */
 using SourceCodeFunctionMessageMap = std::map<std::string, SourceCodeFunctionMessage>;
-} // namespace MyFunction
+}   // namespace MyFunction

@@ -1,5 +1,6 @@
 #pragma once
 #include "function/AnalysisMessage.h"
+
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/ASTMatchers/ASTMatchers.h>
 namespace MyFunction
@@ -22,7 +23,10 @@ public:
     }
     // clang-format on
 
-    FunctionDefLister(SourceCodeFunctionMessageMap& ref) : functionMessageRef(ref) {}
+    FunctionDefLister(SourceCodeFunctionMessageMap& Ref)
+            : FunctionMessageRef(Ref)
+    {
+    }
 
 
     void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
@@ -32,8 +36,8 @@ public:
         clang::PrintingPolicy Policy(LangOpts);
         if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("FunctionDecl"))
         {
-            auto iter = functionMessageRef.find(functionDecl->getQualifiedNameAsString());
-            if (iter == functionMessageRef.end())
+            auto iter = FunctionMessageRef.find(functionDecl->getQualifiedNameAsString());
+            if (iter == FunctionMessageRef.end())
             {
                 std::string functionname;
                 std::vector<std::string> functionparms;
@@ -41,55 +45,58 @@ public:
                 functionparms.push_back(functionDecl->getReturnType().getAsString());
                 getParams(functionparms, functionDecl);
 
-                iter = functionMessageRef
+                iter = FunctionMessageRef
                            .insert(SourceCodeFunctionMessageMap::value_type(
                                functionname, SourceCodeFunctionMessage(functionname, functionparms)))
                            .first;
             }
             if (auto const* callexprdec = Result.Nodes.getNodeAs<clang::CallExpr>("callExprInfo"))
             {
-                auto func = callexprdec->getDirectCallee();
-                auto callexprIter = functionMessageRef.find(func->getQualifiedNameAsString());
-                if (callexprIter == functionMessageRef.end())
+                const auto* func = callexprdec->getDirectCallee();
+                auto callexprIter = FunctionMessageRef.find(func->getQualifiedNameAsString());
+                if (callexprIter == FunctionMessageRef.end())
                 {
                     std::string functionname;
                     std::vector<std::string> functionparms;
                     functionname = func->getQualifiedNameAsString();
                     functionparms.push_back(func->getReturnType().getAsString());
                     getParams(functionparms, func);
-                    functionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
+                    FunctionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
                         functionname, SourceCodeFunctionMessage(functionname, functionparms)));
                 }
-                iter->second.AddFunctionWhichCallExpr(func->getQualifiedNameAsString());
+                iter->second.addFunctionWhichCallExpr(func->getQualifiedNameAsString());
             }
         }
     }
 
 
-    void getParams(FunctionParamList& functionparms, const clang::FunctionDecl* func)
+    void getParams(FunctionParamList& Functionparms, const clang::FunctionDecl* Func)
     {
         clang::LangOptions LangOpts;
         LangOpts.CPlusPlus = true;
         clang::PrintingPolicy Policy(LangOpts);
-        for (unsigned int i = 0; i < func->getNumParams(); i++)
+        for (unsigned int i = 0; i < Func->getNumParams(); i++)
         {
             std::string paramwithname;
-            auto param = func->getParamDecl(i);
+            const auto* param = Func->getParamDecl(i);
             paramwithname += clang::QualType::getAsString(param->getType().split(), Policy);
             // paramwithname += "  ";
             // paramwithname += func->getParamDecl(i)->getNameAsString();
-            functionparms.push_back(paramwithname);
+            Functionparms.push_back(paramwithname);
         }
     }
 
 private:
-    SourceCodeFunctionMessageMap& functionMessageRef;
+    SourceCodeFunctionMessageMap& FunctionMessageRef;
 };
 
 class SourceCodeErrorAnalysis : public clang::DiagnosticConsumer
 {
 public:
-    SourceCodeErrorAnalysis(SourceCodeErrorMessageList& errorMessageList) : errorMessageListRef(errorMessageList) {}
+    SourceCodeErrorAnalysis(SourceCodeErrorMessageList& ErrorMessageList)
+            : ErrorMessageListRef(ErrorMessageList)
+    {
+    }
     ~SourceCodeErrorAnalysis() override = default;
     void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel, const clang::Diagnostic& Info) override
     {
@@ -103,10 +110,10 @@ public:
 
         filename += ":";
         filename += std::to_string(Line);
-        errorMessageListRef.push_back(SourceCodeErrorMessage(DiagLevel, DiagMessageStream.str().str(), filename));
+        ErrorMessageListRef.push_back(SourceCodeErrorMessage(DiagLevel, DiagMessageStream.str().str(), filename));
     }
 
 private:
-    SourceCodeErrorMessageList& errorMessageListRef;
+    SourceCodeErrorMessageList& ErrorMessageListRef;
 };
-} // namespace MyFunction
+}   // namespace MyFunction

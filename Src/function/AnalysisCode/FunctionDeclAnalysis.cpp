@@ -3,38 +3,39 @@
 #include "Infra/FactoryTemplate.h"
 #include "function/utilities.h"
 #include "spdlog/spdlog.h"
+
 #include <clang/Tooling/Tooling.h>
 #include <cmath>
 #include <string>
 using namespace clang::tooling;
 
-static Infra::ProductClassRegistrar<MyFunction::SourceCodeAnalysisFunc, MyFunction::FunctionDeclAnalysis>
-    funcdeclAnalysisMethod(MyFunction::FunctionDeclAnalysis::GetFactoryID());
+static Infra::ProductClassRegistrar<MyFunction::SourceCodeAnalysisFunc, MyFunction::FunctionDeclAnalysis> funcdeclAnalysisMethod(
+    MyFunction::FunctionDeclAnalysis::getFactoryID());
 namespace MyFunction
 {
 class MyFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
 public:
-    std::unique_ptr<clang::FrontendAction> create() override { return std::unique_ptr<clang::FrontendAction>(myFrontendAction); }
-    void setPtr(clang::FrontendAction* tmpptr) { myFrontendAction = tmpptr; }
+    std::unique_ptr<clang::FrontendAction> create() override { return std::unique_ptr<clang::FrontendAction>(MyFrontendAction); }
+    void setPtr(clang::FrontendAction* Tmpptr) { MyFrontendAction = Tmpptr; }
 
 private:
-    clang::FrontendAction* myFrontendAction;
+    clang::FrontendAction* MyFrontendAction;
 };
 
-bool FunctionDeclAnalysis::StartToAnalysisSourceCode(SourceCodeFunctionMessageMap& functionmessage,
-                                                     SourceCodeErrorMessageList& errormessage)
+bool FunctionDeclAnalysis::startToAnalysisSourceCode(
+    SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage)
 {
     int argc = 2;
     char argv_tmp[3][128] = {
-        {0},
+        { 0 },
     };
     strcpy(argv_tmp[0], "__READY_TO_ANALYSIS__");
-    strncpy(argv_tmp[1], sourceCodeFilePath.c_str(), sourceCodeFilePath.length());
-    if (!compiledDatabasePath.empty())
+    strncpy(argv_tmp[1], SourceCodeFilePath.c_str(), SourceCodeFilePath.length());
+    if (!CompiledDatabasePath.empty())
     {
         argc++;
-        std::string tmpstr = "-p=" + compiledDatabasePath;
+        std::string tmpstr = "-p=" + CompiledDatabasePath;
         strncpy(argv_tmp[2], tmpstr.c_str(), tmpstr.length());
     }
 
@@ -52,10 +53,10 @@ bool FunctionDeclAnalysis::StartToAnalysisSourceCode(SourceCodeFunctionMessageMa
     ArgumentsAdjuster ardj1 = getInsertArgumentAdjuster(MyFunction::CLANG_ARGS2APPEND.c_str());
     Tool.appendArgumentsAdjuster(ardj1);
 
-    functionmessage.clear();
-    errormessage.clear();
+    Functionmessage.clear();
+    Errormessage.clear();
 
-    auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(functionmessage, errormessage);
+    auto* tmpFrontendAction = new FuncDeclAnalysisFrontendAction(Functionmessage, Errormessage);
     MyFrontendActionFactory frontACtionFactory;
     frontACtionFactory.setPtr(tmpFrontendAction);
     // 0 on success; 1 if any error occurred; 2 if there is no error but some files are skipped due to missing
@@ -63,10 +64,10 @@ bool FunctionDeclAnalysis::StartToAnalysisSourceCode(SourceCodeFunctionMessageMa
     int errorcode = Tool.run(&frontACtionFactory);
     if (errorcode != 0)
     {
-        spdlog::info("[{}] error for analysis file[{}] errnocode[{}]", __FUNCTION__, sourceCodeFilePath, errorcode);
+        spdlog::info("[{}] error for analysis file[{}] errnocode[{}]", __FUNCTION__, SourceCodeFilePath, errorcode);
         return false;
     }
     return true;
 }
 
-} // namespace MyFunction
+}   // namespace MyFunction

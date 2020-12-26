@@ -2,6 +2,7 @@
 
 #include "AnalysisMessage.h"
 #include "Infra/FactoryTemplate.h"
+
 #include <string>
 namespace MyFunction
 {
@@ -22,23 +23,23 @@ public:
      * @param[out] errormessage
      * @return bool : success or not
      */
-    virtual bool StartToAnalysisSourceCode(SourceCodeFunctionMessageMap& functionmessage,
-                                           SourceCodeErrorMessageList& errormessage) = 0;
+    virtual bool startToAnalysisSourceCode(
+        SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage) = 0;
 
     /**
      * @brief Set the File Path To Analysis object
      *
      * @param filepath
      */
-    virtual void SetFilePathToAnalysis(std::string filepath) = 0;
+    virtual void setFilePathToAnalysis(std::string Filepath) = 0;
 
     /**
      * @brief Set the file path to Compile Database object
      *
      * @param compiledatabase
      */
-    virtual void SetCompileDatabase(std::string compiledatabase) = 0;
+    virtual void setCompileDatabase(std::string Compiledatabase) = 0;
 };
 
 using g_SourceCodeAnalysisFactory = Infra::ProductClassFactory<MyFunction::SourceCodeAnalysisFunc>;
-} // namespace MyFunction
+}   // namespace MyFunction

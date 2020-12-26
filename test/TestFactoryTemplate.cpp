@@ -1,6 +1,7 @@
 #include "Infra/FactoryTemplate.h"
 #include "catch2/catch.hpp"
 #include "spdlog/spdlog.h"
+
 #include <memory>
 #include <string>
 class BaseClass
@@ -14,7 +15,7 @@ public:
      *
      * @return std::string
      */
-    virtual std::string GetClassProductID() = 0;
+    virtual std::string getClassProductId() = 0;
 };
 
 class DerivedClass : public BaseClass
@@ -23,8 +24,8 @@ public:
     DerivedClass() = default;
     ~DerivedClass() override = default;
 
-    std::string GetClassProductID() override { return ProductID(); };
-    static std::string ProductID() { return "DerivedClassProduct"; }
+    std::string getClassProductId() override { return productId(); };
+    static std::string productId() { return "DerivedClassProduct"; }
 };
 
 class DerivedAnotherClass : public BaseClass
@@ -33,8 +34,8 @@ public:
     DerivedAnotherClass() = default;
     ~DerivedAnotherClass() override = default;
 
-    std::string GetClassProductID() override { return ProductID(); };
-    static std::string ProductID() { return "DerivedAnotherClassProduct"; }
+    std::string getClassProductId() override { return productId(); };
+    static std::string productId() { return "DerivedAnotherClassProduct"; }
 };
 
 using g_BaseClassFactory = Infra::ProductClassFactory<class BaseClass>;
@@ -45,22 +46,22 @@ TEST_CASE("Test an empty factory template function", "[factory template test]")
     {
         WHEN("No product registration, but try to obtain the product")
         {
-            auto oneProduct4DerivedClass = g_BaseClassFactory::instance().GetProductClass(DerivedClass::ProductID());
+            auto oneProduct4DerivedClass = g_BaseClassFactory::instance().getProductClass(DerivedClass::productId());
             THEN("Check the nullptr returned") { REQUIRE(oneProduct4DerivedClass == nullptr); }
         }
         WHEN("regist DerivedClass Product to Factory")
         {
-            Infra::ProductClassRegistrar<class BaseClass, class DerivedClass> registProduct(DerivedClass::ProductID());
+            Infra::ProductClassRegistrar<class BaseClass, class DerivedClass> registProduct(DerivedClass::productId());
             THEN("Try get a DerivedClass Product and check return value")
             {
-                auto oneProduct4DerivedClass = g_BaseClassFactory::instance().GetProductClass(DerivedClass::ProductID());
+                auto oneProduct4DerivedClass = g_BaseClassFactory::instance().getProductClass(DerivedClass::productId());
                 REQUIRE(oneProduct4DerivedClass != nullptr);
-                REQUIRE(oneProduct4DerivedClass->GetClassProductID() == DerivedClass::ProductID());
+                REQUIRE(oneProduct4DerivedClass->getClassProductId() == DerivedClass::productId());
             }
         }
         WHEN("after local register DerivedClass leave the lifecycle try get the Product again")
         {
-            auto oneProduct4DerivedClass = g_BaseClassFactory::instance().GetProductClass(DerivedClass::ProductID());
+            auto oneProduct4DerivedClass = g_BaseClassFactory::instance().getProductClass(DerivedClass::productId());
             THEN("Check the return value") { REQUIRE(oneProduct4DerivedClass == nullptr); }
         }
     }
@@ -70,34 +71,34 @@ TEST_CASE("Test the factory template function of a product", "[factory template 
 {
     GIVEN("Factory with a product")
     {
-        Infra::ProductClassRegistrar<class BaseClass, class DerivedClass> registProduct(DerivedClass::ProductID());
+        Infra::ProductClassRegistrar<class BaseClass, class DerivedClass> registProduct(DerivedClass::productId());
         WHEN("Register another product to the factory")
         {
             Infra::ProductClassRegistrar<class BaseClass, class DerivedAnotherClass> registanotherProduct(
-                DerivedAnotherClass::ProductID());
+                DerivedAnotherClass::productId());
             THEN("Gets the product with new Product ID and verifies return values")
             {
                 auto oneProduct4AnotherDerivedClass =
-                    g_BaseClassFactory::instance().GetProductClass(DerivedAnotherClass::ProductID());
+                    g_BaseClassFactory::instance().getProductClass(DerivedAnotherClass::productId());
                 REQUIRE(oneProduct4AnotherDerivedClass != nullptr);
-                REQUIRE(oneProduct4AnotherDerivedClass->GetClassProductID() == DerivedAnotherClass::ProductID());
+                REQUIRE(oneProduct4AnotherDerivedClass->getClassProductId() == DerivedAnotherClass::productId());
             }
             THEN("try to Gets old Product")
             {
-                auto oneProduct4DerivedClass = g_BaseClassFactory::instance().GetProductClass(DerivedClass::ProductID());
+                auto oneProduct4DerivedClass = g_BaseClassFactory::instance().getProductClass(DerivedClass::productId());
                 REQUIRE(oneProduct4DerivedClass != nullptr);
-                REQUIRE(oneProduct4DerivedClass->GetClassProductID() == DerivedClass::ProductID());
+                REQUIRE(oneProduct4DerivedClass->getClassProductId() == DerivedClass::productId());
             }
         }
         WHEN("Register a product with a duplicate name to the factory")
         {
             Infra::ProductClassRegistrar<class BaseClass, class DerivedAnotherClass> registanotherProduct(
-                DerivedClass::ProductID());
+                DerivedClass::productId());
             THEN("Gets the product with the duplicate name and verifies that it was not inserted successfully")
             {
-                auto oneProduct4DerivedClass = g_BaseClassFactory::instance().GetProductClass(DerivedClass::ProductID());
+                auto oneProduct4DerivedClass = g_BaseClassFactory::instance().getProductClass(DerivedClass::productId());
                 REQUIRE(oneProduct4DerivedClass != nullptr);
-                REQUIRE(oneProduct4DerivedClass->GetClassProductID() == DerivedClass::ProductID());
+                REQUIRE(oneProduct4DerivedClass->getClassProductId() == DerivedClass::productId());
             }
         }
     }

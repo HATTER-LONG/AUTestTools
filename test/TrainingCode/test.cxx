@@ -1,7 +1,11 @@
 #include "spdlog/spdlog.h"
 #include "test.h"
+
 #include <iostream>
-int ExternFunctionHasNoBody(int param) { return param; }
+int externFunctionHasNoBody(int param)
+{
+    return param;
+}
 extern int testExternFunction(int param);
 enum class Cpp11Enum
 {
@@ -26,13 +30,10 @@ struct StructTypeDerivedClass : StructTypeVirtualClass
     bool operator==(const StructTypeDerivedClass& o) const;
 };
 
-void test_if_else_branch(int unlessparam)
+void testIfElseBranch(int unlessparam)
 {
     int h = 1;
-    if (int b = 1)
-    {
-        int a = 10;
-    }
+    if (int b = 1) { int a = 10; }
     else if (h == 1)
     {
         int b = 20;

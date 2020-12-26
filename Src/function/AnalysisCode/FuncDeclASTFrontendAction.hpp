@@ -21,7 +21,10 @@ static llvm::cl::OptionCategory ToolingSampleCategory("Tooling Sample");
 class MatcherNodeFuncCall : public clang::ast_matchers::MatchFinder::MatchCallback
 {
 public:
-    MatcherNodeFuncCall(MyFunction::SourceCodeFunctionMessageMap& functionmessage) : functionMessageRef(functionmessage) {}
+    MatcherNodeFuncCall(MyFunction::SourceCodeFunctionMessageMap& Functionmessage)
+            : FunctionMessageRef(Functionmessage)
+    {
+    }
     void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
     {
         clang::LangOptions LangOpts;
@@ -29,8 +32,8 @@ public:
         clang::PrintingPolicy Policy(LangOpts);
         if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("FunctionDeclWithCall"))
         {
-            auto iter = functionMessageRef.find(functionDecl->getQualifiedNameAsString());
-            if (iter == functionMessageRef.end())
+            auto iter = FunctionMessageRef.find(functionDecl->getQualifiedNameAsString());
+            if (iter == FunctionMessageRef.end())
             {
                 std::string functionname;
                 std::vector<std::string> functionparms;
@@ -38,54 +41,57 @@ public:
                 functionparms.push_back(functionDecl->getReturnType().getAsString());
                 getParams(functionparms, functionDecl);
 
-                iter = functionMessageRef
+                iter = FunctionMessageRef
                            .insert(SourceCodeFunctionMessageMap::value_type(
                                functionname, SourceCodeFunctionMessage(functionname, functionparms)))
                            .first;
             }
             if (auto const* callexprdec = Result.Nodes.getNodeAs<clang::CallExpr>("callExprFunction"))
             {
-                auto func = callexprdec->getDirectCallee();
-                auto callexprIter = functionMessageRef.find(func->getQualifiedNameAsString());
-                if (callexprIter == functionMessageRef.end())
+                const auto* func = callexprdec->getDirectCallee();
+                auto callexprIter = FunctionMessageRef.find(func->getQualifiedNameAsString());
+                if (callexprIter == FunctionMessageRef.end())
                 {
                     std::string functionname;
                     std::vector<std::string> functionparms;
                     functionname = func->getQualifiedNameAsString();
                     functionparms.push_back(func->getReturnType().getAsString());
                     getParams(functionparms, func);
-                    functionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
+                    FunctionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
                         functionname, SourceCodeFunctionMessage(functionname, functionparms)));
                 }
-                iter->second.AddFunctionWhichCallExpr(func->getQualifiedNameAsString());
+                iter->second.addFunctionWhichCallExpr(func->getQualifiedNameAsString());
             }
         }
     }
 
-    void getParams(FunctionParamList& functionparms, const clang::FunctionDecl* func)
+    void getParams(FunctionParamList& Functionparms, const clang::FunctionDecl* Func)
     {
         clang::LangOptions LangOpts;
         LangOpts.CPlusPlus = true;
         clang::PrintingPolicy Policy(LangOpts);
-        for (unsigned int i = 0; i < func->getNumParams(); i++)
+        for (unsigned int i = 0; i < Func->getNumParams(); i++)
         {
             std::string paramwithname;
-            auto param = func->getParamDecl(i);
+            const auto* param = Func->getParamDecl(i);
             paramwithname += clang::QualType::getAsString(param->getType().split(), Policy);
             // paramwithname += "  ";
             // paramwithname += func->getParamDecl(i)->getNameAsString();
-            functionparms.push_back(paramwithname);
+            Functionparms.push_back(paramwithname);
         }
     }
 
 private:
-    SourceCodeFunctionMessageMap& functionMessageRef;
+    SourceCodeFunctionMessageMap& FunctionMessageRef;
 };
 
 class SourceCodeErrorAnalysis : public clang::DiagnosticConsumer
 {
 public:
-    SourceCodeErrorAnalysis(SourceCodeErrorMessageList& errorMessageList) : errorMessageListRef(errorMessageList) {}
+    SourceCodeErrorAnalysis(SourceCodeErrorMessageList& ErrorMessageList)
+            : ErrorMessageListRef(ErrorMessageList)
+    {
+    }
     ~SourceCodeErrorAnalysis() override = default;
     void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel, const clang::Diagnostic& Info) override
     {
@@ -99,42 +105,42 @@ public:
 
         filename += ":";
         filename += std::to_string(Line);
-        errorMessageListRef.push_back(SourceCodeErrorMessage(DiagLevel, DiagMessageStream.str().str(), filename));
+        ErrorMessageListRef.push_back(SourceCodeErrorMessage(DiagLevel, DiagMessageStream.str().str(), filename));
     }
 
 private:
-    SourceCodeErrorMessageList& errorMessageListRef;
+    SourceCodeErrorMessageList& ErrorMessageListRef;
 };
 
 class FuncDeclAnalysisFrontendAction : public clang::ASTFrontendAction
 {
 public:
-    FuncDeclAnalysisFrontendAction(SourceCodeFunctionMessageMap& functionmessage, SourceCodeErrorMessageList& errormessage)
+    FuncDeclAnalysisFrontendAction(SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage)
     {
-        errorAnalysis = new SourceCodeErrorAnalysis(errormessage);
-        nodeFuncCall = new MatcherNodeFuncCall(functionmessage);
+        ErrorAnalysis = new SourceCodeErrorAnalysis(Errormessage);
+        NodeFuncCall = new MatcherNodeFuncCall(Functionmessage);
     }
     ~FuncDeclAnalysisFrontendAction() override
     {
-        delete nodeFuncCall;
-        nodeFuncCall = nullptr;
+        delete NodeFuncCall;
+        NodeFuncCall = nullptr;
     }
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& CI, clang::StringRef /*file*/) override
     {
         using namespace clang::ast_matchers;
-        auto FuncDeclMatcher = functionDecl(isExpansionInMainFile(), anyOf(forEachDescendant(callExpr().bind("callExprFunction")),
-                                                                           unless(forEachDescendant(callExpr()))))
+        auto FuncDeclMatcher = functionDecl(isExpansionInMainFile(),
+            anyOf(forEachDescendant(callExpr().bind("callExprFunction")), unless(forEachDescendant(callExpr()))))
                                    .bind("FunctionDeclWithCall");
-        finder.addMatcher(FuncDeclMatcher, nodeFuncCall);
+        Finder.addMatcher(FuncDeclMatcher, NodeFuncCall);
         // setClient 第二个参数默认为 true 迁移 DiagnosticConsumer 所有权
-        CI.getDiagnostics().setClient(errorAnalysis);
-        return finder.newASTConsumer();
+        CI.getDiagnostics().setClient(ErrorAnalysis);
+        return Finder.newASTConsumer();
     }
 
 private:
-    MatcherNodeFuncCall* nodeFuncCall;
-    clang::ast_matchers::MatchFinder finder;
-    SourceCodeErrorAnalysis* errorAnalysis;
+    MatcherNodeFuncCall* NodeFuncCall;
+    clang::ast_matchers::MatchFinder Finder;
+    SourceCodeErrorAnalysis* ErrorAnalysis;
 };
 
-} // namespace MyFunction
+}   // namespace MyFunction

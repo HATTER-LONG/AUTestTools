@@ -29,45 +29,45 @@ public:
         MoveItem
     };
 
-    explicit DiagramScene(QMenu* itemMenu, QObject* parent = nullptr);
-    QFont font() const { return myFont; }
-    QColor textColor() const { return myTextColor; }
-    QColor itemColor() const { return myItemColor; }
-    QColor lineColor() const { return myLineColor; }
-    void setLineColor(const QColor& color);
-    void setTextColor(const QColor& color);
-    void setItemColor(const QColor& color);
-    void setFont(const QFont& font);
-    DiagramItem* createItem(DiagramItem::DiagramType type, QPointF point);
-    void setArrow(DiagramItem* startItem, DiagramItem* endItem);
+    explicit DiagramScene(QMenu* ItemMenu, QObject* Parent = nullptr);
+    QFont font() const { return MyFont; }
+    QColor textColor() const { return MyTextColor; }
+    QColor itemColor() const { return MyItemColor; }
+    QColor lineColor() const { return MyLineColor; }
+    void setLineColor(const QColor& Color);
+    void setTextColor(const QColor& Color);
+    void setItemColor(const QColor& Color);
+    void setFont(const QFont& Font);
+    DiagramItem* createItem(DiagramItem::DiagramType Type, QPointF Point);
+    void setArrow(DiagramItem* StartItem, DiagramItem* EndItem);
 public slots:
-    void setMode(Mode mode);
-    void setItemType(DiagramItem::DiagramType type);
-    void editorLostFocus(DiagramTextItem* item);
+    void setMode(Mode Mode);
+    void setItemType(DiagramItem::DiagramType Type);
+    void editorLostFocus(DiagramTextItem* Item);
 
 signals:
-    void itemInserted(DiagramItem* item);
-    void textInserted(QGraphicsTextItem* item);
-    void itemSelected(QGraphicsItem* item);
+    void itemInserted(DiagramItem* Item);
+    void textInserted(QGraphicsTextItem* Item);
+    void itemSelected(QGraphicsItem* Item);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent* MouseEvent) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* MouseEvent) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* MouseEvent) override;
 
 private:
-    bool isItemChange(int type);
-    bool isDiagramItem(QGraphicsItem* item);
-    DiagramItem::DiagramType myItemType;
-    QMenu* myItemMenu;
-    Mode myMode;
-    bool leftButtonDown;
-    QPointF startPoint;
-    QGraphicsLineItem* line;
-    QFont myFont;
-    DiagramTextItem* textItem;
-    QColor myTextColor;
-    QColor myItemColor;
-    QColor myLineColor;
+    bool isItemChange(int Type);
+    bool isDiagramItem(QGraphicsItem* Item);
+    DiagramItem::DiagramType MyItemType;
+    QMenu* MyItemMenu;
+    Mode MyMode;
+    bool LeftButtonDown;
+    QPointF StartPoint;
+    QGraphicsLineItem* Line;
+    QFont MyFont;
+    DiagramTextItem* TextItem;
+    QColor MyTextColor;
+    QColor MyItemColor;
+    QColor MyLineColor;
 };
 #endif

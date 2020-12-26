@@ -10,37 +10,37 @@
 #include <QTextBlockFormat>
 #include <QTextCursor>
 
-DiagramItem::DiagramItem(DiagramType diagramType, QMenu* contextMenu, QGraphicsItem* parent)
-        : QGraphicsPolygonItem(parent)
+DiagramItem::DiagramItem(DiagramType DiagramType, QMenu* ContextMenu, QGraphicsItem* Parent)
+        : QGraphicsPolygonItem(Parent)
 {
-    myDiagramType = diagramType;
-    myContextMenu = contextMenu;
+    MyDiagramType = DiagramType;
+    MyContextMenu = ContextMenu;
 
     QPainterPath path;
-    switch (myDiagramType)
+    switch (MyDiagramType)
     {
-    case StartEnd:
-        path.moveTo(200, 50);
-        path.arcTo(150, 0, 50, 50, 0, 90);
-        path.arcTo(50, 0, 50, 50, 90, 90);
-        path.arcTo(50, 50, 50, 50, 180, 90);
-        path.arcTo(150, 50, 50, 50, 270, 90);
-        path.lineTo(200, 25);
-        myPolygon = path.toFillPolygon();
-        break;
-    case Conditional:
-        myPolygon << QPointF(-100, 0) << QPointF(0, 100) << QPointF(100, 0) << QPointF(0, -100) << QPointF(-100, 0);
-        break;
-    case Step:
-        myPolygon << QPointF(-100, -100) << QPointF(100, -100) << QPointF(100, 100) << QPointF(-100, 100)
-                  << QPointF(-100, -100);
-        break;
-    default:
-        myPolygon << QPointF(-120, -80) << QPointF(-70, 80) << QPointF(120, 80) << QPointF(70, -80)
-                  << QPointF(-120, -80);
-        break;
+        case StartEnd:
+            path.moveTo(200, 50);
+            path.arcTo(150, 0, 50, 50, 0, 90);
+            path.arcTo(50, 0, 50, 50, 90, 90);
+            path.arcTo(50, 50, 50, 50, 180, 90);
+            path.arcTo(150, 50, 50, 50, 270, 90);
+            path.lineTo(200, 25);
+            MyPolygon = path.toFillPolygon();
+            break;
+        case Conditional:
+            MyPolygon << QPointF(-100, 0) << QPointF(0, 100) << QPointF(100, 0) << QPointF(0, -100) << QPointF(-100, 0);
+            break;
+        case Step:
+            MyPolygon << QPointF(-100, -100) << QPointF(100, -100) << QPointF(100, 100) << QPointF(-100, 100)
+                      << QPointF(-100, -100);
+            break;
+        default:
+            MyPolygon << QPointF(-120, -80) << QPointF(-70, 80) << QPointF(120, 80) << QPointF(70, -80)
+                      << QPointF(-120, -80);
+            break;
     }
-    setPolygon(myPolygon);
+    setPolygon(MyPolygon);
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
@@ -48,19 +48,22 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu* contextMenu, QGraphicsI
     createTextItem();
 }
 
-DiagramItem::~DiagramItem() { delete mytextItem; }
-
-void DiagramItem::removeArrow(Arrow* arrow)
+DiagramItem::~DiagramItem()
 {
-    int index = arrows.indexOf(arrow);
+    delete MyTestItem;
+}
+
+void DiagramItem::removeArrow(Arrow* Arrow)
+{
+    int index = ArrowList.indexOf(Arrow);
 
     if (index != -1)
-        arrows.removeAt(index);
+        ArrowList.removeAt(index);
 }
 
 void DiagramItem::removeArrows()
 {
-    foreach (Arrow* arrow, arrows)
+    foreach (Arrow* arrow, ArrowList)
     {
         arrow->startItem()->removeArrow(arrow);
         arrow->endItem()->removeArrow(arrow);
@@ -69,39 +72,48 @@ void DiagramItem::removeArrows()
     }
 }
 
-void DiagramItem::addArrow(Arrow* arrow) { arrows.append(arrow); }
-
-void DiagramItem::setFont(const QFont& font)
+void DiagramItem::addArrow(Arrow* Arrow)
 {
-    myFont = font;
-    mytextItem->setFont(myFont);
+    ArrowList.append(Arrow);
 }
 
-void DiagramItem::setTextColor(const QColor& color)
+void DiagramItem::setFont(const QFont& Font)
 {
-    myTextColor = color;
-    mytextItem->setDefaultTextColor(myTextColor);
+    MyFont = Font;
+    MyTestItem->setFont(MyFont);
+}
+
+void DiagramItem::setTextColor(const QColor& Color)
+{
+    MyTestColor = Color;
+    MyTestItem->setDefaultTextColor(MyTestColor);
 }
 
 void DiagramItem::createTextItem()
 {
-    mytextItem = new DiagramTextItem(this);
-    mytextItem->setTextInteractionFlags(Qt::NoTextInteraction);
-    mytextItem->setTextWidth(this->boundingRect().width());
+    MyTestItem = new DiagramTextItem(this);
+    MyTestItem->setTextInteractionFlags(Qt::NoTextInteraction);
+    MyTestItem->setTextWidth(this->boundingRect().width());
     QTextBlockFormat format;
     format.setAlignment(Qt::AlignHCenter);
-    QTextCursor cursor = mytextItem->textCursor();
+    QTextCursor cursor = MyTestItem->textCursor();
     cursor.select(QTextCursor::Document);
     cursor.mergeBlockFormat(format);
     cursor.clearSelection();
-    mytextItem->setTextCursor(cursor);
-    mytextItem->setPos(static_cast<qreal>(0 - (this->boundingRect().width() / 2)),
-                       static_cast<qreal>(0 - (boundingRect().height() / 4)));
-    mytextItem->setFlag(QGraphicsItem::ItemIsMovable, false);
-    mytextItem->setFlag(QGraphicsItem::ItemIsSelectable, false);
+    MyTestItem->setTextCursor(cursor);
+    MyTestItem->setPos(static_cast<qreal>(0 - (this->boundingRect().width() / 2)),
+        static_cast<qreal>(0 - (boundingRect().height() / 4)));
+    MyTestItem->setFlag(QGraphicsItem::ItemIsMovable, false);
+    MyTestItem->setFlag(QGraphicsItem::ItemIsSelectable, false);
 }
-void DiagramItem::setItemText(const QString& text) { mytextItem->setPlainText(text); }
-const QString DiagramItem::getItemText() { return mytextItem->toPlainText(); }
+void DiagramItem::setItemText(const QString& Text)
+{
+    MyTestItem->setPlainText(Text);
+}
+const QString DiagramItem::getItemText()
+{
+    return MyTestItem->toPlainText();
+}
 QPixmap DiagramItem::image() const
 {
     QPixmap pixmap(250, 250);
@@ -109,57 +121,57 @@ QPixmap DiagramItem::image() const
     QPainter painter(&pixmap);
     painter.setPen(QPen(Qt::black, 8));
     painter.translate(125, 125);
-    painter.drawPolyline(myPolygon);
+    painter.drawPolyline(MyPolygon);
 
     return pixmap;
 }
 
-void DiagramItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
+void DiagramItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* Event)
 {
     spdlog::info("{}:{} call!!", __FILE__, __FUNCTION__);
     scene()->clearSelection();
     setSelected(true);
-    myContextMenu->exec(event->screenPos());
+    MyContextMenu->exec(Event->screenPos());
 }
 
-QVariant DiagramItem::itemChange(GraphicsItemChange change, const QVariant& value)
+QVariant DiagramItem::itemChange(GraphicsItemChange Change, const QVariant& Value)
 {
-    if (change == QGraphicsItem::ItemPositionChange)
+    if (Change == QGraphicsItem::ItemPositionChange)
     {
-        foreach (Arrow* arrow, arrows)
+        foreach (Arrow* arrow, ArrowList)
         {
             arrow->updatePosition();
         }
     }
 
-    return value;
+    return Value;
 }
 
-void DiagramItem::focusOutEvent(QFocusEvent* event)
+void DiagramItem::focusOutEvent(QFocusEvent* Event)
 {
-    if (Q_NULLPTR == mytextItem)
+    if (Q_NULLPTR == MyTestItem)
     {
-        QGraphicsPolygonItem::focusOutEvent(event);
+        QGraphicsPolygonItem::focusOutEvent(Event);
         return;
     }
-    mytextItem->setTextInteractionFlags(Qt::NoTextInteraction);
-    mytextItem->lostFocus(mytextItem);
+    MyTestItem->setTextInteractionFlags(Qt::NoTextInteraction);
+    MyTestItem->lostFocus(MyTestItem);
 
-    QGraphicsPolygonItem::focusOutEvent(event);
+    QGraphicsPolygonItem::focusOutEvent(Event);
 }
 
-void DiagramItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void DiagramItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* Event)
 {
-    if (Q_NULLPTR == mytextItem)
+    if (Q_NULLPTR == MyTestItem)
     {
-        QGraphicsPolygonItem::mouseDoubleClickEvent(event);
+        QGraphicsPolygonItem::mouseDoubleClickEvent(Event);
         return;
     }
-    if (mytextItem->textInteractionFlags() == Qt::NoTextInteraction)
+    if (MyTestItem->textInteractionFlags() == Qt::NoTextInteraction)
     {
-        mytextItem->setTextInteractionFlags(Qt::TextEditorInteraction);
-        mytextItem->setFocus();
+        MyTestItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+        MyTestItem->setFocus();
     }
 
-    QGraphicsPolygonItem::mouseDoubleClickEvent(event);
+    QGraphicsPolygonItem::mouseDoubleClickEvent(Event);
 }

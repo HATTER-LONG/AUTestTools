@@ -1,5 +1,6 @@
 #pragma once
 #include "clang/ASTMatchers/ASTMatchFinder.h"
+
 #include <set>
 #include <string>
 #include <vector>
@@ -13,8 +14,8 @@ namespace tooling
 {
 class Replacements;
 class Replacement;
-} // namespace tooling
-} // namespace clang
+}   // namespace tooling
+}   // namespace clang
 namespace Infra
 {
 // std:: aliases
@@ -37,4 +38,4 @@ using sm_cref_t = clang::SourceManager const&;
 using sm_cc_ptr_t = clang::SourceManager const* const;
 ;
 
-} // namespace Infra
+}   // namespace Infra
