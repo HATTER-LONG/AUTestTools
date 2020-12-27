@@ -5,13 +5,14 @@
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
+
 static llvm::cl::OptionCategory flt_cat("func-decl-list-am");
 static Infra::ProductClassRegistrar<MyFunction::SourceCodeAnalysisFunc, MyFunction::SourceCodeMessageAnalysis>
     funcdeclAnalysisMethod(MyFunction::SourceCodeMessageAnalysis::getFactoryID());
 namespace MyFunction
 {
 bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
-    SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage)
+    SourceCodeFunctionMessageMap& FunctionMessage, SourceCodeErrorMessageList& ErrorMessage)
 {
     int argc = 2;
     char argv_tmp[3][128] = {
@@ -42,13 +43,13 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
     clang::tooling::ArgumentsAdjuster ardj1 = clang::tooling::getInsertArgumentAdjuster(MyFunction::CLANG_ARGS2APPEND.c_str());
     Tool.appendArgumentsAdjuster(ardj1);
 
-    Functionmessage.clear();
-    Errormessage.clear();
+    FunctionMessage.clear();
+    ErrorMessage.clear();
 
     clang::ast_matchers::MatchFinder finder;
-    FunctionDefLister fp(Functionmessage);
+    FunctionDefLister fp(FunctionMessage);
     finder.addMatcher(fp.matcher(), &fp);
-    SourceCodeErrorAnalysis diagnosticConsumer(Errormessage);
+    SourceCodeErrorAnalysis diagnosticConsumer(ErrorMessage);
     Tool.setDiagnosticConsumer(&diagnosticConsumer);
     int ret = Tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
     if (ret != 0)
