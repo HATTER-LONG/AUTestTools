@@ -3,6 +3,7 @@
 
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/ASTMatchers/ASTMatchers.h>
+#include <spdlog/common.h>
 namespace MyFunction
 {
 class FunctionDefLister : public clang::ast_matchers::MatchFinder::MatchCallback
@@ -10,7 +11,6 @@ class FunctionDefLister : public clang::ast_matchers::MatchFinder::MatchCallback
 public:
     // clang-format off
 
-    //m callExpr(unless(isExpansionInSystemHeader()), hasDescendant(declRefExpr(to(functionDecl().bind("function"))))) 得到自定义的调用函数信息
     auto matcher()
     {
         using namespace clang::ast_matchers;
@@ -44,31 +44,32 @@ public:
                 functionname = functionDecl->getQualifiedNameAsString();
                 functionparms.push_back(functionDecl->getReturnType().getAsString());
                 getParams(functionparms, functionDecl);
-
-                iter = FunctionMessageRef
-                           .insert(SourceCodeFunctionMessageMap::value_type(
-                               functionname, SourceCodeFunctionMessage(functionname, functionparms)))
-                           .first;
+                iter = insertFuncToMapRef(functionDecl);
             }
             if (auto const* callexprdec = Result.Nodes.getNodeAs<clang::CallExpr>("callExprInfo"))
             {
-                const auto* func = callexprdec->getDirectCallee();
-                auto callexprIter = FunctionMessageRef.find(func->getQualifiedNameAsString());
-                if (callexprIter == FunctionMessageRef.end())
+                if (const auto* func = callexprdec->getDirectCallee())
                 {
-                    std::string functionname;
-                    std::vector<std::string> functionparms;
-                    functionname = func->getQualifiedNameAsString();
-                    functionparms.push_back(func->getReturnType().getAsString());
-                    getParams(functionparms, func);
-                    FunctionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
-                        functionname, SourceCodeFunctionMessage(functionname, functionparms)));
+                    auto callexprIter = FunctionMessageRef.find(func->getQualifiedNameAsString());
+                    if (callexprIter == FunctionMessageRef.end()) { insertFuncToMapRef(func); }
+                    iter->second.addFunctionWhichCallExpr(func->getQualifiedNameAsString());
                 }
-                iter->second.addFunctionWhichCallExpr(func->getQualifiedNameAsString());
             }
         }
     }
 
+    SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(const clang::FunctionDecl* Func)
+    {
+        std::string functionname;
+        std::vector<std::string> functionparms;
+        functionname = Func->getQualifiedNameAsString();
+        functionparms.push_back(Func->getReturnType().getAsString());
+        getParams(functionparms, Func);
+        return FunctionMessageRef
+            .insert(SourceCodeFunctionMessageMap::value_type(
+                functionname, SourceCodeFunctionMessage(functionname, functionparms, Func->hasBody())))
+            .first;
+    }
 
     void getParams(FunctionParamList& Functionparms, const clang::FunctionDecl* Func)
     {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AnalysisMessage.h"
+#include "AnalysisMessageHelper.h"
 #include "Infra/FactoryTemplate.h"
 
 #include <string>

@@ -11,6 +11,8 @@ int simpleFunction(int unuseparam)
 int trainCallOtherFunction(int param)
 {
     externFunctionHasNoBody(param);
+    headFileDefinedFunc();
+
     simpleFunction(param);
     return 0;
 }

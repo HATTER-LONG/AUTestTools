@@ -5,7 +5,9 @@
 #include "function/utilities.h"
 #include "spdlog/spdlog.h"
 
-TEST_CASE("FunctionDeclAnalysis base test", "[function decl analysis test]")
+// ! 此用例用于测试 Level_1 CustomASTFront 的方法，已经弃用 关闭此测试用例
+// TODO: 整理抽离相关实现代码并删除
+TEST_CASE("FunctionDeclAnalysis base test", "[.][function decl analysis test]")
 {
     std::string analysisFilePath = MyFunction::TRAININGCODE_FILEPATH + "test.cxx";
     std::string comipleCommandFilePath = MyFunction::COMPILECOMMANDS_INFOFILE;

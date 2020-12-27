@@ -75,12 +75,14 @@ public:
     /**
      * @brief Construct a new Source Code Function Message object
      *
-     * @param functionname
-     * @param functionparam
+     * @param Functionname
+     * @param Functionparam
+     * @param HasFuncBody
      */
-    SourceCodeFunctionMessage(std::string Functionname, std::vector<std::string> Functionparam)
+    SourceCodeFunctionMessage(std::string Functionname, std::vector<std::string> Functionparam, bool HasFuncBody)
             : FunctionName(Functionname)
             , FunctionParam(Functionparam)
+            , HasBody(HasFuncBody)
     {
     }
     /**
@@ -111,10 +113,19 @@ public:
      */
     const FunctionCallExprList& getFunctionWhichCallExpr() const noexcept { return FunctionCallExpr; }
 
+    /**
+     * @brief Get the Function Has Body Info object
+     *
+     * @return true Has Function Body
+     * @return false  None Function Body
+     */
+    const bool getFunctionHasBodyInfo() const noexcept { return HasBody; }
+
 private:
     std::string FunctionName;
     FunctionParamList FunctionParam;
     FunctionCallExprList FunctionCallExpr;
+    bool HasBody;
 };
 
 /**

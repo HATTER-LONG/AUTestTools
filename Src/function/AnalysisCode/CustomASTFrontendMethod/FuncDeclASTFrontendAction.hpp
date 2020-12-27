@@ -43,7 +43,7 @@ public:
 
                 iter = FunctionMessageRef
                            .insert(SourceCodeFunctionMessageMap::value_type(
-                               functionname, SourceCodeFunctionMessage(functionname, functionparms)))
+                               functionname, SourceCodeFunctionMessage(functionname, functionparms, functionDecl->hasBody())))
                            .first;
             }
             if (auto const* callexprdec = Result.Nodes.getNodeAs<clang::CallExpr>("callExprFunction"))
@@ -58,7 +58,7 @@ public:
                     functionparms.push_back(func->getReturnType().getAsString());
                     getParams(functionparms, func);
                     FunctionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
-                        functionname, SourceCodeFunctionMessage(functionname, functionparms)));
+                        functionname, SourceCodeFunctionMessage(functionname, functionparms, func->hasBody())));
                 }
                 iter->second.addFunctionWhichCallExpr(func->getQualifiedNameAsString());
             }
