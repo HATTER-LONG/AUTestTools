@@ -31,14 +31,14 @@ public:
      *
      * @param filepath
      */
-    virtual void setFilePathToAnalysis(std::string Filepath) = 0;
+    virtual void setFilePathToAnalysis(const std::string& Filepath) = 0;
 
     /**
      * @brief Set the file path to Compile Database object
      *
      * @param compiledatabase
      */
-    virtual void setCompileDatabase(std::string Compiledatabase) = 0;
+    virtual void setCompileDatabase(const std::string& Compiledatabase) = 0;
 };
 
 using g_SourceCodeAnalysisFactory = Infra::ProductClassFactory<MyFunction::SourceCodeAnalysisFunc>;

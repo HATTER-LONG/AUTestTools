@@ -15,8 +15,8 @@ public:
     bool startToAnalysisSourceCode(
         SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage) override;
 
-    void setFilePathToAnalysis(std::string Filepath) override { SourceCodeFilePath = Filepath; }
-    void setCompileDatabase(std::string Compiledatabase) override { CompiledDatabasePath = Compiledatabase; }
+    void setFilePathToAnalysis(const std::string& Filepath) override { SourceCodeFilePath = Filepath; }
+    void setCompileDatabase(const std::string& Compiledatabase) override { CompiledDatabasePath = Compiledatabase; }
     static std::string getFactoryID() { return "level_2"; };
 
 private:

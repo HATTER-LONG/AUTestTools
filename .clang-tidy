@@ -19,6 +19,6 @@ CheckOptions:
   - key:             readability-identifier-naming.VariableCase
     value:           CamelCasek
   - key:             readability-function-size.StatementThreshold
-    value:           100
+    value:           130
   - key:             readability-function-size.ParameterThreshold
     value:           5'
