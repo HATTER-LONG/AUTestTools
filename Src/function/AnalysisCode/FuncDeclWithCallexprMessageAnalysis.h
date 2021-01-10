@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SourceCodeMessageAnlysis.h"
+#include "SourceCodeMessageAnalysis.h"
 
 namespace MyFunction
 {

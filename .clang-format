@@ -10,7 +10,7 @@ AllowAllParametersOfDeclarationOnNextLine: true         # 函数方法声明参�
 AllowShortCaseLabelsOnASingleLine: false                # 短小的 case 语句不会放到一行
 AllowShortEnumsOnASingleLine: false                     # 短小的 enum 语句不会放到一行
 AllowShortFunctionsOnASingleLine: Inline                # 短函数空实现可放在同一行，其余均换行
-AllowShortIfStatementsOnASingleLine: WithoutElse        # 短 if 语句当没有 else 分支时可放在同一行
+AllowShortIfStatementsOnASingleLine: Never              # 短 if 语句当没有 else 分支时可放在同一行
 AllowShortLoopsOnASingleLine: false                     # 循环语句代码块不会放在同一行
 AllowShortBlocksOnASingleLine: Empty                    # 空代码块会放到同一行
 AlwaysBreakAfterReturnType: None                        # 返回值是否换行

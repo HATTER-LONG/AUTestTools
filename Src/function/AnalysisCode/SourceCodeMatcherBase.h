@@ -20,6 +20,8 @@ public:
     virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) { assert(false); }
 };
 
+using DeclarationMatcherPtr = std::unique_ptr<DeclarationMatcherCallBackBase>;
+
 class SourceCodeErrorAnalysis : public clang::DiagnosticConsumer
 {
 public:
@@ -34,9 +36,9 @@ public:
         Info.FormatDiagnostic(OutStr);
 
         llvm::raw_svector_ostream DiagMessageStream(OutStr);
-        auto aa = clang::FullSourceLoc(Info.getLocation(), Info.getSourceManager()).getFileLoc();
-        int Line = aa.getLineNumber();
-        std::string filename(aa.getPresumedLoc().getFilename());
+        auto SourceLocal = clang::FullSourceLoc(Info.getLocation(), Info.getSourceManager()).getFileLoc();
+        int Line = SourceLocal.getLineNumber();
+        std::string filename(SourceLocal.getPresumedLoc().getFilename());
 
         filename += ":";
         filename += std::to_string(Line);
