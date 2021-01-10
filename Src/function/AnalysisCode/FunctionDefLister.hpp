@@ -1,17 +1,15 @@
 #pragma once
+#include "SourceCodeMatcherBase.h"
 #include "function/AnalysisMessage.h"
 
-#include <clang/ASTMatchers/ASTMatchFinder.h>
-#include <clang/ASTMatchers/ASTMatchers.h>
 #include <spdlog/common.h>
 namespace MyFunction
 {
-class FunctionDefLister : public clang::ast_matchers::MatchFinder::MatchCallback
+class FunctionDefLister : public DeclarationMatcherCallBackBase
 {
 public:
     // clang-format off
-
-    auto matcher()
+    virtual clang::ast_matchers::DeclarationMatcher matcher() override
     {
         using namespace clang::ast_matchers;
         return functionDecl(
@@ -29,7 +27,7 @@ public:
     }
 
 
-    void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
+    virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
     {
         clang::LangOptions LangOpts;
         LangOpts.CPlusPlus = true;
@@ -91,30 +89,4 @@ private:
     SourceCodeFunctionMessageMap& FunctionMessageRef;
 };
 
-class SourceCodeErrorAnalysis : public clang::DiagnosticConsumer
-{
-public:
-    SourceCodeErrorAnalysis(SourceCodeErrorMessageList& ErrorMessageList)
-            : ErrorMessageListRef(ErrorMessageList)
-    {
-    }
-    ~SourceCodeErrorAnalysis() override = default;
-    void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel, const clang::Diagnostic& Info) override
-    {
-        clang::SmallString<100> OutStr;
-        Info.FormatDiagnostic(OutStr);
-
-        llvm::raw_svector_ostream DiagMessageStream(OutStr);
-        auto aa = clang::FullSourceLoc(Info.getLocation(), Info.getSourceManager()).getFileLoc();
-        int Line = aa.getLineNumber();
-        std::string filename(aa.getPresumedLoc().getFilename());
-
-        filename += ":";
-        filename += std::to_string(Line);
-        ErrorMessageListRef.push_back(SourceCodeErrorMessage(DiagLevel, DiagMessageStream.str().str(), filename));
-    }
-
-private:
-    SourceCodeErrorMessageList& ErrorMessageListRef;
-};
 }   // namespace MyFunction

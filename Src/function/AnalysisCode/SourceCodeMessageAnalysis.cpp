@@ -7,12 +7,10 @@
 #include <clang/Tooling/Tooling.h>
 
 static llvm::cl::OptionCategory flt_cat("func-decl-list-am");
-static Infra::ProductClassRegistrar<MyFunction::SourceCodeAnalysisFunc, MyFunction::SourceCodeMessageAnalysis>
-    funcdeclAnalysisMethod(MyFunction::SourceCodeMessageAnalysis::getFactoryID());
 namespace MyFunction
 {
 bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
-    SourceCodeFunctionMessageMap& FunctionMessage, SourceCodeErrorMessageList& ErrorMessage)
+    SourceCodeFunctionMessageMap& /*FunctionMessage*/, SourceCodeErrorMessageList& ErrorMessage)
 {
     int argc = 2;
     char argv_tmp[3][128] = {
@@ -43,12 +41,8 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
     clang::tooling::ArgumentsAdjuster ardj1 = clang::tooling::getInsertArgumentAdjuster(MyFunction::CLANG_ARGS2APPEND.c_str());
     Tool.appendArgumentsAdjuster(ardj1);
 
-    FunctionMessage.clear();
-    ErrorMessage.clear();
-
     clang::ast_matchers::MatchFinder finder;
-    FunctionDefLister fp(FunctionMessage);
-    finder.addMatcher(fp.matcher(), &fp);
+    finder.addMatcher(MatcherWithCallBack->matcher(), MatcherWithCallBack.get());
     SourceCodeErrorAnalysis diagnosticConsumer(ErrorMessage);
     Tool.setDiagnosticConsumer(&diagnosticConsumer);
     int ret = Tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
