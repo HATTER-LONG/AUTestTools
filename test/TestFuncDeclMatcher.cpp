@@ -5,50 +5,60 @@
 #include "function/utilities.h"
 #include "spdlog/spdlog.h"
 
-TEST_CASE("Test Level_'ID' analysis code tool functions Get normally", "[Source code analysis function]")
+class AnalysisTools
 {
-    std::string analysisFilePath = MyFunction::TRAININGCODE_FILEPATH + "FunctionInfoTestCode.cxx";
-    std::string comipleCommandFilePath = MyFunction::COMPILECOMMANDS_INFOFILE;
+public:
+    AnalysisTools()
+    {
+        REQUIRE(!m_analysisFilePath.empty());
+        REQUIRE(!m_comipleCommandFilePath.empty());
+    }
+    std::string m_analysisFilePath { MyFunction::TRAININGCODE_FILEPATH + "FunctionInfoTestCode.cxx" };
+    std::string m_comipleCommandFilePath { MyFunction::COMPILECOMMANDS_INFOFILE };
+    std::string m_id { "FuncDeclWithCallExpr_v1" };
+};
 
-    REQUIRE(!analysisFilePath.empty());
-    REQUIRE(!comipleCommandFilePath.empty());
-
-    std::string id = "FuncDeclWithCallExpr_v1";
+TEST_CASE_METHOD(AnalysisTools, "Test analysis code tool functions Get normally", "[Source code analysis function]")
+{
     GIVEN("Source Code function ID")
     {
-        WHEN("Try to obtain the Level_'ID' source code message function from factory")
+        WHEN("Try to obtain the FuncDeclWithCallExpr_'v1' source code message function from factory")
         {
-            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(id);
+            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
             THEN("Check return value") { REQUIRE(fundeclanalysisptr != nullptr); }
         }
-        WHEN("start analysis code infomation")
+    }
+}
+
+TEST_CASE_METHOD(AnalysisTools, "Test analysis code tool functions normally", "[Source code analysis function]")
+{
+    WHEN("start analysis code infomation")
+    {
+        static MyFunction::SourceCodeErrorMessageList errormessage;
+        static MyFunction::SourceCodeFunctionMessageMap funcmessagemap;
+
+        THEN("start analysis and Check return value")
         {
-            static MyFunction::SourceCodeErrorMessageList errormessage;
-            static MyFunction::SourceCodeFunctionMessageMap funcmessagemap;
+            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
+            fundeclanalysisptr->setFilePathToAnalysis(m_analysisFilePath);
+            fundeclanalysisptr->setCompileDatabase(m_comipleCommandFilePath);
+            bool result = fundeclanalysisptr->startToAnalysisSourceCode(funcmessagemap, errormessage);
 
-            THEN("start analysis and Check return value")
-            {
-                auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(id);
-                fundeclanalysisptr->setFilePathToAnalysis(analysisFilePath);
-                fundeclanalysisptr->setCompileDatabase(comipleCommandFilePath);
-                bool result = fundeclanalysisptr->startToAnalysisSourceCode(funcmessagemap, errormessage);
+            REQUIRE(result == true);
+        }
 
-                REQUIRE(result == true);
-            }
-
-            THEN("Check infomation about source code funcdecl With CallExpr")
-            {
-                REQUIRE(funcmessagemap.size() == TESTCXX_FUNCTIONCOUNT);
-            }
-            THEN("Check infomation about error info") { REQUIRE(errormessage.size() == TESTCXX_ERRORCOUNT); }
-            THEN("Check infomation about function has body list")
-            {
-                REQUIRE(MyFunction::getHasBodyOfFunctionMap(funcmessagemap).size() == TESTCXX_DEFINEDFUNC);
-            }
-            THEN("Check infomation about function no body list")
-            {
-                REQUIRE(MyFunction::getNoHasBodyOfFunctionmap(funcmessagemap).size() == TESTCXX_NOBODYFUNC);
-            }
+        THEN("Check infomation about source code funcdecl With CallExpr")
+        {
+            REQUIRE(funcmessagemap.size() == TESTCXX_FUNCTIONCOUNT);
+        }
+        THEN("Check infomation about error info") { REQUIRE(errormessage.size() == TESTCXX_ERRORCOUNT); }
+        THEN("Check infomation about function has body list")
+        {
+            REQUIRE(MyFunction::getHasBodyOfFunctionMap(funcmessagemap).size() == TESTCXX_DEFINEDFUNC);
+        }
+        THEN("Check infomation about function no body list")
+        {
+            REQUIRE(MyFunction::getNoHasBodyOfFunctionmap(funcmessagemap).size() == TESTCXX_NOBODYFUNC);
         }
     }
 }
