@@ -13,12 +13,12 @@ TEST_CASE("Test Level_'ID' analysis code tool functions Get normally", "[Source 
     REQUIRE(!analysisFilePath.empty());
     REQUIRE(!comipleCommandFilePath.empty());
 
-    std::string ID = "FuncDeclWithCallExpr";
+    std::string id = "FuncDeclWithCallExpr_v1";
     GIVEN("Source Code function ID")
     {
         WHEN("Try to obtain the Level_'ID' source code message function from factory")
         {
-            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(ID);
+            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(id);
             THEN("Check return value") { REQUIRE(fundeclanalysisptr != nullptr); }
         }
         WHEN("start analysis code infomation")
@@ -28,7 +28,7 @@ TEST_CASE("Test Level_'ID' analysis code tool functions Get normally", "[Source 
 
             THEN("start analysis and Check return value")
             {
-                auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(ID);
+                auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(id);
                 fundeclanalysisptr->setFilePathToAnalysis(analysisFilePath);
                 fundeclanalysisptr->setCompileDatabase(comipleCommandFilePath);
                 bool result = fundeclanalysisptr->startToAnalysisSourceCode(funcmessagemap, errormessage);

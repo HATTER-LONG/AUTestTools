@@ -12,9 +12,10 @@ int main(int argc, char* argv[])
 {
     help(argc);
 
-    auto sourceCodeMessagePtr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass("level_1");
+    auto sourceCodeMessagePtr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass("FuncDeclWithCallExpr_v1");
 
     sourceCodeMessagePtr->setCompileDatabase(std::string(argv[2]));
+    sourceCodeMessagePtr->setFilePathToAnalysis(std::string(argv[1]));
     MyFunction::SourceCodeFunctionMessageMap functionmessage;
     MyFunction::SourceCodeErrorMessageList errormessage;
     sourceCodeMessagePtr->startToAnalysisSourceCode(functionmessage, errormessage);
