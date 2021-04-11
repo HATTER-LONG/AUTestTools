@@ -26,26 +26,26 @@ class SourceCodeErrorAnalysis : public clang::DiagnosticConsumer
 {
 public:
     SourceCodeErrorAnalysis(SourceCodeErrorMessageList& ErrorMessageList)
-            : ErrorMessageListRef(ErrorMessageList)
+            : m_errorMessageListRef(ErrorMessageList)
     {
     }
     ~SourceCodeErrorAnalysis() override = default;
     void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel, const clang::Diagnostic& Info) override
     {
-        clang::SmallString<100> OutStr;
-        Info.FormatDiagnostic(OutStr);
+        clang::SmallString<100> outStr;
+        Info.FormatDiagnostic(outStr);
 
-        llvm::raw_svector_ostream DiagMessageStream(OutStr);
-        auto SourceLocal = clang::FullSourceLoc(Info.getLocation(), Info.getSourceManager()).getFileLoc();
-        int Line = SourceLocal.getLineNumber();
-        std::string filename(SourceLocal.getPresumedLoc().getFilename());
+        llvm::raw_svector_ostream diagMessageStream(outStr);
+        auto sourceLocal = clang::FullSourceLoc(Info.getLocation(), Info.getSourceManager()).getFileLoc();
+        int line = sourceLocal.getLineNumber();
+        std::string filename(sourceLocal.getPresumedLoc().getFilename());
 
         filename += ":";
-        filename += std::to_string(Line);
-        ErrorMessageListRef.push_back(SourceCodeErrorMessage(DiagLevel, DiagMessageStream.str().str(), filename));
+        filename += std::to_string(line);
+        m_errorMessageListRef.push_back(SourceCodeErrorMessage(DiagLevel, diagMessageStream.str().str(), filename));
     }
 
 private:
-    SourceCodeErrorMessageList& ErrorMessageListRef;
+    SourceCodeErrorMessageList& m_errorMessageListRef;
 };
 }   // namespace MyFunction

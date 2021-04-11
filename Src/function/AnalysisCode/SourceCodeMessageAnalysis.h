@@ -17,11 +17,11 @@ public:
     }
     ~SourceCodeMessageAnalysis() override = default;
 
-    void setFilePathToAnalysis(const std::string& Filepath) override { SourceCodeFilePath = Filepath; }
-    void setCompileDatabase(const std::string& Compiledatabase) override { CompiledDatabasePath = Compiledatabase; }
+    void setFilePathToAnalysis(const std::string& Filepath) override { m_sourceCodeFilePath = Filepath; }
+    void setCompileDatabase(const std::string& Compiledatabase) override { m_compiledDatabasePath = Compiledatabase; }
 
 protected:
-    void setMatchMethodAndCallBackFunc(DeclarationMatcherPtr Matcher) { MatcherWithCallBack = std::move(Matcher); };
+    void setMatchMethodAndCallBackFunc(DeclarationMatcherPtr Matcher) { m_matcherWithCallBack = std::move(Matcher); };
 
     bool startToAnalysisSourceCode(
         SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage) override;
@@ -33,10 +33,10 @@ private:
     void paramInitialize(std::vector<std::string>& ParamList);
 
 private:
-    std::string SourceCodeFilePath;
-    std::string CompiledDatabasePath;
+    std::string m_sourceCodeFilePath;
+    std::string m_compiledDatabasePath;
 
-    DeclarationMatcherPtr MatcherWithCallBack;
+    DeclarationMatcherPtr m_matcherWithCallBack;
 };
 
 }   // namespace MyFunction
