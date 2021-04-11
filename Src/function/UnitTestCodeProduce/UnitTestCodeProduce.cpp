@@ -12,7 +12,7 @@ string UnitTestCodeProduceFunc::createMockSourceCode(const MyFunction::SourceCod
     string returnValue;
     getFuncReturnValue(returnValue, Info.getFunctionParam()[0]);
 
-    string functionCode = FunctionTemplate;
+    string functionCode = functionTemplate;
     subreplace(functionCode, "${PARAMRETURN}", Info.getFunctionParam()[0]);
     subreplace(functionCode, "${FUNCTIONNAME}", Info.getFunctionName());
     subreplace(functionCode, "${PARAM}", functionParam);
@@ -58,7 +58,7 @@ void UnitTestCodeProduceFunc::getFuncReturnValue(string& ReturnValue, const stri
 
 string UnitTestCodeProduceFunc::createUnitTestCode(const MyFunction::SourceCodeFunctionMessage& Func, const UnitTestInfo& Info)
 {
-    string unitTestCode = CatchUnitTestCaseTemplate;
+    string unitTestCode = catchUnitTestCaseTemplate;
     string unitTestSectionCode;
     for (const auto& a : Info.m_testSection)
     {
@@ -79,7 +79,7 @@ string UnitTestCodeProduceFunc::createUnitTestCode(const MyFunction::SourceCodeF
 string UnitTestCodeProduceFunc::getSectionCode(
     const MyFunction::SourceCodeFunctionMessage& Func, const UnitTestSectionInfo& SectionInfo)
 {
-    string tmpSectionCode = CatchUnitTestSectionTemplate;
+    string tmpSectionCode = catchUnitTestSectionTemplate;
     subreplace(tmpSectionCode, "${SECTIONNAME}", SectionInfo.m_sectionName);
 
     string tmpFuncCallName = Func.getFunctionName();

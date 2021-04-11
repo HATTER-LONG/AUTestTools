@@ -72,6 +72,12 @@ using FunctionCallExprList = std::vector<std::string>;
 class SourceCodeFunctionMessage
 {
 public:
+    enum FUNCTYPE
+    {
+        CXXMEMBER = 0,   // c++ 类成员
+        CTYPE,           // C 函数
+        TOTAL
+    };
     /**
      * @brief Construct a new Source Code Function Message object
      *
@@ -79,10 +85,12 @@ public:
      * @param Functionparam
      * @param HasFuncBody
      */
-    SourceCodeFunctionMessage(std::string Functionname, std::vector<std::string> Functionparam, bool HasFuncBody)
+    SourceCodeFunctionMessage(
+        std::string Functionname, std::vector<std::string> Functionparam, bool HasFuncBody, FUNCTYPE FuncType)
             : m_functionName(Functionname)
             , m_functionParam(Functionparam)
             , m_hasBody(HasFuncBody)
+            , m_funcType(FuncType)
     {
     }
     /**
@@ -121,11 +129,19 @@ public:
      */
     const bool getFunctionHasBodyInfo() const noexcept { return m_hasBody; }
 
+    /**
+     * @brief Get the Function Type
+     *
+     * @return FUNCTYPE CType or CxxMember
+     */
+    const FUNCTYPE getFunctionType() const noexcept { return m_funcType; };
+
 private:
     std::string m_functionName;
     FunctionParamList m_functionParam;
     FunctionCallExprList m_functionCallExpr;
     bool m_hasBody;
+    FUNCTYPE m_funcType;
 };
 
 /**

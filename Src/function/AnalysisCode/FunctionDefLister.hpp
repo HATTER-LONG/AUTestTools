@@ -2,7 +2,6 @@
 #include "SourceCodeMatcherBase.h"
 #include "function/AnalysisMessage.h"
 
-#include <spdlog/common.h>
 namespace MyFunction
 {
 class FunctionDefLister : public DeclarationMatcherCallBackBase
@@ -20,7 +19,7 @@ public:
                 .bind("FunctionDecl");
     }
     // clang-format on
-
+    // functionDecl(cxxMethodDecl(), matchesName("MyTestNameSpace2"))
     FunctionDefLister(SourceCodeFunctionMessageMap& Ref)
             : m_functionMessageRef(Ref)
     {
@@ -68,7 +67,9 @@ public:
         getParams(functionparms, Func);
         return m_functionMessageRef
             .insert(SourceCodeFunctionMessageMap::value_type(
-                functionname, SourceCodeFunctionMessage(functionname, functionparms, Func->hasBody())))
+                functionname, SourceCodeFunctionMessage(functionname, functionparms, Func->hasBody(),
+                                  Func->isCXXClassMember() ? SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER
+                                                           : SourceCodeFunctionMessage::FUNCTYPE::CTYPE)))
             .first;
     }
 

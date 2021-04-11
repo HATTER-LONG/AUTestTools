@@ -24,6 +24,7 @@ set(PROJECTNAME automatedtools_unittests)
 add_executable(${PROJECTNAME} ${AUTESTSRC})
 clang_target_link(${PROJECTNAME} PRIVATE ${LOCAL_LINK_LIB})
 
+add_subdirectory(TrainingCode)
 
 #----------------------------------------------------
 #******************** 工具可以打印出 target 的属性 ************************************

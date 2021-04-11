@@ -48,25 +48,25 @@ inline const string getFunctionName(const string& SrcStr)
     return "";
 }
 
-static string CppFunctionTemplate = "\n\
+static string cppFunctionTemplate = "\n\
 ${PARAMRETURN} ${CLASSNAME}::${FUNCTIONNAME}(${PARAM})\n\
 {\n\
     ${RETURNVALUE}\n\
 }";
 
-static string FunctionTemplate = "\n\
+static string functionTemplate = "\n\
 ${PARAMRETURN} ${FUNCTIONNAME}(${PARAM})\n\
 {\n\
     ${RETURNVALUE}\n\
 }";
 
-static string CatchUnitTestCaseTemplate = "\n\
+static string catchUnitTestCaseTemplate = "\n\
 TEST_CASE(\"${TESTNAME}\",\"${TESTTAGS}\") \n\
 {\
     ${TESTSECTION}\
 }";
 
-static string CatchUnitTestSectionTemplate = "\n\
+static string catchUnitTestSectionTemplate = "\n\
     SECTION(\"${SECTIONNAME}\")\n\
     {\
         REQUIRE(${SECTIONCHECK})\n\
