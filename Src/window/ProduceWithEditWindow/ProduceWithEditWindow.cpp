@@ -98,13 +98,13 @@ void ProduceWithEditWindow::createUnitTestCodeButtonClicked()
     MyFunction::UnitTestCodeProduceFunc produceCode;
 
     MyFunction::UnitTestSectionInfo unitTestSectionInfo;
-    unitTestSectionInfo.SectionName = SectionSetEdit->text().toStdString();
-    unitTestSectionInfo.CheckInfo = SectionCheckEdit->text().toStdString();
+    unitTestSectionInfo.m_sectionName = SectionSetEdit->text().toStdString();
+    unitTestSectionInfo.m_checkInfo = SectionCheckEdit->text().toStdString();
 
     MyFunction::UnitTestInfo unitTestinfo;
-    unitTestinfo.TestSection.emplace_back(unitTestSectionInfo);
-    unitTestinfo.TestName = TestNameEdit->text().toStdString();
-    getTagName(unitTestinfo.TestTags);
+    unitTestinfo.m_testSection.emplace_back(unitTestSectionInfo);
+    unitTestinfo.m_testName = TestNameEdit->text().toStdString();
+    getTagName(unitTestinfo.m_testTags);
 
     auto iter = FunctionMessageMap.find(FuncNameHasSelected);
     if (iter != FunctionMessageMap.end())
