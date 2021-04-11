@@ -2,13 +2,9 @@ cmake_minimum_required(VERSION 3.5)
 
 project(Automated_UnitTest_Tools LANGUAGES CXX)
 
-# 1. QT 以及 C++ 环境相关配置
+# 1. C++ 环境相关配置
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
@@ -17,13 +13,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Wall -pedantic)
 
 find_package(Threads)
-find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
-set(QT5_LINK_LIBRARY Qt5::Widgets Qt5::Core Qt5::Gui)
-
-## QT 资源文件添加
-file(GLOB_RECURSE QRC_SOURCE_FILES "./*.qrc")
-set(QRC_SOURCE_FILES image.qrc)
-qt5_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
 
 # 2. Clang 库配置 提供库 Target 以及头文件路径标识 ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS}
 find_package(Clang REQUIRED CONFIG)
@@ -40,7 +29,7 @@ add_definitions(${LocalLibClang_DEFINITIONS})
 set(CLANG_LINK_LIBRARIES clangTooling)
 
 # 3. 添加本地库与头文件搜索路径
-set(LOCAL_LINK_LIB ${LocalLib} ${QT5_LINK_LIBRARY}  ${CLANG_LINK_LIBRARIES} pthread)
+set(LOCAL_LINK_LIB   ${CLANG_LINK_LIBRARIES} pthread)
 
 find_package(spdlog QUIET CONFIG)
 if(spdlog_FOUND)
@@ -51,6 +40,14 @@ elseif(spdlog_FOUND)
     add_subdirectory(Lib)
     include_directories(Lib/spdlog)
 endif(spdlog_FOUND)
+
+#find_package(GTest QUIET CONFIG)
+find_package(Catch2 QUIET CONFIG)
+
+if(NOT Catch2_FOUND)
+    include_directories(Lib/catch2)
+endif(NOT Catch2_FOUND)
+
 ## 指定头文件、库查找路径
 include_directories(Include)
 link_directories(Lib)

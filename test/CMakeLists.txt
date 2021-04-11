@@ -1,11 +1,4 @@
 message(STATUS "Config unittest current dir is ${CMAKE_CURRENT_SOURCE_DIR}")
-#find_package(GTest QUIET CONFIG)
-find_package(Catch2 QUIET CONFIG)
-
-if(NOT Catch2_FOUND)
-    message(WARNING "Catch2 not found skip unittests")
-    return()
-endif(NOT Catch2_FOUND)
 
 FILE(GLOB AUTESTSRC 
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" 
