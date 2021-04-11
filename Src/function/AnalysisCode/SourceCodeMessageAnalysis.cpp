@@ -1,13 +1,12 @@
-#include "FunctionDefLister.hpp"
 #include "SourceCodeMessageAnalysis.h"
 #include "function/utilities.h"
+#include "spdlog/spdlog.h"
 
 #include <algorithm>
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
 #include <memory>
-#include <spdlog/spdlog.h>
 
 static llvm::cl::OptionCategory fltCat("func-decl-list-am");
 namespace MyFunction

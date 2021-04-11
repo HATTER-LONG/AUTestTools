@@ -19,7 +19,7 @@ public:
                 .bind("FunctionDecl");
     }
     // clang-format on
-    // functionDecl(cxxMethodDecl(), matchesName("MyTestNameSpace2"))
+
     FunctionDefLister(SourceCodeFunctionMessageMap& Ref)
             : m_functionMessageRef(Ref)
     {

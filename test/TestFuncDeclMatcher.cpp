@@ -5,10 +5,10 @@
 #include "function/utilities.h"
 #include "spdlog/spdlog.h"
 
-class AnalysisTools
+class FuncDefListernAnalysisTools
 {
 public:
-    AnalysisTools()
+    FuncDefListernAnalysisTools()
     {
         REQUIRE(!m_analysisFilePath.empty());
         REQUIRE(!m_comipleCommandFilePath.empty());
@@ -18,7 +18,7 @@ public:
     std::string m_id { "FuncDeclWithCallExpr_v1" };
 };
 
-TEST_CASE_METHOD(AnalysisTools, "Test analysis code tool functions Get normally", "[Source code analysis function]")
+TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions Get normally", "[Source code analysis function]")
 {
     GIVEN("Source Code function ID")
     {
@@ -30,7 +30,7 @@ TEST_CASE_METHOD(AnalysisTools, "Test analysis code tool functions Get normally"
     }
 }
 
-TEST_CASE_METHOD(AnalysisTools, "Test analysis code tool functions normally", "[Source code analysis function]")
+TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions normally", "[Source code analysis function]")
 {
     WHEN("start analysis code infomation")
     {

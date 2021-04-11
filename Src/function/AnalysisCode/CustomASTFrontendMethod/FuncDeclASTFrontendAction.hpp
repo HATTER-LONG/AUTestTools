@@ -43,7 +43,9 @@ public:
 
                 iter = FunctionMessageRef
                            .insert(SourceCodeFunctionMessageMap::value_type(
-                               functionname, SourceCodeFunctionMessage(functionname, functionparms, functionDecl->hasBody())))
+                               functionname, SourceCodeFunctionMessage(functionname, functionparms, functionDecl->hasBody(),
+                                                 functionDecl->isCXXClassMember() ? SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER
+                                                                                  : SourceCodeFunctionMessage::FUNCTYPE::CTYPE)))
                            .first;
             }
             if (auto const* callexprdec = Result.Nodes.getNodeAs<clang::CallExpr>("callExprFunction"))
@@ -58,7 +60,9 @@ public:
                     functionparms.push_back(func->getReturnType().getAsString());
                     getParams(functionparms, func);
                     FunctionMessageRef.insert(SourceCodeFunctionMessageMap::value_type(
-                        functionname, SourceCodeFunctionMessage(functionname, functionparms, func->hasBody())));
+                        functionname, SourceCodeFunctionMessage(functionname, functionparms, func->hasBody(),
+                                          func->isCXXClassMember() ? SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER
+                                                                   : SourceCodeFunctionMessage::FUNCTYPE::CTYPE)));
                 }
                 iter->second.addFunctionWhichCallExpr(func->getQualifiedNameAsString());
             }
