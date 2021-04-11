@@ -7,8 +7,8 @@
 #define TESTCXX_FUNCTIONCOUNT 4
 #define TESTCXX_DEFINEDFUNC 3
 #define TESTCXX_NOBODYFUNC 1
-static std::vector<std::string> DefinedFuncNameList { "SimpleFunction", "TrainCallOtherFunction", "headFileDefinedFunc" };
-static std::vector<std::string> NoneBodyFuncNameList { "externFunctionHasNoBody" };
+static std::vector<std::string> definedFuncNameList { "SimpleFunction", "TrainCallOtherFunction", "headFileDefinedFunc" };
+static std::vector<std::string> noneBodyFuncNameList { "externFunctionHasNoBody" };
 inline int headFileDefinedFunc()
 {
     return 0;

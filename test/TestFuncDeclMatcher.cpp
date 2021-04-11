@@ -47,17 +47,11 @@ TEST_CASE_METHOD(AnalysisTools, "Test analysis code tool functions normally", "[
             REQUIRE(result == true);
         }
 
-        THEN("Check infomation about source code funcdecl With CallExpr")
+        THEN("Check infomation about source code")
         {
             REQUIRE(funcmessagemap.size() == TESTCXX_FUNCTIONCOUNT);
-        }
-        THEN("Check infomation about error info") { REQUIRE(errormessage.size() == TESTCXX_ERRORCOUNT); }
-        THEN("Check infomation about function has body list")
-        {
+            REQUIRE(errormessage.size() == TESTCXX_ERRORCOUNT);
             REQUIRE(MyFunction::getHasBodyOfFunctionMap(funcmessagemap).size() == TESTCXX_DEFINEDFUNC);
-        }
-        THEN("Check infomation about function no body list")
-        {
             REQUIRE(MyFunction::getNoHasBodyOfFunctionmap(funcmessagemap).size() == TESTCXX_NOBODYFUNC);
         }
     }

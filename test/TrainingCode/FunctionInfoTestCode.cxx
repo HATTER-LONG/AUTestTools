@@ -1,20 +1,18 @@
 #include "FunctionInfoTestCode.h"
 
-extern int externFunctionHasNoBody(int param);
+extern int externFunctionHasNoBody(int Param);
 
-
-
-int simpleFunction(int unuseparam)
+int simpleFunction(int Param)
 {
     int unuse = 0;
     return 0;
 }
 
-int trainCallOtherFunction(int param)
+int trainCallOtherFunction(int Param)
 {
-    externFunctionHasNoBody(param);
+    externFunctionHasNoBody(Param);
     headFileDefinedFunc();
-    simpleFunction(param);
+    simpleFunction(Param);
     return 0;
 }
 
