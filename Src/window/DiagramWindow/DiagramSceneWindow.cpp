@@ -67,7 +67,8 @@ void DiagramSceneWindow::backgroundButtonGroupClicked(QAbstractButton* Button)
     QList<QAbstractButton*> buttons = BackgroundButtonGroup->buttons();
     foreach (QAbstractButton* myButton, buttons)
     {
-        if (myButton != Button) Button->setChecked(false);
+        if (myButton != Button)
+            Button->setChecked(false);
     }
     QString text = Button->text();
     if (text == tr("Blue Grid"))
@@ -90,9 +91,13 @@ void DiagramSceneWindow::buttonGroupClicked(int Id)
     QList<QAbstractButton*> buttons = ButtonGroup->buttons();
     foreach (QAbstractButton* button, buttons)
     {
-        if (ButtonGroup->button(Id) != button) button->setChecked(false);
+        if (ButtonGroup->button(Id) != button)
+            button->setChecked(false);
     }
-    if (Id == InsertTextButton) { MyDiagramScene->setMode(DiagramScene::InsertText); }
+    if (Id == InsertTextButton)
+    {
+        MyDiagramScene->setMode(DiagramScene::InsertText);
+    }
     else
     {
         MyDiagramScene->setItemType(DiagramItem::DiagramType(Id));
@@ -117,7 +122,10 @@ void DiagramSceneWindow::deleteItem()
 
     foreach (QGraphicsItem* item, MyDiagramScene->selectedItems())
     {
-        if (item->type() == DiagramItem::Type) { qgraphicsitem_cast<DiagramItem*>(item)->removeArrows(); }
+        if (item->type() == DiagramItem::Type)
+        {
+            qgraphicsitem_cast<DiagramItem*>(item)->removeArrows();
+        }
 
         if (item->parentItem() == Q_NULLPTR)
         {
@@ -142,7 +150,8 @@ void DiagramSceneWindow::bringToFront()
 {
     spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
 
-    if (MyDiagramScene->selectedItems().isEmpty()) return;
+    if (MyDiagramScene->selectedItems().isEmpty())
+        return;
 
     QGraphicsItem* selectedItem = MyDiagramScene->selectedItems().first();
     QList<QGraphicsItem*> overlapItems = selectedItem->collidingItems();
@@ -150,7 +159,8 @@ void DiagramSceneWindow::bringToFront()
     qreal zValue = 0;
     foreach (QGraphicsItem* item, overlapItems)
     {
-        if (item->zValue() >= zValue && item->type() == DiagramItem::Type) zValue = item->zValue() + 0.1;
+        if (item->zValue() >= zValue && item->type() == DiagramItem::Type)
+            zValue = item->zValue() + 0.1;
     }
     selectedItem->setZValue(zValue);
 }
@@ -159,7 +169,8 @@ void DiagramSceneWindow::sendToBack()
 {
     spdlog::info("{}:{}:{} Call!!!", __FILE__, __FUNCTION__, __LINE__);
 
-    if (MyDiagramScene->selectedItems().isEmpty()) return;
+    if (MyDiagramScene->selectedItems().isEmpty())
+        return;
 
     QGraphicsItem* selectedItem = MyDiagramScene->selectedItems().first();
     QList<QGraphicsItem*> overlapItems = selectedItem->collidingItems();
@@ -167,7 +178,8 @@ void DiagramSceneWindow::sendToBack()
     qreal zValue = 0;
     foreach (QGraphicsItem* item, overlapItems)
     {
-        if (item->zValue() <= zValue && item->type() == DiagramItem::Type) zValue = item->zValue() - 0.1;
+        if (item->zValue() <= zValue && item->type() == DiagramItem::Type)
+            zValue = item->zValue() - 0.1;
     }
     selectedItem->setZValue(zValue);
 }
@@ -479,7 +491,8 @@ QMenu* DiagramSceneWindow::createColorMenu(const char* Slot, QColor DefaultColor
         action->setIcon(createColorIcon(colors.at(i)));
         connect(action, SIGNAL(triggered()), this, Slot);
         colorMenu->addAction(action);
-        if (colors.at(i) == DefaultColor) colorMenu->setDefaultAction(action);
+        if (colors.at(i) == DefaultColor)
+            colorMenu->setDefaultAction(action);
     }
     return colorMenu;
 }
@@ -576,7 +589,8 @@ void DiagramSceneWindow::drawResultByCodeMessage(const MyFunction::SourceCodeFun
         for (auto b = functionparam.begin() + 1; b != functionparam.end(); b++)
         {
             showText += *b;
-            if (b != functionparam.end() - 1) showText += ", ";
+            if (b != functionparam.end() - 1)
+                showText += ", ";
         }
         showText += ")";
 
@@ -612,7 +626,8 @@ void DiagramSceneWindow::drawResultByCodeMessage(const MyFunction::SourceCodeFun
             for (auto b = functionparam.begin() + 1; b != functionparam.end(); b++)
             {
                 showText += *b;
-                if (b != functionparam.end() - 1) showText += ", ";
+                if (b != functionparam.end() - 1)
+                    showText += ", ";
             }
             showText += ")";
             tmpItemcall->setItemText(QString(showText.c_str()));

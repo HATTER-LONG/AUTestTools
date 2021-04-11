@@ -27,6 +27,7 @@ qt5_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
 
 # 2. Clang 库配置 提供库 Target 以及头文件路径标识 ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS}
 find_package(Clang REQUIRED CONFIG)
+# TODO: 增加判断逻辑是否由一些 clang 头文件，或者使用环境变量来获取
 set(CLANG_INCLUDE_DIR1 ${CLANG_INSTALL_PREFIX}/include/c++/v1/)
 set(CLANG_INCLUDE_DIR2 ${CLANG_INSTALL_PREFIX}/lib/clang/11.0.0/include/)
 set(CLANG_ANALYSIS_ARGS_APPEND "-isystem ${CLANG_INCLUDE_DIR1} -isystem ${CLANG_INCLUDE_DIR2} -stdlib=libc++")

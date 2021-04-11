@@ -5,6 +5,7 @@
 #include "function/SourceCodeAnalysisFunc.h"
 
 #include <QMainWindow>
+#include <qmenu.h>
 class DiagramSceneWindow;
 class ProduceWithEditWindow;
 QT_BEGIN_NAMESPACE
@@ -40,7 +41,6 @@ private:
     QMenu* FileMenu;
     QMenu* ItemMenu;
     QMenu* AboutInfoMenu;
-
     std::unique_ptr<MyFunction::SourceCodeAnalysisFunc> SourceCodeMessagePtr;
     MyFunction::SourceCodeFunctionMessageMap FunctionMessageMap;
     MyFunction::SourceCodeErrorMessageList ErrorMessageList;

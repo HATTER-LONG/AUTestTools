@@ -13,3 +13,18 @@ inline int headFileDefinedFunc()
 {
     return 0;
 }
+
+class HeadFileDefinedClass
+{
+public:
+    HeadFileDefinedClass() = default;
+    ~HeadFileDefinedClass() = default;
+
+public:
+    bool classPublicFuncWithInline() { return true; }
+    bool classPublicFuncWithNormalDef();
+
+private:
+    bool classPrivateFuncWithInline() { return false; }
+    bool classPrivateFuncWithNormalDef();
+};
