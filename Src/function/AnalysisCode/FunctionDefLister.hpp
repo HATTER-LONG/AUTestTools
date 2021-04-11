@@ -22,20 +22,20 @@ public:
     // clang-format on
 
     FunctionDefLister(SourceCodeFunctionMessageMap& Ref)
-            : FunctionMessageRef(Ref)
+            : m_functionMessageRef(Ref)
     {
     }
 
 
     virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
     {
-        clang::LangOptions LangOpts;
-        LangOpts.CPlusPlus = true;
-        clang::PrintingPolicy Policy(LangOpts);
+        clang::LangOptions langOpts;
+        langOpts.CPlusPlus = true;
+        clang::PrintingPolicy policy(langOpts);
         if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("FunctionDecl"))
         {
-            auto iter = FunctionMessageRef.find(functionDecl->getQualifiedNameAsString());
-            if (iter == FunctionMessageRef.end())
+            auto iter = m_functionMessageRef.find(functionDecl->getQualifiedNameAsString());
+            if (iter == m_functionMessageRef.end())
             {
                 std::string functionname;
                 std::vector<std::string> functionparms;
@@ -48,8 +48,11 @@ public:
             {
                 if (const auto* func = callexprdec->getDirectCallee())
                 {
-                    auto callexprIter = FunctionMessageRef.find(func->getQualifiedNameAsString());
-                    if (callexprIter == FunctionMessageRef.end()) { insertFuncToMapRef(func); }
+                    auto callexprIter = m_functionMessageRef.find(func->getQualifiedNameAsString());
+                    if (callexprIter == m_functionMessageRef.end())
+                    {
+                        insertFuncToMapRef(func);
+                    }
                     iter->second.addFunctionWhichCallExpr(func->getQualifiedNameAsString());
                 }
             }
@@ -63,7 +66,7 @@ public:
         functionname = Func->getQualifiedNameAsString();
         functionparms.push_back(Func->getReturnType().getAsString());
         getParams(functionparms, Func);
-        return FunctionMessageRef
+        return m_functionMessageRef
             .insert(SourceCodeFunctionMessageMap::value_type(
                 functionname, SourceCodeFunctionMessage(functionname, functionparms, Func->hasBody())))
             .first;
@@ -71,14 +74,14 @@ public:
 
     void getParams(FunctionParamList& Functionparms, const clang::FunctionDecl* Func)
     {
-        clang::LangOptions LangOpts;
-        LangOpts.CPlusPlus = true;
-        clang::PrintingPolicy Policy(LangOpts);
+        clang::LangOptions langOpts;
+        langOpts.CPlusPlus = true;
+        clang::PrintingPolicy policy(langOpts);
         for (unsigned int i = 0; i < Func->getNumParams(); i++)
         {
             std::string paramwithname;
             const auto* param = Func->getParamDecl(i);
-            paramwithname += clang::QualType::getAsString(param->getType().split(), Policy);
+            paramwithname += clang::QualType::getAsString(param->getType().split(), policy);
             // paramwithname += "  ";
             // paramwithname += func->getParamDecl(i)->getNameAsString();
             Functionparms.push_back(paramwithname);
@@ -86,7 +89,7 @@ public:
     }
 
 private:
-    SourceCodeFunctionMessageMap& FunctionMessageRef;
+    SourceCodeFunctionMessageMap& m_functionMessageRef;
 };
 
 }   // namespace MyFunction

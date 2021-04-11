@@ -37,13 +37,19 @@ void UnitTestCodeProduceFunc::getParamList(string& FunctionParam, const MyFuncti
     for (size_t i = 1; i < Info.size(); i++)
     {
         FunctionParam += (Info[i] + " arg" + to_string(i));
-        if (i != Info.size() - 1) { FunctionParam += ", "; }
+        if (i != Info.size() - 1)
+        {
+            FunctionParam += ", ";
+        }
     }
 }
 
 void UnitTestCodeProduceFunc::getFuncReturnValue(string& ReturnValue, const string& ReturnType)
 {
-    if (ReturnType == "void") { ReturnValue = ""; }
+    if (ReturnType == "void")
+    {
+        ReturnValue = "";
+    }
     else
     {
         ReturnValue = "return " + ReturnType + "();";
@@ -54,19 +60,19 @@ string UnitTestCodeProduceFunc::createUnitTestCode(const MyFunction::SourceCodeF
 {
     string unitTestCode = CatchUnitTestCaseTemplate;
     string unitTestSectionCode;
-    for (const auto& a : Info.TestSection)
+    for (const auto& a : Info.m_testSection)
     {
         unitTestSectionCode += getSectionCode(Func, a);
     }
     subreplace(unitTestCode, "${TESTSECTION}", unitTestSectionCode);
 
     string tmpTestTag;
-    for (const auto& a : Info.TestTags)
+    for (const auto& a : Info.m_testTags)
     {
         tmpTestTag += "[" + a + "]";
     }
     subreplace(unitTestCode, "${TESTTAGS}", tmpTestTag);
-    subreplace(unitTestCode, "${TESTNAME}", Info.TestName);
+    subreplace(unitTestCode, "${TESTNAME}", Info.m_testName);
     return (unitTestCode);
 }
 
@@ -74,13 +80,13 @@ string UnitTestCodeProduceFunc::getSectionCode(
     const MyFunction::SourceCodeFunctionMessage& Func, const UnitTestSectionInfo& SectionInfo)
 {
     string tmpSectionCode = CatchUnitTestSectionTemplate;
-    subreplace(tmpSectionCode, "${SECTIONNAME}", SectionInfo.SectionName);
+    subreplace(tmpSectionCode, "${SECTIONNAME}", SectionInfo.m_sectionName);
 
     string tmpFuncCallName = Func.getFunctionName();
     string tmpFuncParam;
     getParamList(tmpFuncParam, Func.getFunctionParam());
     tmpFuncCallName += "(" + tmpFuncParam + ")";
-    subreplace(tmpSectionCode, "${SECTIONCHECK}", tmpFuncCallName + SectionInfo.CheckInfo);
+    subreplace(tmpSectionCode, "${SECTIONCHECK}", tmpFuncCallName + SectionInfo.m_checkInfo);
 
     return tmpSectionCode;
 }

@@ -21,9 +21,9 @@ public:
      * @param errorpos
      */
     SourceCodeErrorMessage(int Errorlevel, std::string Errormessage, std::string Errorpos)
-            : ErrorLevel(Errorlevel)
-            , ErrorMessage(Errormessage)
-            , ErrorPos(Errorpos)
+            : m_errorLevel(Errorlevel)
+            , m_errorMessage(Errormessage)
+            , m_errorPos(Errorpos)
     {
     }
 
@@ -32,26 +32,26 @@ public:
      *
      * @return int
      */
-    int getErrorLevel() const noexcept { return ErrorLevel; }
+    int getErrorLevel() const noexcept { return m_errorLevel; }
 
     /**
      * @brief Get the Error Message object
      *
      * @return std::string
      */
-    std::string getErrorMessage() const noexcept { return ErrorMessage; }
+    std::string getErrorMessage() const noexcept { return m_errorMessage; }
 
     /**
      * @brief Get the Error Pos object
      *
      * @return std::string
      */
-    std::string getErrorPos() const noexcept { return ErrorPos; }
+    std::string getErrorPos() const noexcept { return m_errorPos; }
 
 private:
-    int ErrorLevel;
-    std::string ErrorMessage;
-    std::string ErrorPos;
+    int m_errorLevel;
+    std::string m_errorMessage;
+    std::string m_errorPos;
 };
 /**
  * @brief 记录函数方法参数信息列表
@@ -80,9 +80,9 @@ public:
      * @param HasFuncBody
      */
     SourceCodeFunctionMessage(std::string Functionname, std::vector<std::string> Functionparam, bool HasFuncBody)
-            : FunctionName(Functionname)
-            , FunctionParam(Functionparam)
-            , HasBody(HasFuncBody)
+            : m_functionName(Functionname)
+            , m_functionParam(Functionparam)
+            , m_hasBody(HasFuncBody)
     {
     }
     /**
@@ -90,28 +90,28 @@ public:
      *
      * @param callexprname
      */
-    void addFunctionWhichCallExpr(std::string Callexprname) { FunctionCallExpr.push_back(Callexprname); }
+    void addFunctionWhichCallExpr(std::string Callexprname) { m_functionCallExpr.push_back(Callexprname); }
 
     /**
      * @brief Get the Function Name object
      *
      * @return const std::string
      */
-    const std::string getFunctionName() const noexcept { return FunctionName; }
+    const std::string getFunctionName() const noexcept { return m_functionName; }
 
     /**
      * @brief Get the Function Param object
      *
      * @return const FunctionParamList&
      */
-    const FunctionParamList& getFunctionParam() const noexcept { return FunctionParam; }
+    const FunctionParamList& getFunctionParam() const noexcept { return m_functionParam; }
 
     /**
      * @brief Get the Function Which Call Expr object
      *
      * @return const FunctionCallExprList&
      */
-    const FunctionCallExprList& getFunctionWhichCallExpr() const noexcept { return FunctionCallExpr; }
+    const FunctionCallExprList& getFunctionWhichCallExpr() const noexcept { return m_functionCallExpr; }
 
     /**
      * @brief Get the Function Has Body Info object
@@ -119,13 +119,13 @@ public:
      * @return true Has Function Body
      * @return false  None Function Body
      */
-    const bool getFunctionHasBodyInfo() const noexcept { return HasBody; }
+    const bool getFunctionHasBodyInfo() const noexcept { return m_hasBody; }
 
 private:
-    std::string FunctionName;
-    FunctionParamList FunctionParam;
-    FunctionCallExprList FunctionCallExpr;
-    bool HasBody;
+    std::string m_functionName;
+    FunctionParamList m_functionParam;
+    FunctionCallExprList m_functionCallExpr;
+    bool m_hasBody;
 };
 
 /**

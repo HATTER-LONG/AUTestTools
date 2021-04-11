@@ -58,8 +58,8 @@ public:
      */
     void registerClassWithId(IProductClassRegistrar<CustomProductType_t>* Registry, std::string ID)
     {
-        auto iter = MProductClassRegistry.find(ID);
-        if (iter != MProductClassRegistry.end())
+        auto iter = m_mProductClassRegistry.find(ID);
+        if (iter != m_mProductClassRegistry.end())
         {
             spdlog::warn("[{}] Error with Repeatedly insert the class with "
                          "ID[{}] into the factory, pls check it",
@@ -67,7 +67,7 @@ public:
 
             return;
         }
-        MProductClassRegistry[ID] = Registry;
+        m_mProductClassRegistry[ID] = Registry;
     }
 
     /**
@@ -78,7 +78,10 @@ public:
      */
     std::unique_ptr<CustomProductType_t> getProductClass(std::string ID)
     {
-        if (MProductClassRegistry.find(ID) != MProductClassRegistry.end()) { return MProductClassRegistry[ID]->createProduct(); }
+        if (m_mProductClassRegistry.find(ID) != m_mProductClassRegistry.end())
+        {
+            return m_mProductClassRegistry[ID]->createProduct();
+        }
         spdlog::warn("[{}] No product class found for ID[{}]", __FUNCTION__, ID.c_str());
         return std::unique_ptr<CustomProductType_t>(nullptr);
     }
@@ -90,10 +93,10 @@ public:
      */
     void removeProductClassByID(std::string ProduceId)
     {
-        auto iter = MProductClassRegistry.find(ProduceId);
-        if (iter != MProductClassRegistry.end())
+        auto iter = m_mProductClassRegistry.find(ProduceId);
+        if (iter != m_mProductClassRegistry.end())
         {
-            MProductClassRegistry.erase(iter);
+            m_mProductClassRegistry.erase(iter);
             return;
         }
         spdlog::warn("[{}] remove the produce ID[{}] register failed that not "
@@ -111,7 +114,7 @@ private:
      * @brief 保存注册过的产品，key:产品名字 , value:产品类型存
      *
      */
-    std::map<std::string, IProductClassRegistrar<CustomProductType_t>*> MProductClassRegistry;
+    std::map<std::string, IProductClassRegistrar<CustomProductType_t>*> m_mProductClassRegistry;
 };
 
 /**
@@ -131,7 +134,7 @@ public:
      * @param ID
      */
     explicit ProductClassRegistrar(std::string ID)
-            : CustomProductImplID(ID)
+            : m_customProductImplId(ID)
     {
         ProductClassFactory<CustomProductType_t>::instance().registerClassWithId(this, ID);
     }
@@ -140,7 +143,10 @@ public:
      * TODO:[不应该在注册器中保存过多的信息，应该提供出基类模板供所有产品继承用于提供获取
      * produceID 信息]
      */
-    ~ProductClassRegistrar() { ProductClassFactory<CustomProductType_t>::instance().removeProductClassByID(CustomProductImplID); }
+    ~ProductClassRegistrar()
+    {
+        ProductClassFactory<CustomProductType_t>::instance().removeProductClassByID(m_customProductImplId);
+    }
     /**
      * @brief Create a Product object
      *
@@ -152,6 +158,6 @@ public:
     }
 
 private:
-    std::string CustomProductImplID;
+    std::string m_customProductImplId;
 };
 }   // namespace Infra

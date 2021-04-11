@@ -10,16 +10,16 @@ namespace MyFunction
 class UnitTestSectionInfo
 {
 public:
-    std::string SectionName;
-    std::string CheckInfo;
+    std::string m_sectionName;
+    std::string m_checkInfo;
 };
 
 class UnitTestInfo
 {
 public:
-    std::string TestName;
-    std::vector<std::string> TestTags;
-    std::vector<UnitTestSectionInfo> TestSection;
+    std::string m_testName;
+    std::vector<std::string> m_testTags;
+    std::vector<UnitTestSectionInfo> m_testSection;
 };
 
 class UnitTestCodeProduceFunc

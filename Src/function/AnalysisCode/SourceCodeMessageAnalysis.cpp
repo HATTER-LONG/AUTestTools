@@ -9,7 +9,7 @@
 #include <memory>
 #include <spdlog/spdlog.h>
 
-static llvm::cl::OptionCategory flt_cat("func-decl-list-am");
+static llvm::cl::OptionCategory fltCat("func-decl-list-am");
 namespace MyFunction
 {
 using CommonOptionsParserPtr = std::unique_ptr<clang::tooling::CommonOptionsParser>;
@@ -17,10 +17,10 @@ using CommonOptionsParserPtr = std::unique_ptr<clang::tooling::CommonOptionsPars
 void SourceCodeMessageAnalysis::paramInitialize(std::vector<std::string>& ParamList)
 {
     ParamList.emplace_back(std::string("__READY_TO_ANALYSIS__"));
-    ParamList.emplace_back(SourceCodeFilePath);
-    if (!CompiledDatabasePath.empty())
+    ParamList.emplace_back(m_sourceCodeFilePath);
+    if (!m_compiledDatabasePath.empty())
     {
-        std::string tmpstr = "-p=" + CompiledDatabasePath;
+        std::string tmpstr = "-p=" + m_compiledDatabasePath;
         ParamList.emplace_back(tmpstr);
     }
 }
@@ -40,7 +40,7 @@ CommonOptionsParserPtr SourceCodeMessageAnalysis::getCommonOptionsParser()
         argv[i] = paramList[i].c_str();
     }
     int argc = paramList.size();
-    return CommonOptionsParserPtr(std::make_unique<clang::tooling::CommonOptionsParser>(argc, argv, flt_cat));
+    return CommonOptionsParserPtr(std::make_unique<clang::tooling::CommonOptionsParser>(argc, argv, fltCat));
 }
 
 bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
@@ -51,18 +51,18 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
 
 bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(SourceCodeErrorMessageList& ErrorMessage)
 {
-    std::vector<std::string> SourceCodePathList;
-    SourceCodePathList.emplace_back(SourceCodeFilePath);
+    std::vector<std::string> sourceCodePathList;
+    sourceCodePathList.emplace_back(m_sourceCodeFilePath);
 
     auto commonOptionsParserVar = getCommonOptionsParser();
-    clang::tooling::ClangTool Tool(commonOptionsParserVar->getCompilations(), SourceCodePathList);
+    clang::tooling::ClangTool tool(commonOptionsParserVar->getCompilations(), sourceCodePathList);
     clang::tooling::ArgumentsAdjuster ardj1 = clang::tooling::getInsertArgumentAdjuster(MyFunction::CLANG_ARGS2APPEND.c_str());
-    Tool.appendArgumentsAdjuster(ardj1);
+    tool.appendArgumentsAdjuster(ardj1);
 
     clang::ast_matchers::MatchFinder finder;
-    if (MatcherWithCallBack != nullptr)
+    if (m_matcherWithCallBack != nullptr)
     {
-        finder.addMatcher(MatcherWithCallBack->matcher(), MatcherWithCallBack.get());
+        finder.addMatcher(m_matcherWithCallBack->matcher(), m_matcherWithCallBack.get());
     }
     else
     {
@@ -70,11 +70,11 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(SourceCodeErrorMessage
     }
 
     SourceCodeErrorAnalysis diagnosticConsumer(ErrorMessage);
-    Tool.setDiagnosticConsumer(&diagnosticConsumer);
-    int ret = Tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
+    tool.setDiagnosticConsumer(&diagnosticConsumer);
+    int ret = tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
     if (ret != 0)
     {
-        spdlog::info("[{}] error for analysis file[{}] errnocode[{}]", __FUNCTION__, SourceCodeFilePath, ret);
+        spdlog::info("[{}] error for analysis file[{}] errnocode[{}]", __FUNCTION__, m_sourceCodeFilePath, ret);
         return false;
     }
     return true;
