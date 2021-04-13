@@ -1,5 +1,13 @@
 message(STATUS "Config unittest current dir is ${CMAKE_CURRENT_SOURCE_DIR}")
 
+#find_package(GTest QUIET CONFIG)
+find_package(Catch2 QUIET CONFIG)
+if(Catch2_FOUND)
+    list(APPEND LOCAL_LINK_LIB Catch2::Catch2)
+else(Catch2_FOUND)
+    include_directories(Lib/catch2)
+endif(Catch2_FOUND)
+
 FILE(GLOB AUTESTSRC 
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx"
@@ -15,9 +23,6 @@ set(COMPILE_COMMANDS_FILEPATH ${CMAKE_BINARY_DIR})
 add_definitions(-D_CRT_SECURE_NO_WARNINGS 
                 -DTESTCODE_FULLPATH="${TESTCODE_FULLPATH}" 
                 -DCOMPILE_COMMANDS_FILEPATH="${COMPILE_COMMANDS_FILEPATH}")
-
-
-list(APPEND LOCAL_LINK_LIB Catch2::Catch2WithMain)
 
 set(PROJECTNAME automatedtools_unittests)
 

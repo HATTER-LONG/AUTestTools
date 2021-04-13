@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Wall -pedantic)
 
@@ -34,19 +34,16 @@ set(LOCAL_LINK_LIB   ${CLANG_LINK_LIBRARIES} pthread)
 find_package(spdlog QUIET CONFIG)
 if(spdlog_FOUND)
     list(APPEND LOCAL_LINK_LIB spdlog::spdlog)
-elseif(spdlog_FOUND)
-    ##通过通过静态链接使用 spdlog 库
-    add_definitions(-DSPDLOG_COMPILED_LIB)
-    add_subdirectory(Lib)
+else(spdlog_FOUND)
     include_directories(Lib/spdlog)
 endif(spdlog_FOUND)
 
-#find_package(GTest QUIET CONFIG)
-find_package(Catch2 QUIET CONFIG)
-
-if(NOT Catch2_FOUND)
-    include_directories(Lib/catch2)
-endif(NOT Catch2_FOUND)
+find_package(nlohmann_json REQUIRED CONFIG)
+if(nlohmann_json_FOUND)
+    list(APPEND LOCAL_LINK_LIB nlohmann_json::nlohmann_json)
+else(nlohmann_json_FOUND)
+    include_directories(Lib/nlohmann)
+endif(nlohmann_json_FOUND)
 
 ## 指定头文件、库查找路径
 include_directories(Include)
