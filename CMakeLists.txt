@@ -12,6 +12,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Wall -pedantic)
 
+if(CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo")
+    add_definitions(-fno-limit-debug-info)
+endif()
+
 find_package(Threads)
 
 # 2. Clang 库配置 提供库 Target 以及头文件路径标识 ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS}
@@ -29,21 +33,21 @@ add_definitions(${LocalLibClang_DEFINITIONS})
 set(CLANG_LINK_LIBRARIES clangTooling)
 
 # 3. 添加本地库与头文件搜索路径
-set(LOCAL_LINK_LIB   ${CLANG_LINK_LIBRARIES} pthread)
+set(LOCAL_LINK_LIB ${CLANG_LINK_LIBRARIES} pthread)
 
 find_package(spdlog QUIET CONFIG)
 if(spdlog_FOUND)
     list(APPEND LOCAL_LINK_LIB spdlog::spdlog)
-else(spdlog_FOUND)
+else()
     include_directories(Lib/spdlog)
-endif(spdlog_FOUND)
+endif()
 
 find_package(nlohmann_json REQUIRED CONFIG)
 if(nlohmann_json_FOUND)
     list(APPEND LOCAL_LINK_LIB nlohmann_json::nlohmann_json)
-else(nlohmann_json_FOUND)
+else()
     include_directories(Lib/nlohmann)
-endif(nlohmann_json_FOUND)
+endif()
 
 ## 指定头文件、库查找路径
 include_directories(Include)

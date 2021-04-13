@@ -6,6 +6,8 @@
 #include "function/utilities.h"
 #include "spdlog/spdlog.h"
 
+using namespace nlohmann;
+
 class CxxMethodDefListernAnalysisTools
 {
 public:
@@ -29,5 +31,21 @@ TEST_CASE_METHOD(CxxMethodDefListernAnalysisTools, "Test class decl analysis cod
             auto cxxmethoddeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
             THEN("Check return value") { REQUIRE(cxxmethoddeclanalysisptr != nullptr); }
         }
+        // TODO: 完成传入错误配置后需要进行的校验
+        json object;
+        object["ClassName"] = "zzzz";
+        spdlog::info("is_object = {}| object = \n{}", object.is_object(), object.dump(1, '\t'));
+        std::string aa;
+        try
+        {
+            object.at("ClassName").get_to(aa);
+            object.at("ClassName2").get_to(aa);
+        }
+        catch (json::exception& a)
+        {
+            spdlog::info("error is a = {}", a.what());
+        }
+
+        spdlog::info("222 object = \n{}", object.dump(1, '\t'));
     }
 }

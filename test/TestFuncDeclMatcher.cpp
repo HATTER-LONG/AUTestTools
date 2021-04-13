@@ -56,3 +56,22 @@ TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions
         }
     }
 }
+
+TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions using without CommandFilePath",
+    "[Source code analysis function]")
+{
+    WHEN("start analysis code infomation")
+    {
+        static MyFunction::SourceCodeErrorMessageList errormessage;
+        static MyFunction::SourceCodeFunctionMessageMap funcmessagemap;
+
+        THEN("start analysis  without CommandFilePath and Check return value")
+        {
+            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
+            fundeclanalysisptr->setFilePathToAnalysis(m_analysisFilePath);
+            bool result = fundeclanalysisptr->startToAnalysisSourceCode(funcmessagemap, errormessage);
+
+            REQUIRE(result == true);
+        }
+    }
+}
