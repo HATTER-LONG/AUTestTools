@@ -18,9 +18,8 @@ public:
     }
     // clang-format on
 
-    ClassMemberDefLister(SourceCodeFunctionMessageMap& Ref, std::string ClassName)
+    ClassMemberDefLister(SourceCodeFunctionMessageMap& Ref)
             : m_functionMessageRef(Ref)
-            , m_strClassName(ClassName)
     {
     }
 
@@ -43,7 +42,9 @@ public:
             }
         }
     }
+    void config(const ConfigInfo& Config) override { Config.at("ClassName").get_to(m_strClassName); }
 
+private:
     SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(const clang::FunctionDecl* Func)
     {
         std::string functionname;

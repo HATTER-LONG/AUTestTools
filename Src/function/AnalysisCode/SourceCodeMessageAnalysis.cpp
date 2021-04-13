@@ -6,7 +6,6 @@
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
-#include <memory>
 
 static llvm::cl::OptionCategory fltCat("func-decl-list-am");
 namespace MyFunction
@@ -61,6 +60,7 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(SourceCodeErrorMessage
     clang::ast_matchers::MatchFinder finder;
     if (m_matcherWithCallBack != nullptr)
     {
+        m_matcherWithCallBack->config(m_jsonConfigToMatcher);
         finder.addMatcher(m_matcherWithCallBack->matcher(), m_matcherWithCallBack.get());
     }
     else

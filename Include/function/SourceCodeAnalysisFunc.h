@@ -2,8 +2,12 @@
 
 #include "AnalysisMessageHelper.h"
 #include "Infra/FactoryTemplate.h"
+#include "nlohmann/json.hpp"
 
 #include <string>
+
+using ConfigInfo = nlohmann::json;
+
 namespace MyFunction
 {
 /**
@@ -39,6 +43,13 @@ public:
      * @param compiledatabase
      */
     virtual void setCompileDatabase(const std::string& Compiledatabase) = 0;
+
+    /**
+     * @brief Set config to Compile Analysis object
+     *
+     * @param Json 具体内容参照组件接口定义
+     */
+    virtual void setConfigToAnalysis(const ConfigInfo& Config) = 0;
 };
 
 using g_SourceCodeAnalysisFactory = Infra::ProductClassFactory<MyFunction::SourceCodeAnalysisFunc>;

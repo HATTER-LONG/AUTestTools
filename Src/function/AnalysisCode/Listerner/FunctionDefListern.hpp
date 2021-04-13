@@ -57,7 +57,9 @@ public:
             }
         }
     }
+    void config(const ConfigInfo& Config) override { spdlog::warn("{} Analysis Matcher Nothing Need to be Config", __FILE__); }
 
+private:
     SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(const clang::FunctionDecl* Func)
     {
         std::string functionname;

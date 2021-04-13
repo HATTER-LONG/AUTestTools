@@ -16,7 +16,10 @@ inline auto getHasBodyOfFunctionMap(const SourceCodeFunctionMessageMap& Function
     SourceCodeFunctionMessageMap functionMap;
     for (const auto& iter : FunctionInfoMap)
     {
-        if (iter.second.getFunctionHasBodyInfo()) { functionMap.insert(iter); }
+        if (iter.second.getFunctionHasBodyInfo())
+        {
+            functionMap.insert(iter);
+        }
     }
     return functionMap;
 }
@@ -32,7 +35,10 @@ inline auto getNoHasBodyOfFunctionmap(const SourceCodeFunctionMessageMap& Functi
     SourceCodeFunctionMessageMap functionMap;
     for (const auto& iter : FunctionInfoMap)
     {
-        if (!iter.second.getFunctionHasBodyInfo()) { functionMap.insert(iter); }
+        if (!iter.second.getFunctionHasBodyInfo())
+        {
+            functionMap.insert(iter);
+        }
     }
     return functionMap;
 }

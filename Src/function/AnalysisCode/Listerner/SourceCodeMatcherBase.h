@@ -1,6 +1,7 @@
 #pragma once
 
 #include "function/AnalysisMessage.h"
+#include "function/SourceCodeAnalysisFunc.h"
 
 #include <assert.h>
 #include <clang/ASTMatchers/ASTMatchFinder.h>
@@ -18,6 +19,7 @@ public:
         return functionDecl().bind("Do not use this");
     };
     virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) { assert(false); }
+    virtual void config(const ConfigInfo& Config) = 0;
 };
 
 using DeclarationMatcherPtr = std::unique_ptr<DeclarationMatcherCallBackBase>;

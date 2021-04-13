@@ -19,6 +19,7 @@ public:
 
     void setFilePathToAnalysis(const std::string& Filepath) override { m_sourceCodeFilePath = Filepath; }
     void setCompileDatabase(const std::string& Compiledatabase) override { m_compiledDatabasePath = Compiledatabase; }
+    void setConfigToAnalysis(const ConfigInfo& Config) override { m_jsonConfigToMatcher = Config; };
 
 protected:
     void setMatchMethodAndCallBackFunc(DeclarationMatcherPtr Matcher) { m_matcherWithCallBack = std::move(Matcher); };
@@ -35,7 +36,7 @@ private:
 private:
     std::string m_sourceCodeFilePath;
     std::string m_compiledDatabasePath;
-
+    ConfigInfo m_jsonConfigToMatcher;
     DeclarationMatcherPtr m_matcherWithCallBack;
 };
 
