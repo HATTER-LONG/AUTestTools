@@ -14,8 +14,7 @@ FILE(GLOB AUTESTSRC
     "${CMAKE_CURRENT_SOURCE_DIR}/Tools/*.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/TrainingCode/*.cxx"
     "${CMAKE_SOURCE_DIR}/Src/function/*.cpp"
-    "${CMAKE_SOURCE_DIR}/Src/function/AnalysisCode/*.cpp"
-    "${CMAKE_SOURCE_DIR}/Src/function/AnalysisCode/CustomASTFrontendMethod/*.cpp")
+    "${CMAKE_SOURCE_DIR}/Src/function/AnalysisCode/*.cpp")
 
 ## 指定测试用的代码路径
 set(TESTCODE_FULLPATH "${CMAKE_CURRENT_SOURCE_DIR}/TrainingCode/")
