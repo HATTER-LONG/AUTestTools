@@ -28,5 +28,3 @@ int TestA::functionPrivate(void)
 }
 
 }   // namespace MyTestNameSpace
-
-#include "sometestcode.hpp"

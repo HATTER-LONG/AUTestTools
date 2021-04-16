@@ -7,7 +7,7 @@ namespace MyFunction
 class FuncDeclWithCallExprMessage : public SourceCodeMessageAnalysis
 {
 public:
-    FuncDeclWithCallExprMessage();
+    FuncDeclWithCallExprMessage() = default;
     ~FuncDeclWithCallExprMessage() = default;
     bool startToAnalysisSourceCode(
         SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage) override;

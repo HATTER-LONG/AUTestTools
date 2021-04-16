@@ -6,12 +6,6 @@ namespace MyFunction
 static Infra::ProductClassRegistrar<SourceCodeAnalysisFunc, FuncDeclWithCallExprMessage> funcdeclAnalysisMethod(
     FuncDeclWithCallExprMessage::getFactoryID());
 
-
-FuncDeclWithCallExprMessage::FuncDeclWithCallExprMessage()
-        : SourceCodeMessageAnalysis()
-{
-}
-
 bool FuncDeclWithCallExprMessage::startToAnalysisSourceCode(
     SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage)
 {

@@ -8,7 +8,7 @@ namespace MyFunction
 class CxxMethodDeclMessageAnalysis : public SourceCodeMessageAnalysis
 {
 public:
-    CxxMethodDeclMessageAnalysis();
+    CxxMethodDeclMessageAnalysis() = default;
     ~CxxMethodDeclMessageAnalysis() = default;
 
     bool startToAnalysisSourceCode(

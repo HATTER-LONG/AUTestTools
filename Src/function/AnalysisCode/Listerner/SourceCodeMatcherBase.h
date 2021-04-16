@@ -12,6 +12,11 @@ namespace MyFunction
 class DeclarationMatcherCallBackBase : public clang::ast_matchers::MatchFinder::MatchCallback
 {
 public:
+    DeclarationMatcherCallBackBase()
+            : m_policy(clang::LangOptions {})
+    {
+        m_policy.adjustForCPlusPlus();
+    }
     virtual clang::ast_matchers::DeclarationMatcher matcher()
     {
         assert(false);
@@ -20,6 +25,7 @@ public:
     };
     virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) { assert(false); }
     virtual void config(const ConfigInfo& Config) = 0;
+    clang::PrintingPolicy m_policy;
 };
 
 using DeclarationMatcherPtr = std::unique_ptr<DeclarationMatcherCallBackBase>;

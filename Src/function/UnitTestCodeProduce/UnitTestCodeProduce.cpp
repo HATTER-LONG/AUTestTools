@@ -50,9 +50,13 @@ void UnitTestCodeProduceFunc::getFuncReturnValue(string& ReturnValue, const stri
     {
         ReturnValue = "";
     }
+    else if (ReturnType.find('&') != string::npos)
+    {
+        ReturnValue = "return " + std::string("*this;");
+    }
     else
     {
-        ReturnValue = "return " + ReturnType + "();";
+        ReturnValue = "return " + ReturnType + "{};";
     }
 }
 

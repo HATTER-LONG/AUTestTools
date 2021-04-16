@@ -25,9 +25,6 @@ public:
 
     virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
     {
-        clang::LangOptions langOpts;
-        langOpts.CPlusPlus = true;
-        clang::PrintingPolicy policy(langOpts);
         if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("ClassMethodDef"))
         {
             auto iter = m_functionMessageRef.find(functionDecl->getQualifiedNameAsString());
@@ -36,7 +33,7 @@ public:
                 std::string functionname;
                 std::vector<std::string> functionparms;
                 functionname = functionDecl->getQualifiedNameAsString();
-                functionparms.push_back(functionDecl->getReturnType().getAsString());
+                functionparms.push_back(functionDecl->getReturnType().getAsString(m_policy));
                 getParams(functionparms, functionDecl);
                 iter = insertFuncToMapRef(functionDecl);
             }
@@ -50,7 +47,7 @@ private:
         std::string functionname;
         std::vector<std::string> functionparms;
         functionname = Func->getQualifiedNameAsString();
-        functionparms.push_back(Func->getReturnType().getAsString());
+        functionparms.push_back(Func->getReturnType().getAsString(m_policy));
         getParams(functionparms, Func);
         return m_functionMessageRef
             .insert(SourceCodeFunctionMessageMap::value_type(
@@ -61,14 +58,11 @@ private:
 
     void getParams(FunctionParamList& Functionparms, const clang::FunctionDecl* Func)
     {
-        clang::LangOptions langOpts;
-        langOpts.CPlusPlus = true;
-        clang::PrintingPolicy policy(langOpts);
         for (unsigned int i = 0; i < Func->getNumParams(); i++)
         {
             std::string paramwithname;
             const auto* param = Func->getParamDecl(i);
-            paramwithname += clang::QualType::getAsString(param->getType().split(), policy);
+            paramwithname += clang::QualType::getAsString(param->getType().split(), m_policy);
             // paramwithname += "  ";
             // paramwithname += func->getParamDecl(i)->getNameAsString();
             Functionparms.push_back(paramwithname);

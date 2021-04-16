@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#define TESTCXX_ERRORCOUNT 1
+#define TESTCXX_ERRORCOUNT 2
 #define TESTCXX_FUNCTIONCOUNT 4
 #define TESTCXX_DEFINEDFUNC 3
 #define TESTCXX_NOBODYFUNC 1
