@@ -15,25 +15,61 @@ void help(int Argc)
 int main(int argc, char* argv[])
 {
     help(argc);
-    auto sourceCodeMessagePtr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass("FuncDeclWithCallExpr_v1");
-    sourceCodeMessagePtr->setCompileDatabase(std::string(argv[2]));
-    sourceCodeMessagePtr->setFilePathToAnalysis(std::string(argv[1]));
 
-    MyFunction::SourceCodeFunctionMessageMap functionmessage;
-    MyFunction::SourceCodeErrorMessageList errormessage;
-    sourceCodeMessagePtr->startToAnalysisSourceCode(functionmessage, errormessage);
-
-    for (auto& function : functionmessage)
+    if (argc == 3)
     {
-        if (!function.second.getFunctionHasBodyInfo())
+        auto sourceCodeMessagePtr =
+            MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass("FuncDeclWithCallExpr_v1");
+        sourceCodeMessagePtr->setCompileDatabase(std::string(argv[2]));
+        sourceCodeMessagePtr->setFilePathToAnalysis(std::string(argv[1]));
+
+        MyFunction::SourceCodeFunctionMessageMap functionmessage;
+        MyFunction::SourceCodeErrorMessageList errormessage;
+        if (sourceCodeMessagePtr->startToAnalysisSourceCode(functionmessage, errormessage))
         {
-            spdlog::info("Function Name is {} generate body is", function.first);
-            auto functionInfo = function.second;
+            std::string functionSourceCode;
             MyFunction::UnitTestCodeProduceFunc generate;
-            auto functionSourceCode = generate.createMockSourceCode(functionInfo);
+            for (auto& function : functionmessage)
+            {
+                if (!function.second.getFunctionHasBodyInfo())
+                {
+                    // spdlog::info("Function Name is {} generate body is", function.first);
+                    auto functionInfo = function.second;
+                    functionSourceCode += generate.createMockSourceCode(functionInfo);
+                }
+            }
+            spdlog::info("{}", functionSourceCode);
+        }
+        for (auto& error : errormessage)
+        {
+            spdlog::info("error message = {}", error.getErrorMessage());
+        }
+    }
+    else
+    {
+        auto sourceCodeMessagePtr =
+            MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass("CxxMethodDeclWithName_v1");
+        sourceCodeMessagePtr->setCompileDatabase(std::string(argv[2]));
+        sourceCodeMessagePtr->setFilePathToAnalysis(std::string(argv[1]));
+        ConfigInfo config;
+        config["ClassName"] = argv[3];
+        sourceCodeMessagePtr->setConfigToAnalysis(config);
+        MyFunction::SourceCodeFunctionMessageMap functionmessage;
+        MyFunction::SourceCodeErrorMessageList errormessage;
+        if (sourceCodeMessagePtr->startToAnalysisSourceCode(functionmessage, errormessage))
+        {
+            std::string functionSourceCode;
+            MyFunction::UnitTestCodeProduceFunc generate;
+            for (auto& function : functionmessage)
+            {
+                if (!function.second.getFunctionHasBodyInfo())
+                {
+                    // spdlog::info("Function Name is {} generate body is", function.first);
+                    auto functionInfo = function.second;
+                    functionSourceCode += generate.createMockSourceCode(functionInfo);
+                }
+            }
             spdlog::info("{}", functionSourceCode);
         }
     }
-
-    return 0;
 }

@@ -7,12 +7,6 @@ namespace MyFunction
  * @brief Include directories for standard headers
  *
  */
-#ifdef CLANG_ANALYSIS_ARGS_APPEND
-std::string const CLANG_ARGS2APPEND(CLANG_ANALYSIS_ARGS_APPEND);
-#else
-std::string const CLANG_ARGS2APPEND;
-#endif
-
 #ifdef COMPILE_COMMANDS_FILEPATH
 std::string const COMPILECOMMANDS_INFOFILE(COMPILE_COMMANDS_FILEPATH);
 #else

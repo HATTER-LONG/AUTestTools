@@ -21,13 +21,10 @@ find_package(Threads)
 # 2. Clang 库配置 提供库 Target 以及头文件路径标识 ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS}
 find_package(Clang REQUIRED CONFIG)
 # TODO: 增加判断逻辑是否由一些 clang 头文件，或者使用环境变量来获取
-set(CLANG_INCLUDE_DIR1 ${CLANG_INSTALL_PREFIX}/include/c++/v1/)
-set(CLANG_INCLUDE_DIR2 ${CLANG_INSTALL_PREFIX}/lib/clang/11.0.0/include/)
-set(CLANG_ANALYSIS_ARGS_APPEND "-isystem ${CLANG_INCLUDE_DIR1} -isystem ${CLANG_INCLUDE_DIR2} -stdlib=libc++")
+
 set(LocalLibClang_DEFINITIONS  -fno-rtti 
     -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS 
-    -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
-    -DCLANG_ANALYSIS_ARGS_APPEND="${CLANG_ANALYSIS_ARGS_APPEND}")
+    -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS)
 add_definitions(${LocalLibClang_DEFINITIONS})
 
 set(CLANG_LINK_LIBRARIES clangTooling)

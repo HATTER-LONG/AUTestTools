@@ -1,5 +1,4 @@
 #include "SourceCodeMessageAnalysis.h"
-#include "function/utilities.h"
 #include "spdlog/spdlog.h"
 
 #include <algorithm>
@@ -54,8 +53,6 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(SourceCodeErrorMessage
 
     auto commonOptionsParserVar = getCommonOptionsParser();
     clang::tooling::ClangTool tool(commonOptionsParserVar->getCompilations(), sourceCodePathList);
-    clang::tooling::ArgumentsAdjuster ardj1 = clang::tooling::getInsertArgumentAdjuster(MyFunction::CLANG_ARGS2APPEND.c_str());
-    tool.appendArgumentsAdjuster(ardj1);
 
     clang::ast_matchers::MatchFinder finder;
     if (m_matcherWithCallBack != nullptr)
