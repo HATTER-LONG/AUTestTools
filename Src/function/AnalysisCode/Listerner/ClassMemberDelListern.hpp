@@ -39,7 +39,20 @@ public:
             }
         }
     }
-    void config(const ConfigInfo& Config) override { Config.at("ClassName").get_to(m_strClassName); }
+
+    bool config(const ConfigInfo& Config) override
+    {
+        try
+        {
+            Config.at("ClassName").get_to(m_strClassName);
+        }
+        catch (nlohmann::json::exception& a)
+        {
+            spdlog::error("error config info  {}", a.what());
+            return false;
+        }
+        return true;
+    }
 
 private:
     SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(const clang::FunctionDecl* Func)
@@ -49,24 +62,11 @@ private:
         functionname = Func->getQualifiedNameAsString();
         functionparms.push_back(Func->getReturnType().getAsString(m_policy));
         getParams(functionparms, Func);
+        bool hasbody = Func->isExplicitlyDefaulted() || Func->hasBody() || Func->isDefaulted();
         return m_functionMessageRef
-            .insert(SourceCodeFunctionMessageMap::value_type(
-                functionname, SourceCodeFunctionMessage(
-                                  functionname, functionparms, Func->hasBody(), SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER)))
+            .insert(SourceCodeFunctionMessageMap::value_type(functionname,
+                SourceCodeFunctionMessage(functionname, functionparms, hasbody, SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER)))
             .first;
-    }
-
-    void getParams(FunctionParamList& Functionparms, const clang::FunctionDecl* Func)
-    {
-        for (unsigned int i = 0; i < Func->getNumParams(); i++)
-        {
-            std::string paramwithname;
-            const auto* param = Func->getParamDecl(i);
-            paramwithname += clang::QualType::getAsString(param->getType().split(), m_policy);
-            // paramwithname += "  ";
-            // paramwithname += func->getParamDecl(i)->getNameAsString();
-            Functionparms.push_back(paramwithname);
-        }
     }
 
 private:

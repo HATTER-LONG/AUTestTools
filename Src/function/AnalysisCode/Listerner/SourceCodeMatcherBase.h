@@ -23,8 +23,20 @@ public:
         using namespace clang::ast_matchers;
         return functionDecl().bind("Do not use this");
     };
+    virtual void getParams(FunctionParamList& Functionparms, const clang::FunctionDecl* Func)
+    {
+        for (unsigned int i = 0; i < Func->getNumParams(); i++)
+        {
+            std::string paramwithname;
+            const auto* param = Func->getParamDecl(i);
+            paramwithname += clang::QualType::getAsString(param->getType().split(), m_policy);
+            // paramwithname += "  ";
+            // paramwithname += func->getParamDecl(i)->getNameAsString();
+            Functionparms.push_back(paramwithname);
+        }
+    }
     virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) { assert(false); }
-    virtual void config(const ConfigInfo& Config) = 0;
+    virtual bool config(const ConfigInfo& Config) = 0;
     clang::PrintingPolicy m_policy;
 };
 

@@ -25,7 +25,6 @@ public:
     {
     }
 
-
     virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
     {
         if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("FunctionDecl"))
@@ -54,7 +53,7 @@ public:
             }
         }
     }
-    void config(const ConfigInfo& Config) override { return; }
+    bool config(const ConfigInfo& Config) override { return true; }
 
 private:
     SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(const clang::FunctionDecl* Func)
@@ -72,18 +71,6 @@ private:
             .first;
     }
 
-    void getParams(FunctionParamList& Functionparms, const clang::FunctionDecl* Func)
-    {
-        for (unsigned int i = 0; i < Func->getNumParams(); i++)
-        {
-            std::string paramwithname;
-            const auto* param = Func->getParamDecl(i);
-            paramwithname += clang::QualType::getAsString(param->getType().split(), m_policy);
-            // paramwithname += "  ";
-            // paramwithname += func->getParamDecl(i)->getNameAsString();
-            Functionparms.push_back(paramwithname);
-        }
-    }
 
 private:
     SourceCodeFunctionMessageMap& m_functionMessageRef;

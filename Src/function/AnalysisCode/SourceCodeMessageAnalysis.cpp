@@ -55,14 +55,15 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(SourceCodeErrorMessage
     clang::tooling::ClangTool tool(commonOptionsParserVar->getCompilations(), sourceCodePathList);
 
     clang::ast_matchers::MatchFinder finder;
-    if (m_matcherWithCallBack != nullptr)
+    if (m_matcherWithCallBack != nullptr && m_matcherWithCallBack->config(m_jsonConfigToMatcher))
     {
-        m_matcherWithCallBack->config(m_jsonConfigToMatcher);
         finder.addMatcher(m_matcherWithCallBack->matcher(), m_matcherWithCallBack.get());
     }
     else
     {
-        spdlog::warn("No matcher has set to analysis source code, please check it");
+        spdlog::error("No matcher has set to analysis source code or config failed, please check it !!!");
+        spdlog::error("Config Info is \n{}", m_jsonConfigToMatcher.dump(1, '\t'));
+        return false;
     }
 
     SourceCodeErrorAnalysis diagnosticConsumer(ErrorMessage);
@@ -70,7 +71,7 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(SourceCodeErrorMessage
     int ret = tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
     if (ret != 0)
     {
-        spdlog::info("[{}] error for analysis file[{}] errnocode[{}]", __FUNCTION__, m_sourceCodeFilePath, ret);
+        spdlog::error("[{}] error for analysis file[{}] errnocode[{}]", __FUNCTION__, m_sourceCodeFilePath, ret);
         return false;
     }
     return true;

@@ -69,7 +69,7 @@ using FunctionCallExprList = std::vector<std::string>;
  * @brief 函数方法信息类
  *
  */
-// TODO: 函数信息设计存在扩展性缺陷，如果功能需要更多的函数信息，则必须修改所有解析方法来进行支持，可以通过结构体扩展
+// TODO: 函数信息设计存在扩展性缺陷，如果功能需要更多的函数信息，则必须修改所有解析方法来进行支持，可以通过结构体或 JSON 字段扩展
 class SourceCodeFunctionMessage
 {
 public:

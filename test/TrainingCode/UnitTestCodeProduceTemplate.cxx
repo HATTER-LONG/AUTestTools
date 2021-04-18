@@ -1,5 +1,6 @@
 #include "TestMethodTemplate.h"
 #include "UnitTestCodeProduceTemplate.h"
+#include "someGeneratedCode.hpp"
 
 extern int cTypeFunctionByExtern(std::string StrParm, int IntParm);
 

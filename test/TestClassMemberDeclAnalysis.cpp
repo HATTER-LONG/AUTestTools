@@ -16,9 +16,19 @@ public:
         REQUIRE(!m_analysisFilePath.empty());
         REQUIRE(!m_comipleCommandFilePath.empty());
     }
+    auto initCxxMethodDeclAnalysisPtr(ConfigInfo& Config)
+    {
+        auto cxxmethoddeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
+        cxxmethoddeclanalysisptr->setCompileDatabase(m_comipleCommandFilePath);
+        cxxmethoddeclanalysisptr->setFilePathToAnalysis(m_analysisFilePath);
+        cxxmethoddeclanalysisptr->setConfigToAnalysis(Config);
+        return cxxmethoddeclanalysisptr;
+    }
     std::string m_analysisFilePath { MyFunction::TRAININGCODE_FILEPATH + "FunctionInfoTestCode.cxx" };
     std::string m_comipleCommandFilePath { MyFunction::COMPILECOMMANDS_INFOFILE };
     std::string m_id { "CxxMethodDeclWithName_v1" };
+    MyFunction::SourceCodeFunctionMessageMap m_functionMessage;
+    MyFunction::SourceCodeErrorMessageList m_errorMessage;
 };
 
 TEST_CASE_METHOD(CxxMethodDefListernAnalysisTools, "Test class decl analysis code tool functions Get normally",
@@ -31,21 +41,27 @@ TEST_CASE_METHOD(CxxMethodDefListernAnalysisTools, "Test class decl analysis cod
             auto cxxmethoddeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
             THEN("Check return value") { REQUIRE(cxxmethoddeclanalysisptr != nullptr); }
         }
-        // TODO: 完成传入错误配置后需要进行的校验
-        json object;
-        object["ClassName"] = "zzzz";
-        spdlog::info("is_object = {}| object = \n{}", object.is_object(), object.dump(1, '\t'));
-        std::string aa;
-        try
+        WHEN("Config analysis function error")
         {
-            object.at("ClassName").get_to(aa);
-            object.at("ClassName2").get_to(aa);
+            ConfigInfo config;
+            config["ErrorClassName"] = "Error";
+            auto cxxmethoddeclanalysisptr = initCxxMethodDeclAnalysisPtr(config);
+            THEN("start analysis check return value")
+            {
+                REQUIRE_FALSE(cxxmethoddeclanalysisptr->startToAnalysisSourceCode(m_functionMessage, m_errorMessage));
+            }
         }
-        catch (json::exception& a)
+        WHEN("Config correct parm and analysis")
         {
-            spdlog::info("error is a = {}", a.what());
+            ConfigInfo config;
+            config["ClassName"] = "HeadFileDefinedClass";
+            auto cxxmethoddeclanalysisptr = initCxxMethodDeclAnalysisPtr(config);
+            THEN("start analysis check return value")
+            {
+                REQUIRE(cxxmethoddeclanalysisptr->startToAnalysisSourceCode(m_functionMessage, m_errorMessage));
+                REQUIRE(m_functionMessage.size() == TESTCXX_DECLMETHOD);
+                REQUIRE(m_errorMessage.size() == TESTCXX_ERRORCOUNT);
+            }
         }
-
-        spdlog::info("222 object = \n{}", object.dump(1, '\t'));
     }
 }

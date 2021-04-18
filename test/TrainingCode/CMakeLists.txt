@@ -14,4 +14,4 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS
 set(PROJECTNAME testcode)
 
 add_executable(${PROJECTNAME} ${AUTESTSRC})
-target_link_libraries(${PROJECTNAME}))
+target_link_libraries(${PROJECTNAME})
