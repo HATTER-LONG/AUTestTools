@@ -1,10 +1,10 @@
 #include "SourceCodeMessageAnalysis.h"
 #include "spdlog/spdlog.h"
 
-#include <algorithm>
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
+#include <algorithm>
 
 static llvm::cl::OptionCategory fltCat("func-decl-list-am");
 namespace MyFunction
