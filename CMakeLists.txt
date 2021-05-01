@@ -18,6 +18,10 @@ endif()
 
 find_package(Threads)
 
+if(NOT DEFINED ENV{CPLUS_INCLUDE_PATH})
+    Message(FATAL_ERROR "Please set environment variables CPLUS_INCLUDE_PATH for Clang code analysis")
+endif()
+
 # 2. Clang 库配置 提供库 Target 以及头文件路径标识 ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS}
 find_package(Clang REQUIRED CONFIG)
 # TODO: 增加判断逻辑是否由一些 clang 头文件，或者使用环境变量来获取
@@ -39,7 +43,7 @@ else()
     include_directories(Lib/spdlog)
 endif()
 
-find_package(nlohmann_json REQUIRED CONFIG)
+find_package(nlohmann_json QUIET CONFIG)
 if(nlohmann_json_FOUND)
     list(APPEND LOCAL_LINK_LIB nlohmann_json::nlohmann_json)
 else()
