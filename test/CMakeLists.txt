@@ -5,6 +5,7 @@ find_package(Catch2 QUIET CONFIG)
 if(Catch2_FOUND)
     list(APPEND LOCAL_LINK_LIB Catch2::Catch2)
 else(Catch2_FOUND)
+    message(STATUS "Catch2 not found using <WorkSpace>/Lib/catch2")
     include_directories(${CMAKE_SOURCE_DIR}/Lib/catch2)
 endif(Catch2_FOUND)
 

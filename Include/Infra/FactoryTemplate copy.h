@@ -6,36 +6,16 @@
 #include <string>
 namespace Infra
 {
-/**
- * @brief 工厂产品注册基类
- *
- * @tparam CustomProductType_t 产品基类类型
- */
-template <class CustomProductType_t, typename... TArgs>
-class IProductClassRegistrar
-{
-public:
-    /**
-     * @brief Create a Product object
-     *
-     * @return std::unique_ptr<CustomProductType_t>
-     */
-    virtual std::unique_ptr<CustomProductType_t> createProduct(TArgs...) = 0;
 
-    IProductClassRegistrar(const IProductClassRegistrar&) = delete;
-    const IProductClassRegistrar& operator=(const IProductClassRegistrar&) = delete;
-
-protected:
-    IProductClassRegistrar() = default;
-    virtual ~IProductClassRegistrar() = default;
-};
+template <class CustomProductType_t, class CustomProductImpl_t>
+class ProductClassRegistrar;
 
 /**
  * @brief 模板工厂类
  *
  * @tparam CustomProductType_t
  */
-template <class CustomProductType_t>
+template <class CustomProductType_t, class CustomProductImpl_t>
 class ProductClassFactory
 {
 public:
@@ -44,9 +24,9 @@ public:
      *
      * @return ProductClassFactory<CustomProductType_t>&
      */
-    static ProductClassFactory<CustomProductType_t>& instance()
+    static ProductClassFactory<CustomProductType_t, CustomProductImpl_t>& instance()
     {
-        static ProductClassFactory<CustomProductType_t> instance;
+        static ProductClassFactory<CustomProductType_t, CustomProductImpl_t> instance;
         return instance;
     }
 
@@ -56,7 +36,7 @@ public:
      * @param registry
      * @param ID
      */
-    void registerClassWithId(void* Registry, std::string ID)
+    void registerClassWithId(ProductClassRegistrar<CustomProductType_t, CustomProductImpl_t>* Registry, std::string ID)
     {
         auto iter = m_mProductClassRegistry.find(ID);
         if (iter != m_mProductClassRegistry.end())
@@ -67,7 +47,7 @@ public:
 
             return;
         }
-        m_mProductClassRegistry[ID] = static_cast<void*>(Registry);
+        m_mProductClassRegistry[ID] = Registry;
     }
 
     /**
@@ -81,13 +61,11 @@ public:
     {
         if (m_mProductClassRegistry.find(ID) != m_mProductClassRegistry.end())
         {
-            return static_cast<IProductClassRegistrar<CustomProductType_t, TArgs&&...>*>(m_mProductClassRegistry[ID])
-                ->createProduct(Args...);
+            return m_mProductClassRegistry[ID]->createProduct(Args...);
         }
         spdlog::warn("[{}] No product class found for ID[{}]", __FUNCTION__, ID.c_str());
         return std::unique_ptr<CustomProductType_t>(nullptr);
     }
-
 
     /**
      * @brief 删除一个已注册的产品注册生成器
@@ -116,7 +94,7 @@ private:
      * @brief 保存注册过的产品，key:产品名字 , value:产品类型存
      *
      */
-    std::map<std::string, void*> m_mProductClassRegistry;
+    std::map<std::string, ProductClassRegistrar<CustomProductType_t, CustomProductImpl_t>*> m_mProductClassRegistry;
 };
 
 /**
@@ -126,8 +104,8 @@ private:
  * @tparam CustomProductType_t
  * @tparam CustomProductImpl_t
  */
-template <class CustomProductType_t, class CustomProductImpl_t, typename... TArgs>
-class ProductClassRegistrar : IProductClassRegistrar<CustomProductType_t, TArgs&&...>
+template <class CustomProductType_t, class CustomProductImpl_t>
+class ProductClassRegistrar
 {
 public:
     /**
@@ -138,7 +116,7 @@ public:
     explicit ProductClassRegistrar(std::string ID)
             : m_customProductImplId(ID)
     {
-        ProductClassFactory<CustomProductType_t>::instance().registerClassWithId(static_cast<void*>(this), ID);
+        ProductClassFactory<CustomProductType_t, CustomProductImpl_t>::instance().registerClassWithId(this, ID);
     }
     /**
      * @brief 删除析构掉的产品注册器 Destroy the Product Class Registrar object
@@ -147,14 +125,15 @@ public:
      */
     ~ProductClassRegistrar()
     {
-        ProductClassFactory<CustomProductType_t>::instance().removeProductClassByID(m_customProductImplId);
+        ProductClassFactory<CustomProductType_t, CustomProductImpl_t>::instance().removeProductClassByID(m_customProductImplId);
     }
     /**
      * @brief Create a Product object
      *
      * @return std::unique_ptr<CustomProductType_t>
      */
-    std::unique_ptr<CustomProductType_t> createProduct(TArgs&&... Args) override
+    template <typename... TArgs>
+    std::unique_ptr<CustomProductType_t> createProduct(TArgs&&... Args)
     {
         return std::unique_ptr<CustomProductType_t>(std::make_unique<CustomProductImpl_t>(std::forward<TArgs>(Args)...));
     }
