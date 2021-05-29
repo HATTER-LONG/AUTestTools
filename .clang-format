@@ -29,7 +29,7 @@ ContinuationIndentWidth: 4                              # 行延续的缩进宽�
 DisableFormat: false                                    # 禁用 clang-format
 FixNamespaceComments: true                              # 自动修正命名空间注释
 ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH ]    # 宏矢量
-IncludeBlocks: Regroup                                  # include 顺序自动调整模式
+IncludeBlocks: Preserve                                  # include 顺序自动调整模式
 IndentCaseLabels: true                                  # case 与 switch 语句不同级
 IndentWidth: 4                                          # Tab 空格数
 IndentWrappedFunctionNames: true                        # 如果函数定义或声明包装在类型之后，则缩进
