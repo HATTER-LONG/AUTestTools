@@ -21,23 +21,26 @@ endif()
 add_definitions(-Wall -pedantic)
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo")
-    add_definitions(-fno-limit-debug-info)
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+       add_definitions(-fno-limit-debug-info)
+    endif()
 endif()
 
 find_package(Threads)
 
 if(UNIX)
-if(NOT DEFINED ENV{CPLUS_INCLUDE_PATH})
-    Message(FATAL_ERROR "Please set environment variables CPLUS_INCLUDE_PATH for Clang code analysis, \n
-                         example: CPLUS_INCLUDE_PATH=/usr/lib/gcc/x86_64-linux-gnu/9/include/")
-endif()
+    if(NOT DEFINED ENV{CPLUS_INCLUDE_PATH})
+        message(WARNING "Please set environment variables CPLUS_INCLUDE_PATH for Clang code analysis \n\texample:\n export CPLUS_INCLUDE_PATH=/usr/lib/gcc/x86_64-linux-gnu/9/include/")
+    endif()
 endif()
 
 # 2. Clang 库配置 提供库 Target 以及头文件路径标识 ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS}
 find_package(Clang REQUIRED CONFIG)
 
-set(LocalLibClang_DEFINITIONS  -fno-rtti 
-    -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS 
+include_directories(${CLANG_INCLUDE_DIRS})
+include_directories(${LLVM_INCLUDE_DIRS})
+set(LocalLibClang_DEFINITIONS  -fno-rtti
+    -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS
     -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS)
 add_definitions(${LocalLibClang_DEFINITIONS})
 
