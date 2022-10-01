@@ -17,7 +17,7 @@ AlwaysBreakAfterReturnType: None                        # 返回值是否换行
 AlwaysBreakTemplateDeclarations: Yes                    # 模板声明中断样式
 BinPackArguments: true                                  # 函数调用参数自动对齐
 BinPackParameters: true                                 # 函数参数自动对齐
-BreakBeforeBinaryOperators: None                        # 二元操作符后换行
+BreakBeforeBinaryOperators: NonAssignment               # 二元操作符后换行
 BreakBeforeBraces: Allman                               # 大括号换行样势
 BreakBeforeTernaryOperators: true                       # 换行后放置三元操作符
 BreakConstructorInitializers: BeforeComma               # 初始化列表样势
@@ -29,7 +29,7 @@ ContinuationIndentWidth: 4                              # 行延续的缩进宽�
 DisableFormat: false                                    # 禁用 clang-format
 FixNamespaceComments: true                              # 自动修正命名空间注释
 ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH ]    # 宏矢量
-IncludeBlocks: Preserve                                  # include 顺序自动调整模式
+IncludeBlocks: Regroup                                  # include 顺序自动调整模式
 IndentCaseLabels: true                                  # case 与 switch 语句不同级
 IndentWidth: 4                                          # Tab 空格数
 IndentWrappedFunctionNames: true                        # 如果函数定义或声明包装在类型之后，则缩进
@@ -45,4 +45,4 @@ SpacesInAngles:  false                                  # 是否在 <a> 中插�
 SpacesInContainerLiterals: true                         # 在容器列表中是否插入空格
 Standard:        Auto                                   # 标准
 UseTab:          Never                                  # 不使用制表符
-ColumnLimit:     130                                   
+ColumnLimit:     80                                   
