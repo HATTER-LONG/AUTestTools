@@ -17,20 +17,34 @@ public:
     }
     ~SourceCodeMessageAnalysis() override = default;
 
-    void setFilePathToAnalysis(const std::string& Filepath) override { m_sourceCodeFilePath = Filepath; }
-    void setCompileDatabase(const std::string& Compiledatabase) override { m_compiledDatabasePath = Compiledatabase; }
-    void setConfigToAnalysis(const ConfigInfo& Config) override { m_jsonConfigToMatcher = Config; };
+    void setFilePathToAnalysis(const std::string& Filepath) override
+    {
+        m_sourceCodeFilePath = Filepath;
+    }
+    void setCompileDatabase(const std::string& Compiledatabase) override
+    {
+        m_compiledDatabasePath = Compiledatabase;
+    }
+    void setConfigToAnalysis(const ConfigInfo& Config) override
+    {
+        m_jsonConfigToMatcher = Config;
+    };
 
 protected:
-    void setMatchMethodAndCallBackFunc(DeclarationMatcherPtr Matcher) { m_matcherWithCallBack = std::move(Matcher); };
+    void setMatchMethodAndCallBackFunc(DeclarationMatcherPtr Matcher)
+    {
+        m_matcherWithCallBack = std::move(Matcher);
+    };
 
     bool startToAnalysisSourceCode(
-        SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage) override;
+        SourceCodeFunctionMessageMap& Functionmessage,
+        SourceCodeErrorMessageList& Errormessage) override;
     bool startToAnalysisSourceCode(SourceCodeErrorMessageList& Errormessage);
 
 private:
-    using CommonOptionsParserPtr = std::unique_ptr<clang::tooling::CommonOptionsParser>;
-    CommonOptionsParserPtr getCommonOptionsParser();
+    using CommonOptionsParserExpected =
+        llvm::Expected<clang::tooling::CommonOptionsParser>;
+    CommonOptionsParserExpected getCommonOptionsParser();
     void paramInitialize(std::vector<std::string>& ParamList);
 
 private:

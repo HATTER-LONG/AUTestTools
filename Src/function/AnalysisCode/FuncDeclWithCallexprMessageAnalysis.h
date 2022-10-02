@@ -10,7 +10,8 @@ public:
     FuncDeclWithCallExprMessage() = default;
     ~FuncDeclWithCallExprMessage() = default;
     bool startToAnalysisSourceCode(
-        SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage) override;
+        SourceCodeFunctionMessageMap& functionmessage,
+        SourceCodeErrorMessageList& errormessage) override;
     static std::string getFactoryID() { return "FuncDeclWithCallExpr_v1"; };
 };
 }   // namespace MyFunction

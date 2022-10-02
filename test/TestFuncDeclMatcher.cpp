@@ -1,5 +1,5 @@
 #include "TrainingCode/FunctionInfoTestCode.h"
-#include "catch2/catch.hpp"
+#include "catch2/catch_test_macros.hpp"
 #include "function/AnalysisMessageHelper.h"
 #include "function/SourceCodeAnalysisFunc.h"
 #include "function/utilities.h"
@@ -13,24 +13,37 @@ public:
         REQUIRE(!m_analysisFilePath.empty());
         REQUIRE(!m_comipleCommandFilePath.empty());
     }
-    std::string m_analysisFilePath { MyFunction::TRAININGCODE_FILEPATH + "FunctionInfoTestCode.cxx" };
-    std::string m_comipleCommandFilePath { MyFunction::COMPILECOMMANDS_INFOFILE };
+    std::string m_analysisFilePath { MyFunction::TRAININGCODE_FILEPATH
+                                     + "FunctionInfoTestCode.cxx" };
+    std::string m_comipleCommandFilePath {
+        MyFunction::COMPILECOMMANDS_INFOFILE
+    };
     std::string m_id { "FuncDeclWithCallExpr_v1" };
 };
 
-TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions Get normally", "[Source code analysis function]")
+TEST_CASE_METHOD(FuncDefListernAnalysisTools,
+    "Test analysis code tool functions Get normally",
+    "[Source code analysis function]")
 {
     GIVEN("Source Code function ID")
     {
-        WHEN("Try to obtain the FuncDeclWithCallExpr_'v1' source code message function from factory")
+        WHEN("Try to obtain the FuncDeclWithCallExpr_'v1' source code message "
+             "function from factory")
         {
-            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
-            THEN("Check return value") { REQUIRE(fundeclanalysisptr != nullptr); }
+            auto fundeclanalysisptr =
+                MyFunction::g_SourceCodeAnalysisFactory::instance()
+                    .getProductClass(m_id);
+            THEN("Check return value")
+            {
+                REQUIRE(fundeclanalysisptr != nullptr);
+            }
         }
     }
 }
 
-TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions normally", "[Source code analysis function]")
+TEST_CASE_METHOD(FuncDefListernAnalysisTools,
+    "Test analysis code tool functions normally",
+    "[Source code analysis function]")
 {
     WHEN("start analysis code infomation")
     {
@@ -39,10 +52,13 @@ TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions
 
         THEN("start analysis and Check return value")
         {
-            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
+            auto fundeclanalysisptr =
+                MyFunction::g_SourceCodeAnalysisFactory::instance()
+                    .getProductClass(m_id);
             fundeclanalysisptr->setFilePathToAnalysis(m_analysisFilePath);
             fundeclanalysisptr->setCompileDatabase(m_comipleCommandFilePath);
-            bool result = fundeclanalysisptr->startToAnalysisSourceCode(funcmessagemap, errormessage);
+            bool result = fundeclanalysisptr->startToAnalysisSourceCode(
+                funcmessagemap, errormessage);
 
             REQUIRE(result == true);
         }
@@ -51,13 +67,16 @@ TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions
         {
             REQUIRE(funcmessagemap.size() == TESTCXX_FUNCTIONCOUNT);
             REQUIRE(errormessage.size() == TESTCXX_ERRORCOUNT);
-            REQUIRE(MyFunction::getHasBodyOfFunctionMap(funcmessagemap).size() == TESTCXX_DEFINEDFUNC);
-            REQUIRE(MyFunction::getNoHasBodyOfFunctionmap(funcmessagemap).size() == TESTCXX_NOBODYFUNC);
+            REQUIRE(MyFunction::getHasBodyOfFunctionMap(funcmessagemap).size()
+                    == TESTCXX_DEFINEDFUNC);
+            REQUIRE(MyFunction::getNoHasBodyOfFunctionmap(funcmessagemap).size()
+                    == TESTCXX_NOBODYFUNC);
         }
     }
 }
 
-TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions using without CommandFilePath",
+TEST_CASE_METHOD(FuncDefListernAnalysisTools,
+    "Test analysis code tool functions using without CommandFilePath",
     "[Source code analysis function]")
 {
     WHEN("start analysis code infomation")
@@ -67,9 +86,12 @@ TEST_CASE_METHOD(FuncDefListernAnalysisTools, "Test analysis code tool functions
 
         THEN("start analysis  without CommandFilePath and Check return value")
         {
-            auto fundeclanalysisptr = MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(m_id);
+            auto fundeclanalysisptr =
+                MyFunction::g_SourceCodeAnalysisFactory::instance()
+                    .getProductClass(m_id);
             fundeclanalysisptr->setFilePathToAnalysis(m_analysisFilePath);
-            bool result = fundeclanalysisptr->startToAnalysisSourceCode(funcmessagemap, errormessage);
+            bool result = fundeclanalysisptr->startToAnalysisSourceCode(
+                funcmessagemap, errormessage);
 
             REQUIRE(result == true);
         }

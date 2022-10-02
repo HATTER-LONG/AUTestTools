@@ -1,8 +1,14 @@
+# Maybe you need change this /to/your/clang/path 
+# or just delete it to use default of cmake detect
+set(CMAKE_CXX_COMPILER "clang++")
+set(CMAKE_C_COMPILER "clang")
+
 cmake_minimum_required(VERSION 3.5)
 
-project(Automated_UnitTest_Tools LANGUAGES CXX)
+# Turn C on because llvm14+ need this
+project(Automated_UnitTest_Tools LANGUAGES C CXX) 
 
-# 1. C++ 环境相关配置
+# 1. C++ environment config
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
