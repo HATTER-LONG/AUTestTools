@@ -9,41 +9,49 @@ namespace MyFunction
 
 using namespace std;
 
-inline void subreplace(string& ResourceStr, const string& SubStr, const string& NewStr)
+inline void subreplace(
+    string& resourceStr, const string& subStr, const string& newStr)
 {
     string::size_type pos = 0;
-    while ((pos = ResourceStr.find(SubStr)) != string::npos)   //替换所有指定子串
+    while (
+        (pos = resourceStr.find(subStr)) != string::npos)   // 替换所有指定子串
     {
-        ResourceStr.replace(pos, SubStr.length(), NewStr);
+        resourceStr.replace(pos, subStr.length(), newStr);
     }
 }
 
-inline const string getClassName(const string& SrcStr)
+inline const string getClassName(const string& srcStr)
 {
     string::size_type posSubstringStart;
     string::size_type posSeparator;
 
-    posSeparator = SrcStr.find("::");
+    posSeparator = srcStr.find("::");
     posSubstringStart = 0;
     if (string::npos != posSeparator)
     {
-        cout << SrcStr.substr(posSubstringStart, posSeparator - posSubstringStart) << endl;
-        return SrcStr.substr(posSubstringStart, posSeparator - posSubstringStart);
+        cout << srcStr.substr(
+            posSubstringStart, posSeparator - posSubstringStart)
+             << endl;
+        return srcStr.substr(
+            posSubstringStart, posSeparator - posSubstringStart);
     }
     return "";
 }
 
-inline const string getFunctionName(const string& SrcStr)
+inline const string getFunctionName(const string& srcStr)
 {
     string::size_type posSubstringStart;
     string::size_type posSeparator;
 
-    posSeparator = SrcStr.size();
-    posSubstringStart = SrcStr.find("::") + 2;
+    posSeparator = srcStr.size();
+    posSubstringStart = srcStr.find("::") + 2;
     if (string::npos != posSeparator)
     {
-        cout << SrcStr.substr(posSubstringStart, posSeparator - posSubstringStart) << endl;
-        return SrcStr.substr(posSubstringStart, posSeparator - posSubstringStart);
+        cout << srcStr.substr(
+            posSubstringStart, posSeparator - posSubstringStart)
+             << endl;
+        return srcStr.substr(
+            posSubstringStart, posSeparator - posSubstringStart);
     }
     return "";
 }

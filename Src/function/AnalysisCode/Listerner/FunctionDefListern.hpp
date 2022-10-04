@@ -60,22 +60,22 @@ public:
             }
         }
     }
-    bool config(const ConfigInfo& Config) override { return true; }
+    bool config(const ConfigInfo& /*Config*/) override { return true; }
 
 private:
     SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(
-        const clang::FunctionDecl* Func)
+        const clang::FunctionDecl* func)
     {
         std::string functionname;
         std::vector<std::string> functionparms;
-        functionname = Func->getQualifiedNameAsString();
-        functionparms.push_back(Func->getReturnType().getAsString(m_policy));
-        getParams(functionparms, Func);
+        functionname = func->getQualifiedNameAsString();
+        functionparms.push_back(func->getReturnType().getAsString(m_policy));
+        getParams(functionparms, func);
         return m_functionMessageRef
             .insert(SourceCodeFunctionMessageMap::value_type(functionname,
                 SourceCodeFunctionMessage(functionname, functionparms,
-                    Func->hasBody(),
-                    Func->isCXXClassMember()
+                    func->hasBody(),
+                    func->isCXXClassMember()
                         ? SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER
                         : SourceCodeFunctionMessage::FUNCTYPE::CTYPE)))
             .first;

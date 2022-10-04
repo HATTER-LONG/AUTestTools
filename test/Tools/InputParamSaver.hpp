@@ -20,10 +20,7 @@ public:
         }
     }
 
-    const std::vector<std::string> getSaver()
-    {
-        return Saver;
-    }
+    const std::vector<std::string> getSaver() { return Saver; }
 
 private:
     std::vector<std::string> Saver;
