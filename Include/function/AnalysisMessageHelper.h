@@ -11,10 +11,11 @@ namespace MyFunction
  * @param FunctionInfoMap
  * @return SourceCodeFunctionMessageMap
  */
-inline auto getHasBodyOfFunctionMap(const SourceCodeFunctionMessageMap& FunctionInfoMap)
+inline SourceCodeFunctionMessageMap getHasBodyOfFunctionMap(
+    const SourceCodeFunctionMessageMap& functionInfoMap)
 {
     SourceCodeFunctionMessageMap functionMap;
-    for (const auto& iter : FunctionInfoMap)
+    for (const auto& iter : functionInfoMap)
     {
         if (iter.second.getFunctionHasBodyInfo())
         {
@@ -28,12 +29,13 @@ inline auto getHasBodyOfFunctionMap(const SourceCodeFunctionMessageMap& Function
  * @brief Get the No Has Body Of Functionmap object
  *
  * @param FunctionInfoMap
- * @return auto
+ * @return SourceCodeFunctionMessageMap
  */
-inline auto getNoHasBodyOfFunctionmap(const SourceCodeFunctionMessageMap& FunctionInfoMap)
+inline SourceCodeFunctionMessageMap getNoHasBodyOfFunctionmap(
+    const SourceCodeFunctionMessageMap& functionInfoMap)
 {
     SourceCodeFunctionMessageMap functionMap;
-    for (const auto& iter : FunctionInfoMap)
+    for (const auto& iter : functionInfoMap)
     {
         if (!iter.second.getFunctionHasBodyInfo())
         {

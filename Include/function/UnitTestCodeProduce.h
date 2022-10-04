@@ -28,14 +28,21 @@ public:
     UnitTestCodeProduceFunc() = default;
     ~UnitTestCodeProduceFunc() = default;
 
-    std::string createMockSourceCode(const MyFunction::SourceCodeFunctionMessage&);
-    std::string createMockSourceCode(const MyFunction::SourceCodeFunctionMessageMap&);
+    std::string createMockSourceCode(
+        const MyFunction::SourceCodeFunctionMessage&);
+    std::string createMockSourceCode(
+        const MyFunction::SourceCodeFunctionMessageMap&);
 
-    std::string createUnitTestCode(const MyFunction::SourceCodeFunctionMessage&, const UnitTestInfo&);
+    std::string createUnitTestCode(
+        const MyFunction::SourceCodeFunctionMessage&, const UnitTestInfo&);
 
 private:
-    void getParamList(std::string& FunctionParam, const MyFunction::FunctionParamList& Info);
-    void getFuncReturnValue(std::string& ReturnValue, const std::string& ReturnType);
-    std::string getSectionCode(const MyFunction::SourceCodeFunctionMessage& Func, const UnitTestSectionInfo&);
+    void getParamList(
+        std::string& functionParam, const MyFunction::FunctionParamList& info);
+    void getFuncReturnValue(
+        std::string& returnValue, const std::string& returnType);
+    std::string getSectionCode(
+        const MyFunction::SourceCodeFunctionMessage& func,
+        const UnitTestSectionInfo&);
 };
 }   // namespace MyFunction

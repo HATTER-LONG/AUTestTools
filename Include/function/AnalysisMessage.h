@@ -7,7 +7,8 @@
 namespace MyFunction
 {
 /**
- * @brief 记录源码分检测出的错误信息，信息为三个维度分别是【错误等级、错误信息、错误位置】
+ * @brief
+ * 记录源码分检测出的错误信息，信息为三个维度分别是【错误等级、错误信息、错误位置】
  *
  */
 class SourceCodeErrorMessage
@@ -20,10 +21,11 @@ public:
      * @param errormessage
      * @param errorpos
      */
-    SourceCodeErrorMessage(int Errorlevel, std::string Errormessage, std::string Errorpos)
-            : m_errorLevel(Errorlevel)
-            , m_errorMessage(Errormessage)
-            , m_errorPos(Errorpos)
+    SourceCodeErrorMessage(
+        int errorlevel, std::string errormessage, std::string errorpos)
+            : m_errorLevel(errorlevel)
+            , m_errorMessage(errormessage)
+            , m_errorPos(errorpos)
     {
     }
 
@@ -69,7 +71,9 @@ using FunctionCallExprList = std::vector<std::string>;
  * @brief 函数方法信息类
  *
  */
-// TODO: 函数信息设计存在扩展性缺陷，如果功能需要更多的函数信息，则必须修改所有解析方法来进行支持，可以通过结构体或 JSON 字段扩展
+// TODO:
+// 函数信息设计存在扩展性缺陷，如果功能需要更多的函数信息，则必须修改所有解析方法来进行支持，可以通过结构体或
+// JSON 字段扩展
 class SourceCodeFunctionMessage
 {
 public:
@@ -86,12 +90,13 @@ public:
      * @param Functionparam
      * @param HasFuncBody
      */
-    SourceCodeFunctionMessage(
-        std::string Functionname, std::vector<std::string> Functionparam, bool HasFuncBody, FUNCTYPE FuncType)
-            : m_functionName(Functionname)
-            , m_functionParam(Functionparam)
-            , m_hasBody(HasFuncBody)
-            , m_funcType(FuncType)
+    SourceCodeFunctionMessage(std::string functionname,
+        std::vector<std::string> functionparam, bool hasFuncBody,
+        FUNCTYPE funcType)
+            : m_functionName(functionname)
+            , m_functionParam(functionparam)
+            , m_hasBody(hasFuncBody)
+            , m_funcType(funcType)
     {
     }
     /**
@@ -99,28 +104,40 @@ public:
      *
      * @param callexprname
      */
-    void addFunctionWhichCallExpr(std::string Callexprname) { m_functionCallExpr.push_back(Callexprname); }
+    void addFunctionWhichCallExpr(std::string callexprname)
+    {
+        m_functionCallExpr.push_back(callexprname);
+    }
 
     /**
      * @brief Get the Function Name object
      *
      * @return const std::string
      */
-    const std::string getFunctionName() const noexcept { return m_functionName; }
+    const std::string getFunctionName() const noexcept
+    {
+        return m_functionName;
+    }
 
     /**
      * @brief Get the Function Param object
      *
      * @return const FunctionParamList&
      */
-    const FunctionParamList& getFunctionParam() const noexcept { return m_functionParam; }
+    const FunctionParamList& getFunctionParam() const noexcept
+    {
+        return m_functionParam;
+    }
 
     /**
      * @brief Get the Function Which Call Expr object
      *
      * @return const FunctionCallExprList&
      */
-    const FunctionCallExprList& getFunctionWhichCallExpr() const noexcept { return m_functionCallExpr; }
+    const FunctionCallExprList& getFunctionWhichCallExpr() const noexcept
+    {
+        return m_functionCallExpr;
+    }
 
     /**
      * @brief Get the Function Has Body Info object
@@ -154,5 +171,6 @@ using SourceCodeErrorMessageList = std::vector<SourceCodeErrorMessage>;
  * @brief 源码中所有目标函数信息列表
  *
  */
-using SourceCodeFunctionMessageMap = std::map<std::string, SourceCodeFunctionMessage>;
+using SourceCodeFunctionMessageMap =
+    std::map<std::string, SourceCodeFunctionMessage>;
 }   // namespace MyFunction

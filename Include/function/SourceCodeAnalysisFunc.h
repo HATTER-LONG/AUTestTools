@@ -28,29 +28,31 @@ public:
      * @return bool : success or not
      */
     virtual bool startToAnalysisSourceCode(
-        SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage) = 0;
+        SourceCodeFunctionMessageMap& functionmessage,
+        SourceCodeErrorMessageList& errormessage) = 0;
 
     /**
      * @brief Set the File Path To Analysis object
      *
      * @param filepath
      */
-    virtual void setFilePathToAnalysis(const std::string& Filepath) = 0;
+    virtual void setFilePathToAnalysis(const std::string& filepath) = 0;
 
     /**
      * @brief Set the file path to Compile Database object
      *
      * @param compiledatabase
      */
-    virtual void setCompileDatabase(const std::string& Compiledatabase) = 0;
+    virtual void setCompileDatabase(const std::string& compiledatabase) = 0;
 
     /**
      * @brief Set config to Compile Analysis object
      *
      * @param Json 具体内容参照组件接口定义
      */
-    virtual void setConfigToAnalysis(const ConfigInfo& Config) = 0;
+    virtual void setConfigToAnalysis(const ConfigInfo& config) = 0;
 };
 
-using g_SourceCodeAnalysisFactory = Infra::ProductClassFactory<MyFunction::SourceCodeAnalysisFunc>;
+using g_SourceCodeAnalysisFactory =
+    Infra::ProductClassFactory<MyFunction::SourceCodeAnalysisFunc>;
 }   // namespace MyFunction

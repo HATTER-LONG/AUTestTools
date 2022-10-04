@@ -10,11 +10,11 @@ namespace clang
 {
 class SourceManager;
 
-namespace tooling
+namespace Tooling
 {
 class Replacements;
 class Replacement;
-}   // namespace tooling
+}   // namespace Tooling
 }   // namespace clang
 namespace Infra
 {
@@ -28,8 +28,8 @@ using set_str = std::set<string_t>;
 using callback_t = clang::ast_matchers::MatchFinder::MatchCallback;
 using finder_t = clang::ast_matchers::MatchFinder;
 using result_t = clang::ast_matchers::MatchFinder::MatchResult;
-using replacement_t = clang::tooling::Replacement;
-using replacements_t = clang::tooling::Replacements;
+using replacement_t = clang::Tooling::Replacement;
+using replacements_t = clang::Tooling::Replacements;
 using replacements_map_t = std::map<string_t, replacements_t>;
 using vec_repl = std::vector<replacement_t>;
 using sm_ptr_t = clang::SourceManager*;
