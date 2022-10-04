@@ -1,22 +1,24 @@
 #include "CxxMethodDeclMessageAnalysis.h"
-
 #include "Listerner/ClassMemberDelListern.hpp"
 #include "SourceCodeMessageAnalysis.h"
 
 namespace MyFunction
 {
-static Infra::ProductClassRegistrar<SourceCodeAnalysisFunc, CxxMethodDeclMessageAnalysis> cxxMethodDeclAnalysisMethod(
-    CxxMethodDeclMessageAnalysis::getFactoryID());
+static Infra::ProductClassRegistrar<SourceCodeAnalysisFunc,
+    CxxMethodDeclMessageAnalysis>
+    cxxMethodDeclAnalysisMethod(CxxMethodDeclMessageAnalysis::getFactoryID());
 
 bool CxxMethodDeclMessageAnalysis::startToAnalysisSourceCode(
-    SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage)
+    SourceCodeFunctionMessageMap& functionmessage,
+    SourceCodeErrorMessageList& errormessage)
 {
-    setMatchMethodAndCallBackFunc(DeclarationMatcherPtr(std::make_unique<ClassMemberDefLister>(Functionmessage)));
-    return SourceCodeMessageAnalysis::startToAnalysisSourceCode(Errormessage);
+    setMatchMethodAndCallBackFunc(DeclarationMatcherPtr(
+        std::make_unique<ClassMemberDefLister>(functionmessage)));
+    return SourceCodeMessageAnalysis::startToAnalysisSourceCode(errormessage);
 }
 
-void CxxMethodDeclMessageAnalysis::setConfigToAnalysis(const ConfigInfo& Config)
+void CxxMethodDeclMessageAnalysis::setConfigToAnalysis(const ConfigInfo& config)
 {
-    SourceCodeMessageAnalysis::setConfigToAnalysis(Config);
+    SourceCodeMessageAnalysis::setConfigToAnalysis(config);
 }
 }   // namespace MyFunction

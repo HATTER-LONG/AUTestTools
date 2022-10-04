@@ -18,33 +18,37 @@ public:
     }
     // clang-format on
 
-    ClassMemberDefLister(SourceCodeFunctionMessageMap& Ref)
-            : m_functionMessageRef(Ref)
+    ClassMemberDefLister(SourceCodeFunctionMessageMap& ref)
+            : m_functionMessageRef(ref)
     {
     }
 
-    virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
+    virtual void run(
+        const clang::ast_matchers::MatchFinder::MatchResult& result) override
     {
-        if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("ClassMethodDef"))
+        if (auto const* functionDecl =
+                result.Nodes.getNodeAs<clang::FunctionDecl>("ClassMethodDef"))
         {
-            auto iter = m_functionMessageRef.find(functionDecl->getQualifiedNameAsString());
+            auto iter = m_functionMessageRef.find(
+                functionDecl->getQualifiedNameAsString());
             if (iter == m_functionMessageRef.end())
             {
                 std::string functionname;
                 std::vector<std::string> functionparms;
                 functionname = functionDecl->getQualifiedNameAsString();
-                functionparms.push_back(functionDecl->getReturnType().getAsString(m_policy));
+                functionparms.push_back(
+                    functionDecl->getReturnType().getAsString(m_policy));
                 getParams(functionparms, functionDecl);
                 iter = insertFuncToMapRef(functionDecl);
             }
         }
     }
 
-    bool config(const ConfigInfo& Config) override
+    bool config(const ConfigInfo& config) override
     {
         try
         {
-            Config.at("ClassName").get_to(m_strClassName);
+            config.at("ClassName").get_to(m_strClassName);
         }
         catch (nlohmann::json::exception& a)
         {
@@ -55,17 +59,20 @@ public:
     }
 
 private:
-    SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(const clang::FunctionDecl* Func)
+    SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(
+        const clang::FunctionDecl* func)
     {
         std::string functionname;
         std::vector<std::string> functionparms;
-        functionname = Func->getQualifiedNameAsString();
-        functionparms.push_back(Func->getReturnType().getAsString(m_policy));
-        getParams(functionparms, Func);
-        bool hasbody = Func->isExplicitlyDefaulted() || Func->hasBody() || Func->isDefaulted();
+        functionname = func->getQualifiedNameAsString();
+        functionparms.push_back(func->getReturnType().getAsString(m_policy));
+        getParams(functionparms, func);
+        bool const hasbody = func->isExplicitlyDefaulted() || func->hasBody()
+                             || func->isDefaulted();
         return m_functionMessageRef
             .insert(SourceCodeFunctionMessageMap::value_type(functionname,
-                SourceCodeFunctionMessage(functionname, functionparms, hasbody, SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER)))
+                SourceCodeFunctionMessage(functionname, functionparms, hasbody,
+                    SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER)))
             .first;
     }
 

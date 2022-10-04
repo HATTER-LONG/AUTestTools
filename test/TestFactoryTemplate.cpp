@@ -58,7 +58,7 @@ TEST_CASE("Test an empty factory template function", "[factory template test]")
         WHEN("regist DerivedClass Product to Factory")
         {
             Infra::ProductClassRegistrar<class BaseClass, class DerivedClass>
-                registProduct(DerivedClass::productId());
+                const registProduct(DerivedClass::productId());
             THEN("Try get a DerivedClass Product and check return value")
             {
                 auto oneProduct4DerivedClass =
@@ -89,12 +89,12 @@ TEST_CASE("Test the factory template function of a product",
     GIVEN("Factory with a product")
     {
         Infra::ProductClassRegistrar<class BaseClass, class DerivedClass>
-            registProduct(DerivedClass::productId());
+            const registProduct(DerivedClass::productId());
         WHEN("Register another product to the factory")
         {
             Infra::ProductClassRegistrar<class BaseClass,
                 class DerivedAnotherClass>
-                registanotherProduct(DerivedAnotherClass::productId());
+                const registanotherProduct(DerivedAnotherClass::productId());
             THEN("Gets the product with new Product ID and verifies return "
                  "values")
             {
@@ -119,7 +119,7 @@ TEST_CASE("Test the factory template function of a product",
         {
             Infra::ProductClassRegistrar<class BaseClass,
                 class DerivedAnotherClass>
-                registanotherProduct(DerivedClass::productId());
+                const registanotherProduct(DerivedClass::productId());
             THEN("Gets the product with the duplicate name and verifies that "
                  "it was not inserted successfully")
             {
@@ -138,7 +138,7 @@ class BaseClassWithArgs
 {
 public:
     BaseClassWithArgs() = delete;
-    BaseClassWithArgs(bool Arg) { m_hasArgs = Arg; }
+    BaseClassWithArgs(bool arg) { m_hasArgs = arg; }
     virtual ~BaseClassWithArgs() = default;
 
     /**
@@ -154,15 +154,15 @@ public:
 class DeviedClassWithArgs : public BaseClassWithArgs
 {
 public:
-    DeviedClassWithArgs(bool Arg)
-            : BaseClassWithArgs(Arg)
+    DeviedClassWithArgs(bool arg)
+            : BaseClassWithArgs(arg)
     {
     }
 
-    DeviedClassWithArgs(bool Arg, int Arg2)
-            : BaseClassWithArgs(Arg)
+    DeviedClassWithArgs(bool arg, int arg2)
+            : BaseClassWithArgs(arg)
     {
-        m_ownArgs = Arg2;
+        m_ownArgs = arg2;
     }
     ~DeviedClassWithArgs() override = default;
 
@@ -181,7 +181,7 @@ TEST_CASE("Test the factory template function of one argument",
     {
         Infra::ProductClassRegistrar<class BaseClassWithArgs,
             class DeviedClassWithArgs, bool>
-            resgistProduct(DeviedClassWithArgs::productId());
+            const resgistProduct(DeviedClassWithArgs::productId());
 
         WHEN("Get a product with one args")
         {
@@ -204,7 +204,7 @@ TEST_CASE("Test the factory template function of mult arguments",
     {
         Infra::ProductClassRegistrar<class BaseClassWithArgs,
             class DeviedClassWithArgs, bool, int>
-            resgistProduct { DeviedClassWithArgs::productId() };
+            const resgistProduct { DeviedClassWithArgs::productId() };
         WHEN("Get a product with mult args")
         {
             bool result = true;

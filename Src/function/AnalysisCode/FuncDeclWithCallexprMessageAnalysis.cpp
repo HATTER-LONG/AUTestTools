@@ -3,13 +3,17 @@
 
 namespace MyFunction
 {
-static Infra::ProductClassRegistrar<SourceCodeAnalysisFunc, FuncDeclWithCallExprMessage> funcdeclAnalysisMethod(
-    FuncDeclWithCallExprMessage::getFactoryID());
+static Infra::ProductClassRegistrar<SourceCodeAnalysisFunc,
+    FuncDeclWithCallExprMessage>
+    funcdeclAnalysisMethod(FuncDeclWithCallExprMessage::getFactoryID());
 
 bool FuncDeclWithCallExprMessage::startToAnalysisSourceCode(
-    SourceCodeFunctionMessageMap& Functionmessage, SourceCodeErrorMessageList& Errormessage)
+    SourceCodeFunctionMessageMap& functionmessage,
+    SourceCodeErrorMessageList& errormessage)
 {
-    setMatchMethodAndCallBackFunc(DeclarationMatcherPtr(std::make_unique<FunctionDefLister>(Functionmessage)));
-    return SourceCodeMessageAnalysis::startToAnalysisSourceCode(Errormessage);
+    setMatchMethodAndCallBackFunc(DeclarationMatcherPtr(
+        std::make_unique<FunctionDefLister>(functionmessage)));
+    return SourceCodeMessageAnalysis::startToAnalysisSourceCode(errormessage);
 }
+
 }   // namespace MyFunction

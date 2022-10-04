@@ -16,14 +16,14 @@ public:
         REQUIRE(!m_analysisFilePath.empty());
         REQUIRE(!m_comipleCommandFilePath.empty());
     }
-    auto initCxxMethodDeclAnalysisPtr(ConfigInfo& Config)
+    auto initCxxMethodDeclAnalysisPtr(ConfigInfo& config)
     {
         auto cxxmethoddeclanalysisptr =
             MyFunction::g_SourceCodeAnalysisFactory::instance().getProductClass(
                 m_id);
         cxxmethoddeclanalysisptr->setCompileDatabase(m_comipleCommandFilePath);
         cxxmethoddeclanalysisptr->setFilePathToAnalysis(m_analysisFilePath);
-        cxxmethoddeclanalysisptr->setConfigToAnalysis(Config);
+        cxxmethoddeclanalysisptr->setConfigToAnalysis(config);
         return cxxmethoddeclanalysisptr;
     }
     std::string m_analysisFilePath { MyFunction::TRAININGCODE_FILEPATH

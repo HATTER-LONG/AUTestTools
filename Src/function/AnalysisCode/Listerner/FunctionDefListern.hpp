@@ -20,35 +20,42 @@ public:
     }
     // clang-format on
 
-    FunctionDefLister(SourceCodeFunctionMessageMap& Ref)
-            : m_functionMessageRef(Ref)
+    FunctionDefLister(SourceCodeFunctionMessageMap& ref)
+            : m_functionMessageRef(ref)
     {
     }
 
-    virtual void run(const clang::ast_matchers::MatchFinder::MatchResult& Result) override
+    virtual void run(
+        const clang::ast_matchers::MatchFinder::MatchResult& result) override
     {
-        if (auto const* functionDecl = Result.Nodes.getNodeAs<clang::FunctionDecl>("FunctionDecl"))
+        if (auto const* functionDecl =
+                result.Nodes.getNodeAs<clang::FunctionDecl>("FunctionDecl"))
         {
-            auto iter = m_functionMessageRef.find(functionDecl->getQualifiedNameAsString());
+            auto iter = m_functionMessageRef.find(
+                functionDecl->getQualifiedNameAsString());
             if (iter == m_functionMessageRef.end())
             {
                 std::string functionname;
                 std::vector<std::string> functionparms;
                 functionname = functionDecl->getQualifiedNameAsString();
-                functionparms.push_back(functionDecl->getReturnType().getAsString(m_policy));
+                functionparms.push_back(
+                    functionDecl->getReturnType().getAsString(m_policy));
                 getParams(functionparms, functionDecl);
                 iter = insertFuncToMapRef(functionDecl);
             }
-            if (auto const* callexprdec = Result.Nodes.getNodeAs<clang::CallExpr>("callExprInfo"))
+            if (auto const* callexprdec =
+                    result.Nodes.getNodeAs<clang::CallExpr>("callExprInfo"))
             {
                 if (const auto* func = callexprdec->getDirectCallee())
                 {
-                    auto callexprIter = m_functionMessageRef.find(func->getQualifiedNameAsString());
+                    auto callexprIter = m_functionMessageRef.find(
+                        func->getQualifiedNameAsString());
                     if (callexprIter == m_functionMessageRef.end())
                     {
                         insertFuncToMapRef(func);
                     }
-                    iter->second.addFunctionWhichCallExpr(func->getQualifiedNameAsString());
+                    iter->second.addFunctionWhichCallExpr(
+                        func->getQualifiedNameAsString());
                 }
             }
         }
@@ -56,7 +63,8 @@ public:
     bool config(const ConfigInfo& Config) override { return true; }
 
 private:
-    SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(const clang::FunctionDecl* Func)
+    SourceCodeFunctionMessageMap::iterator insertFuncToMapRef(
+        const clang::FunctionDecl* Func)
     {
         std::string functionname;
         std::vector<std::string> functionparms;
@@ -64,10 +72,12 @@ private:
         functionparms.push_back(Func->getReturnType().getAsString(m_policy));
         getParams(functionparms, Func);
         return m_functionMessageRef
-            .insert(SourceCodeFunctionMessageMap::value_type(
-                functionname, SourceCodeFunctionMessage(functionname, functionparms, Func->hasBody(),
-                                  Func->isCXXClassMember() ? SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER
-                                                           : SourceCodeFunctionMessage::FUNCTYPE::CTYPE)))
+            .insert(SourceCodeFunctionMessageMap::value_type(functionname,
+                SourceCodeFunctionMessage(functionname, functionparms,
+                    Func->hasBody(),
+                    Func->isCXXClassMember()
+                        ? SourceCodeFunctionMessage::FUNCTYPE::CXXMEMBER
+                        : SourceCodeFunctionMessage::FUNCTYPE::CTYPE)))
             .first;
     }
 

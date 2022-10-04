@@ -1,24 +1,24 @@
 #include "SourceCodeMessageAnalysis.h"
 #include "spdlog/spdlog.h"
 
-#include <algorithm>
 #include <clang/ASTMatchers/ASTMatchFinder.h>
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
+#include <algorithm>
 
 static llvm::cl::OptionCategory fltCat("func-decl-list-am");
 namespace MyFunction
 {
 
 void SourceCodeMessageAnalysis::paramInitialize(
-    std::vector<std::string>& ParamList)
+    std::vector<std::string>& paramList)
 {
-    ParamList.emplace_back(std::string("__READY_TO_ANALYSIS__"));
-    ParamList.emplace_back(m_sourceCodeFilePath);
+    paramList.emplace_back(std::string("__READY_TO_ANALYSIS__"));
+    paramList.emplace_back(m_sourceCodeFilePath);
     if (!m_compiledDatabasePath.empty())
     {
-        std::string tmpstr = "-p=" + m_compiledDatabasePath;
-        ParamList.emplace_back(tmpstr);
+        std::string const tmpstr = "-p=" + m_compiledDatabasePath;
+        paramList.emplace_back(tmpstr);
     }
 }
 
@@ -43,13 +43,13 @@ SourceCodeMessageAnalysis::CommonOptionsParserExpected
 
 bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
     SourceCodeFunctionMessageMap& Functionmessage,
-    SourceCodeErrorMessageList& Errormessage)
+    SourceCodeErrorMessageList& errormessage)
 {
-    return startToAnalysisSourceCode(Errormessage);
+    return startToAnalysisSourceCode(errormessage);
 }
 
 bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
-    SourceCodeErrorMessageList& ErrorMessage)
+    SourceCodeErrorMessageList& errorMessage)
 {
     std::vector<std::string> sourceCodePathList;
     sourceCodePathList.emplace_back(m_sourceCodeFilePath);
@@ -79,7 +79,7 @@ bool SourceCodeMessageAnalysis::startToAnalysisSourceCode(
         return false;
     }
 
-    SourceCodeErrorAnalysis diagnosticConsumer(ErrorMessage);
+    SourceCodeErrorAnalysis diagnosticConsumer(errorMessage);
     tool.setDiagnosticConsumer(&diagnosticConsumer);
     int ret = tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
     if (ret != 0)

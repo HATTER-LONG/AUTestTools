@@ -57,7 +57,7 @@ TEST_CASE_METHOD(FuncDefListernAnalysisTools,
                     .getProductClass(m_id);
             fundeclanalysisptr->setFilePathToAnalysis(m_analysisFilePath);
             fundeclanalysisptr->setCompileDatabase(m_comipleCommandFilePath);
-            bool result = fundeclanalysisptr->startToAnalysisSourceCode(
+            bool const result = fundeclanalysisptr->startToAnalysisSourceCode(
                 funcmessagemap, errormessage);
 
             REQUIRE(result == true);
@@ -90,7 +90,7 @@ TEST_CASE_METHOD(FuncDefListernAnalysisTools,
                 MyFunction::g_SourceCodeAnalysisFactory::instance()
                     .getProductClass(m_id);
             fundeclanalysisptr->setFilePathToAnalysis(m_analysisFilePath);
-            bool result = fundeclanalysisptr->startToAnalysisSourceCode(
+            bool const result = fundeclanalysisptr->startToAnalysisSourceCode(
                 funcmessagemap, errormessage);
 
             REQUIRE(result == true);
